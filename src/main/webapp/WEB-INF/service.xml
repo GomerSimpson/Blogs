@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.0.0//EN"
+        "http://www.liferay.com/dtd/liferay-service-builder_6_0_0.dtd">
+<service-builder package-path="com.brest.ericpol.service">
+    <author>Viktor Kolbik</author>
+    <namespace>app</namespace>
+    <entity name="Tank" local-service="true" remote-service="false">
+        <column name="tankId" type="long" primary="true"/>
+        <column name="number" type="String"/>
+        <column name="modification" type="String"/>
+        <column name="price"  type="long"/>
+        <column name="equipment" type="Collection" entity="Equipment" mapping-key="tankId"/>
+        <finder name="Modification" return-type="Collection">
+            <finder-column name="modification"/>
+        </finder>
+        <finder name="Number" return-type="Tank" unique="true">
+            <finder-column name="number"/>
+        </finder>
+        <finder name="higherPrice" return-type="Collection">
+            <finder-column name="price" comparator="&lt;"/>
+        </finder>
+        <finder name="lowerPrice" return-type="Collection">
+            <finder-column name="price" comparator="&gt;"/>
+        </finder>
+    </entity>
+
+    <entity name="Equipment" local-service="true" remote-service="false">
+        <column name="equipmentId" type="long" primary="true"/>
+        <column name="modification" type="String"/>
+        <column name="price" type="long"/>
+        <column name="tankId" type="long"/>
+        <finder name="Modification" return-type="Collection">
+            <finder-column name="modification"/>
+        </finder>
+        <finder name="higherPrice" return-type="Collection">
+            <finder-column name="price" comparator="&lt;"/>
+        </finder>
+        <finder name="lowerPrice" return-type="Collection">
+            <finder-column name="price" comparator="&gt;"/>
+        </finder>
+        <finder name="TankId" return-type="Collection">
+            <finder-column name="tankId"/>
+        </finder>
+
+    </entity>
+</service-builder>

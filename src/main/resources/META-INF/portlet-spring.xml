@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="com.brest.ericpol.service.service.EquipmentLocalService" class="com.brest.ericpol.service.service.impl.EquipmentLocalServiceImpl" />
+	<bean id="com.brest.ericpol.service.service.persistence.EquipmentPersistence" class="com.brest.ericpol.service.service.persistence.EquipmentPersistenceImpl" parent="basePersistence" />
+	<bean id="com.brest.ericpol.service.service.TankLocalService" class="com.brest.ericpol.service.service.impl.TankLocalServiceImpl" />
+	<bean id="com.brest.ericpol.service.service.persistence.TankPersistence" class="com.brest.ericpol.service.service.persistence.TankPersistenceImpl" parent="basePersistence" />
+</beans>
