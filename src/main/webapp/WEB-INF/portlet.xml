@@ -11,10 +11,15 @@
 			<name>view-jsp</name>
 			<value>/view.jsp</value>
 		</init-param>
+        <init-param>
+            <name>eq-jsp</name>
+            <value>/eq.jsp</value>
+        </init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
 			<portlet-mode>view</portlet-mode>
+            <window-state>maximized</window-state>
 		</supports>
 		<portlet-info>
 			<title>Main</title>

@@ -247,6 +247,11 @@ public interface EquipmentLocalService extends BaseLocalService,
         throws com.liferay.portal.kernel.exception.PortalException,
             com.liferay.portal.kernel.exception.SystemException;
 
+    public void updateEquipment(java.lang.Long equipmentId,
+        java.lang.String modification, java.lang.Long price,
+        java.lang.Long tankId)
+        throws com.liferay.portal.kernel.exception.SystemException;
+
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public java.util.List<com.brest.ericpol.service.model.Equipment> getEquipmentByTankId(
         java.lang.Long tankId)

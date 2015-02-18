@@ -15,14 +15,14 @@
 		<service.api.dir>src/main/java-service-api</service.api.dir>
 		<project.built.sourceEncoding>UTF-8</project.built.sourceEncoding>
 		<liferay.version>6.2.2</liferay.version>
-		<!--<liferay.auto.deploy.dir>/home/simpson/liferay/deploy</liferay.auto.deploy.dir>-->
-		<!--<liferay.app.server.deploy.dir>/home/simpson/liferay/tomcat-7.0.42/webapps</liferay.app.server.deploy.dir>-->
-		<!--<liferay.app.server.lib.global.dir>/home/simpson/liferay/tomcat-7.0.42/lib</liferay.app.server.lib.global.dir>-->
-		<!--<liferay.app.server.portal.dir>/home/simpson/liferay/tomcat-7.0.42/webapps/ROOT</liferay.app.server.portal.dir>-->
-        <liferay.auto.deploy.dir>C:\Program Files\liferay\deploy</liferay.auto.deploy.dir>
-        <liferay.app.server.deploy.dir>C:\Program Files\liferay\tomcat-7.0.42\webapps</liferay.app.server.deploy.dir>
-        <liferay.app.server.lib.global.dir>C:\Program Files\liferay\tomcat-7.0.42\lib\ext</liferay.app.server.lib.global.dir>
-        <liferay.app.server.portal.dir>C:\Program Files\liferay\tomcat-7.0.42\webapps\ROOT</liferay.app.server.portal.dir>
+		<liferay.auto.deploy.dir>/home/simpson/liferay/deploy</liferay.auto.deploy.dir>
+		<liferay.app.server.deploy.dir>/home/simpson/liferay/tomcat-7.0.42/webapps</liferay.app.server.deploy.dir>
+		<liferay.app.server.lib.global.dir>/home/simpson/liferay/tomcat-7.0.42/lib</liferay.app.server.lib.global.dir>
+		<liferay.app.server.portal.dir>/home/simpson/liferay/tomcat-7.0.42/webapps/ROOT</liferay.app.server.portal.dir>
+        <!--<liferay.auto.deploy.dir>C:\Program Files\liferay\deploy</liferay.auto.deploy.dir>-->
+        <!--<liferay.app.server.deploy.dir>C:\Program Files\liferay\tomcat-7.0.42\webapps</liferay.app.server.deploy.dir>-->
+        <!--<liferay.app.server.lib.global.dir>C:\Program Files\liferay\tomcat-7.0.42\lib\ext</liferay.app.server.lib.global.dir>-->
+        <!--<liferay.app.server.portal.dir>C:\Program Files\liferay\tomcat-7.0.42\webapps\ROOT</liferay.app.server.portal.dir>-->
 
     </properties>
 

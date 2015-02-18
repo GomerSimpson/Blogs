@@ -55,6 +55,8 @@ public class EquipmentLocalServiceClpInvoker {
     private String[] _methodParameterTypes45;
     private String _methodName46;
     private String[] _methodParameterTypes46;
+    private String _methodName47;
+    private String[] _methodParameterTypes47;
 
     public EquipmentLocalServiceClpInvoker() {
         _methodName0 = "addEquipment";
@@ -153,21 +155,28 @@ public class EquipmentLocalServiceClpInvoker {
                 "java.lang.String", "java.lang.Long", "java.lang.Long"
             };
 
-        _methodName43 = "getEquipmentByTankId";
+        _methodName43 = "updateEquipment";
 
-        _methodParameterTypes43 = new String[] { "java.lang.Long" };
+        _methodParameterTypes43 = new String[] {
+                "java.lang.Long", "java.lang.String", "java.lang.Long",
+                "java.lang.Long"
+            };
 
-        _methodName44 = "getAllEquipment";
+        _methodName44 = "getEquipmentByTankId";
 
-        _methodParameterTypes44 = new String[] {  };
+        _methodParameterTypes44 = new String[] { "java.lang.Long" };
 
-        _methodName45 = "findByModification";
+        _methodName45 = "getAllEquipment";
 
-        _methodParameterTypes45 = new String[] { "java.lang.String" };
+        _methodParameterTypes45 = new String[] {  };
 
-        _methodName46 = "findByPrice";
+        _methodName46 = "findByModification";
 
-        _methodParameterTypes46 = new String[] {
+        _methodParameterTypes46 = new String[] { "java.lang.String" };
+
+        _methodName47 = "findByPrice";
+
+        _methodParameterTypes47 = new String[] {
                 "java.lang.Long", "java.lang.Long"
             };
     }
@@ -281,21 +290,30 @@ public class EquipmentLocalServiceClpInvoker {
 
         if (_methodName43.equals(name) &&
                 Arrays.deepEquals(_methodParameterTypes43, parameterTypes)) {
-            return EquipmentLocalServiceUtil.getEquipmentByTankId((java.lang.Long) arguments[0]);
+            EquipmentLocalServiceUtil.updateEquipment((java.lang.Long) arguments[0],
+                (java.lang.String) arguments[1], (java.lang.Long) arguments[2],
+                (java.lang.Long) arguments[3]);
+
+            return null;
         }
 
         if (_methodName44.equals(name) &&
                 Arrays.deepEquals(_methodParameterTypes44, parameterTypes)) {
-            return EquipmentLocalServiceUtil.getAllEquipment();
+            return EquipmentLocalServiceUtil.getEquipmentByTankId((java.lang.Long) arguments[0]);
         }
 
         if (_methodName45.equals(name) &&
                 Arrays.deepEquals(_methodParameterTypes45, parameterTypes)) {
-            return EquipmentLocalServiceUtil.findByModification((java.lang.String) arguments[0]);
+            return EquipmentLocalServiceUtil.getAllEquipment();
         }
 
         if (_methodName46.equals(name) &&
                 Arrays.deepEquals(_methodParameterTypes46, parameterTypes)) {
+            return EquipmentLocalServiceUtil.findByModification((java.lang.String) arguments[0]);
+        }
+
+        if (_methodName47.equals(name) &&
+                Arrays.deepEquals(_methodParameterTypes47, parameterTypes)) {
             return EquipmentLocalServiceUtil.findByPrice((java.lang.Long) arguments[0],
                 (java.lang.Long) arguments[1]);
         }

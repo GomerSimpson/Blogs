@@ -27,6 +27,15 @@ public class EquipmentLocalServiceImpl extends EquipmentLocalServiceBaseImpl {
         return equipmentPersistence.update(equipment);
     }
 
+    public void updateEquipment(Long equipmentId, String modification, Long price, Long tankId) throws SystemException {
+        Equipment equipment = equipmentPersistence.create(equipmentId);
+        equipment.setNew(false);
+        equipment.setModification(modification);
+        equipment.setPrice(price);
+        equipment.setTankId(tankId);
+        equipmentPersistence.update(equipment);
+    }
+
     public List<Equipment> getEquipmentByTankId(Long tankId) throws SystemException {
         return equipmentPersistence.findByTankId(tankId);
     }

@@ -54,6 +54,8 @@ public class EquipmentLocalServiceClp implements EquipmentLocalService {
     private String[] _methodParameterTypes22;
     private String _methodName23;
     private String[] _methodParameterTypes23;
+    private String _methodName24;
+    private String[] _methodParameterTypes24;
 
     public EquipmentLocalServiceClp(InvokableLocalService invokableLocalService) {
         _invokableLocalService = invokableLocalService;
@@ -154,21 +156,28 @@ public class EquipmentLocalServiceClp implements EquipmentLocalService {
                 "java.lang.String", "java.lang.Long", "java.lang.Long"
             };
 
-        _methodName20 = "getEquipmentByTankId";
+        _methodName20 = "updateEquipment";
 
-        _methodParameterTypes20 = new String[] { "java.lang.Long" };
+        _methodParameterTypes20 = new String[] {
+                "java.lang.Long", "java.lang.String", "java.lang.Long",
+                "java.lang.Long"
+            };
 
-        _methodName21 = "getAllEquipment";
+        _methodName21 = "getEquipmentByTankId";
 
-        _methodParameterTypes21 = new String[] {  };
+        _methodParameterTypes21 = new String[] { "java.lang.Long" };
 
-        _methodName22 = "findByModification";
+        _methodName22 = "getAllEquipment";
 
-        _methodParameterTypes22 = new String[] { "java.lang.String" };
+        _methodParameterTypes22 = new String[] {  };
 
-        _methodName23 = "findByPrice";
+        _methodName23 = "findByModification";
 
-        _methodParameterTypes23 = new String[] {
+        _methodParameterTypes23 = new String[] { "java.lang.String" };
+
+        _methodName24 = "findByPrice";
+
+        _methodParameterTypes24 = new String[] {
                 "java.lang.Long", "java.lang.Long"
             };
     }
@@ -728,14 +737,47 @@ public class EquipmentLocalServiceClp implements EquipmentLocalService {
     }
 
     @Override
+    public void updateEquipment(java.lang.Long equipmentId,
+        java.lang.String modification, java.lang.Long price,
+        java.lang.Long tankId)
+        throws com.liferay.portal.kernel.exception.SystemException {
+        try {
+            _invokableLocalService.invokeMethod(_methodName20,
+                _methodParameterTypes20,
+                new Object[] {
+                    ClpSerializer.translateInput(equipmentId),
+                    
+                ClpSerializer.translateInput(modification),
+                    
+                ClpSerializer.translateInput(price),
+                    
+                ClpSerializer.translateInput(tankId)
+                });
+        } catch (Throwable t) {
+            t = ClpSerializer.translateThrowable(t);
+
+            if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+                throw (com.liferay.portal.kernel.exception.SystemException) t;
+            }
+
+            if (t instanceof RuntimeException) {
+                throw (RuntimeException) t;
+            } else {
+                throw new RuntimeException(t.getClass().getName() +
+                    " is not a valid exception");
+            }
+        }
+    }
+
+    @Override
     public java.util.List<com.brest.ericpol.service.model.Equipment> getEquipmentByTankId(
         java.lang.Long tankId)
         throws com.liferay.portal.kernel.exception.SystemException {
         Object returnObj = null;
 
         try {
-            returnObj = _invokableLocalService.invokeMethod(_methodName20,
-                    _methodParameterTypes20,
+            returnObj = _invokableLocalService.invokeMethod(_methodName21,
+                    _methodParameterTypes21,
                     new Object[] { ClpSerializer.translateInput(tankId) });
         } catch (Throwable t) {
             t = ClpSerializer.translateThrowable(t);
@@ -761,8 +803,8 @@ public class EquipmentLocalServiceClp implements EquipmentLocalService {
         Object returnObj = null;
 
         try {
-            returnObj = _invokableLocalService.invokeMethod(_methodName21,
-                    _methodParameterTypes21, new Object[] {  });
+            returnObj = _invokableLocalService.invokeMethod(_methodName22,
+                    _methodParameterTypes22, new Object[] {  });
         } catch (Throwable t) {
             t = ClpSerializer.translateThrowable(t);
 
@@ -788,8 +830,8 @@ public class EquipmentLocalServiceClp implements EquipmentLocalService {
         Object returnObj = null;
 
         try {
-            returnObj = _invokableLocalService.invokeMethod(_methodName22,
-                    _methodParameterTypes22,
+            returnObj = _invokableLocalService.invokeMethod(_methodName23,
+                    _methodParameterTypes23,
                     new Object[] { ClpSerializer.translateInput(modification) });
         } catch (Throwable t) {
             t = ClpSerializer.translateThrowable(t);
@@ -816,8 +858,8 @@ public class EquipmentLocalServiceClp implements EquipmentLocalService {
         Object returnObj = null;
 
         try {
-            returnObj = _invokableLocalService.invokeMethod(_methodName23,
-                    _methodParameterTypes23,
+            returnObj = _invokableLocalService.invokeMethod(_methodName24,
+                    _methodParameterTypes24,
                     new Object[] {
                         ClpSerializer.translateInput(lowBorder),
                         

@@ -12,7 +12,12 @@
 <portlet:actionURL var="updateTankURL" windowState="maximized" name="updateTank">
 </portlet:actionURL>
 
+<portlet:renderURL var="toEquipmentPageURL">
+    <portlet:param name="mvcPath" value="/eq.jsp"/>
+</portlet:renderURL>
+
 <portlet:resourceURL var="res" >
+    <portlet:param name="getEntities" value="tanks" />
 </portlet:resourceURL>
 
 <!DOCTYPE html>
@@ -49,7 +54,7 @@
                 </aui:form>
             </div>
             </div class="updateTankFormDiv" id="updateTankFormDiv">
-                <aui:form action="<%=updateTankURL%>" name="updateTankForm" method="PUT">
+                <aui:form action="<%=updateTankURL%>" name="updateTankForm" method="POST">
                     <table>
                         <tbody>
                             <tr>
@@ -74,7 +79,7 @@
                 </aui:form>
 
             </div>
-            <input type="button" value="Update" name="di" id="<portlet:namespace />update" onClick="<portlet:namespace />fillInUpdateForm(10, 'work', 'why', 6547);" />
+            <a href="<%=toEquipmentPageURL%>">Reference to page with equipment</a>
             <div id="mainTableDiv" class="mainTableDiv">
                 <table class="features-table" id="mainTable" summary="List of tanks.">
                             <caption>Tanks</caption>
@@ -89,14 +94,14 @@
                                 </tbody>
                 </table>
         </div>
-        <aui:script use="aui-base">
-                                    function <portlet:namespace />fillInUpdateForm(tankId, number, modification, price){
+        <script>
+                                    function fillInUpdateForm(tankId, number, modification, price){
                                                 alert("work");
-                                                    alert(tankId + " " + number + " " + modification + " " + price);
-                                                    A.one('#updateTankId').set(tankId);
-                                                    A.one('#updateTankNumber').set(number);
-                                                    A.one('#updateTankModification').set(modification);
-                                                    A.one('#updateTankPrice').set(price);
+                                                    alert(tankId + ", "  + number + ", " + modification + ", " + price);
+                                                    A.one('#<portlet:namespace />updateTankId').set('value', tankId);
+                                                    A.one('#<portlet:namespace />updateTankNumber').set('value', number);
+                                                    A.one('#<portlet:namespace />updateTankModification').set('value', modification);
+                                                    A.one('#<portlet:namespace />updateTankPrice').set('value', price);
                                                 }
 
             var A = AUI();
@@ -128,7 +133,7 @@
                                     stringHtml += localStringHtml;
                                     var strNumber = "\'" + obj.number + "\'";
                                     var strMod = "\'" + obj.modification + "\'";
-                                //    stringHtml += "<td class=\"grey\">" + "<input type=\"button\" value=\"Update\" onClick=" + "\"fillInUpdateForm(" + obj.tankId + ", " + strNumber + ", " + strMod + ", " + obj.price + ")\"" + ">";
+                                    stringHtml += "<td class=\"grey\">" + "<input type=\"button\" value=\"Update\" onClick=" + "\"fillInUpdateForm(" + obj.tankId + ", " + strNumber + ", " + strMod + ", " + obj.price + ")\"" + ">";
                                     document.getElementById('mainTable').innerHTML += stringHtml;
                                     localStringHtml = "";
                                     stringHtml = "";
@@ -145,17 +150,8 @@
                 }
             );
 
-            function setRowHtml(obj){
 
-                    var localStringHtml = "";
-                    localStringHtml += "<tr><td class=\"grey\">" + obj.number;
-                    localStringHtml += "<td class=\"green\">"  + obj.modification;
-                    localStringHtml += "<td class=\"green\">" + obj.price;
-
-                return localStringHtml;
-            }
-
-        </aui:script>
+        </script>
 
     </body>
 </html>

@@ -271,6 +271,13 @@ public class EquipmentLocalServiceUtil {
         return getService().addEquipment(modification, price, tankId);
     }
 
+    public static void updateEquipment(java.lang.Long equipmentId,
+        java.lang.String modification, java.lang.Long price,
+        java.lang.Long tankId)
+        throws com.liferay.portal.kernel.exception.SystemException {
+        getService().updateEquipment(equipmentId, modification, price, tankId);
+    }
+
     public static java.util.List<com.brest.ericpol.service.model.Equipment> getEquipmentByTankId(
         java.lang.Long tankId)
         throws com.liferay.portal.kernel.exception.SystemException {

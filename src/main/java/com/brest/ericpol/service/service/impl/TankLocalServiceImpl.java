@@ -54,6 +54,7 @@ public class TankLocalServiceImpl extends TankLocalServiceBaseImpl {
 
     public void updateTank(Long tankId, String number, String modification, Long price) throws PortalException, SystemException{
         Tank tank = tankPersistence.create(tankId);
+        tank.setNew(false);
         tank.setNumber(number);
         tank.setModification(modification);
         tank.setPrice(price);
