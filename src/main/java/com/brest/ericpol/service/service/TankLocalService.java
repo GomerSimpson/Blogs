@@ -243,8 +243,13 @@ public interface TankLocalService extends BaseLocalService, InvokableLocalServic
         throws com.liferay.portal.kernel.exception.SystemException;
 
     public com.brest.ericpol.service.model.Tank addTank(
-        java.lang.String modification, java.lang.String number,
+        java.lang.String number, java.lang.String modification,
         java.lang.Long price)
+        throws com.liferay.portal.kernel.exception.PortalException,
+            com.liferay.portal.kernel.exception.SystemException;
+
+    public void updateTank(java.lang.Long tankId, java.lang.String number,
+        java.lang.String modification, java.lang.Long price)
         throws com.liferay.portal.kernel.exception.PortalException,
             com.liferay.portal.kernel.exception.SystemException;
 

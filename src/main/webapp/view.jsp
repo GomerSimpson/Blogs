@@ -9,7 +9,7 @@
 <portlet:actionURL var="addTankURL" windowState="maximized" name="addTank">
 </portlet:actionURL>
 
-<portlet:actionURL var="getAllTanksURL" windowState="normal" name="getAllTanks">
+<portlet:actionURL var="updateTankURL" windowState="maximized" name="updateTank">
 </portlet:actionURL>
 
 <portlet:resourceURL var="res" >
@@ -48,6 +48,33 @@
                     </table>
                 </aui:form>
             </div>
+            </div class="updateTankFormDiv" id="updateTankFormDiv">
+                <aui:form action="<%=updateTankURL%>" name="updateTankForm" method="PUT">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td><aui:input type="hidden" id="updateTankId" name="updateTankId" value=""/></td>
+                            </tr>
+                            <tr>
+                                <td><aui:input type="text" id="updateTankNumber" name="updateTankNumber" value="i" label="Tank Number"/></td>
+                            </tr>
+                            <tr>
+                                <td><aui:input type="text" id="updateTankModification" name="updateTankModification" value="" label="Tank Modification"/></td>
+                            </tr>
+                            <tr>
+                                <td><aui:input type="number" id="updateTankPrice" name="updateTankPrice" value="" label="Tank Price"/></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                	<aui:input type="submit" name="submit" value="Update tank" label=""/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </aui:form>
+
+            </div>
+            <input type="button" value="Update" name="di" id="<portlet:namespace />update" onClick="<portlet:namespace />fillInUpdateForm(10, 'work', 'why', 6547);" />
             <div id="mainTableDiv" class="mainTableDiv">
                 <table class="features-table" id="mainTable" summary="List of tanks.">
                             <caption>Tanks</caption>
@@ -62,7 +89,17 @@
                                 </tbody>
                 </table>
         </div>
-        <script>
+        <aui:script use="aui-base">
+                                    function <portlet:namespace />fillInUpdateForm(tankId, number, modification, price){
+                                                alert("work");
+                                                    alert(tankId + " " + number + " " + modification + " " + price);
+                                                    A.one('#updateTankId').set(tankId);
+                                                    A.one('#updateTankNumber').set(number);
+                                                    A.one('#updateTankModification').set(modification);
+                                                    A.one('#updateTankPrice').set(price);
+                                                }
+
+            var A = AUI();
             var stringHtml = "";
             var localStringHtml = "";
             var data;
@@ -83,17 +120,21 @@
                                     stringHtml += "<tr><td class=\"grey\">" + obj.number;
                                     stringHtml += "<td class=\"green\">"  + obj.modification;
                                     stringHtml += "<td class=\"green\">" + obj.price;
-
                                     localStringHtml += "<td class=\"green\">";
                                     A.Array.each(obj.equipment, function(eq, idx){
                                         localStringHtml += eq.modification + "<br/>";
                                     });
 
                                     stringHtml += localStringHtml;
+                                    var strNumber = "\'" + obj.number + "\'";
+                                    var strMod = "\'" + obj.modification + "\'";
+                                //    stringHtml += "<td class=\"grey\">" + "<input type=\"button\" value=\"Update\" onClick=" + "\"fillInUpdateForm(" + obj.tankId + ", " + strNumber + ", " + strMod + ", " + obj.price + ")\"" + ">";
                                     document.getElementById('mainTable').innerHTML += stringHtml;
                                     localStringHtml = "";
                                     stringHtml = "";
                                 });
+
+
 
                             }
 
@@ -114,7 +155,7 @@
                 return localStringHtml;
             }
 
-        </script>
+        </aui:script>
 
     </body>
 </html>

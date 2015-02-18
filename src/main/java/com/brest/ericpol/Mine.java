@@ -118,5 +118,13 @@ public class Mine extends MVCPortlet {
         //actionResponse.setEvent(qName, new ArrayList<String>(list));
 	}
 
-
+    public void updateTank(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, PortalException {
+        Long tankId = ParamUtil.getLong(actionRequest, "updateTankId");
+        String tankNumber = ParamUtil.getString(actionRequest, "updateTankNumber");
+        String tankModification = ParamUtil.getString(actionRequest, "updateTankModification");
+        Long tankPrice = ParamUtil.getLong(actionRequest, "updateTankPrice");
+        System.out.println(tankId + " " + tankNumber + " " + tankModification + " " + tankPrice);
+/*
+        TankLocalServiceUtil.updateTank(tankId, tankNumber, tankModification, tankPrice);
+  */  }
 }

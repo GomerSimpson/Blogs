@@ -277,11 +277,19 @@ public class TankLocalServiceWrapper implements TankLocalService,
 
     @Override
     public com.brest.ericpol.service.model.Tank addTank(
-        java.lang.String modification, java.lang.String number,
+        java.lang.String number, java.lang.String modification,
         java.lang.Long price)
         throws com.liferay.portal.kernel.exception.PortalException,
             com.liferay.portal.kernel.exception.SystemException {
-        return _tankLocalService.addTank(modification, number, price);
+        return _tankLocalService.addTank(number, modification, price);
+    }
+
+    @Override
+    public void updateTank(java.lang.Long tankId, java.lang.String number,
+        java.lang.String modification, java.lang.Long price)
+        throws com.liferay.portal.kernel.exception.PortalException,
+            com.liferay.portal.kernel.exception.SystemException {
+        _tankLocalService.updateTank(tankId, number, modification, price);
     }
 
     @Override

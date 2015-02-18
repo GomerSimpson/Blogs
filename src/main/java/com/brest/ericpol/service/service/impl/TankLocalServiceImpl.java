@@ -27,11 +27,6 @@ import java.util.List;
  * @see com.brest.ericpol.service.service.TankLocalServiceUtil
  */
 public class TankLocalServiceImpl extends TankLocalServiceBaseImpl {
-    /*
-     * NOTE FOR DEVELOPERS:
-     *
-     * Never reference this interface directly. Always use {@link com.brest.ericpol.service.service.TankLocalServiceUtil} to access the tank local service.
-     */
 
     public List<MyBean> getFullEntity(List<Tank> list) throws SystemException {
         List<MyBean> newList = new ArrayList<MyBean>();
@@ -47,7 +42,7 @@ public class TankLocalServiceImpl extends TankLocalServiceBaseImpl {
         return newList;
     }
 
-    public Tank addTank(String modification, String number, Long price)
+    public Tank addTank(String number, String modification, Long price)
             throws PortalException, SystemException {
         long id= CounterLocalServiceUtil.increment(Tank.class.getName());
         Tank tank = tankPersistence.create(id);
@@ -55,6 +50,14 @@ public class TankLocalServiceImpl extends TankLocalServiceBaseImpl {
         tank.setPrice(price);
         tank.setNumber(number);
         return tankPersistence.update(tank);
+    }
+
+    public void updateTank(Long tankId, String number, String modification, Long price) throws PortalException, SystemException{
+        Tank tank = tankPersistence.create(tankId);
+        tank.setNumber(number);
+        tank.setModification(modification);
+        tank.setPrice(price);
+        tankPersistence.update(tank);
     }
 
     public List<Tank> findByModification(String modification) throws SystemException {

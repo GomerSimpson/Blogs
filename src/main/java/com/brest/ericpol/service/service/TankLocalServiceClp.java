@@ -56,6 +56,8 @@ public class TankLocalServiceClp implements TankLocalService {
     private String[] _methodParameterTypes23;
     private String _methodName24;
     private String[] _methodParameterTypes24;
+    private String _methodName25;
+    private String[] _methodParameterTypes25;
 
     public TankLocalServiceClp(InvokableLocalService invokableLocalService) {
         _invokableLocalService = invokableLocalService;
@@ -160,23 +162,30 @@ public class TankLocalServiceClp implements TankLocalService {
                 "java.lang.String", "java.lang.String", "java.lang.Long"
             };
 
-        _methodName21 = "findByModification";
+        _methodName21 = "updateTank";
 
-        _methodParameterTypes21 = new String[] { "java.lang.String" };
+        _methodParameterTypes21 = new String[] {
+                "java.lang.Long", "java.lang.String", "java.lang.String",
+                "java.lang.Long"
+            };
 
-        _methodName22 = "findByPrice";
+        _methodName22 = "findByModification";
 
-        _methodParameterTypes22 = new String[] {
+        _methodParameterTypes22 = new String[] { "java.lang.String" };
+
+        _methodName23 = "findByPrice";
+
+        _methodParameterTypes23 = new String[] {
                 "java.lang.Long", "java.lang.Long"
             };
 
-        _methodName23 = "findByNumber";
+        _methodName24 = "findByNumber";
 
-        _methodParameterTypes23 = new String[] { "java.lang.String" };
+        _methodParameterTypes24 = new String[] { "java.lang.String" };
 
-        _methodName24 = "getAllTanks";
+        _methodName25 = "getAllTanks";
 
-        _methodParameterTypes24 = new String[] {  };
+        _methodParameterTypes25 = new String[] {  };
     }
 
     @Override
@@ -719,7 +728,7 @@ public class TankLocalServiceClp implements TankLocalService {
 
     @Override
     public com.brest.ericpol.service.model.Tank addTank(
-        java.lang.String modification, java.lang.String number,
+        java.lang.String number, java.lang.String modification,
         java.lang.Long price)
         throws com.liferay.portal.kernel.exception.PortalException,
             com.liferay.portal.kernel.exception.SystemException {
@@ -729,9 +738,9 @@ public class TankLocalServiceClp implements TankLocalService {
             returnObj = _invokableLocalService.invokeMethod(_methodName20,
                     _methodParameterTypes20,
                     new Object[] {
-                        ClpSerializer.translateInput(modification),
+                        ClpSerializer.translateInput(number),
                         
-                    ClpSerializer.translateInput(number),
+                    ClpSerializer.translateInput(modification),
                         
                     ClpSerializer.translateInput(price)
                     });
@@ -758,14 +767,51 @@ public class TankLocalServiceClp implements TankLocalService {
     }
 
     @Override
+    public void updateTank(java.lang.Long tankId, java.lang.String number,
+        java.lang.String modification, java.lang.Long price)
+        throws com.liferay.portal.kernel.exception.PortalException,
+            com.liferay.portal.kernel.exception.SystemException {
+        try {
+            _invokableLocalService.invokeMethod(_methodName21,
+                _methodParameterTypes21,
+                new Object[] {
+                    ClpSerializer.translateInput(tankId),
+                    
+                ClpSerializer.translateInput(number),
+                    
+                ClpSerializer.translateInput(modification),
+                    
+                ClpSerializer.translateInput(price)
+                });
+        } catch (Throwable t) {
+            t = ClpSerializer.translateThrowable(t);
+
+            if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+                throw (com.liferay.portal.kernel.exception.PortalException) t;
+            }
+
+            if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+                throw (com.liferay.portal.kernel.exception.SystemException) t;
+            }
+
+            if (t instanceof RuntimeException) {
+                throw (RuntimeException) t;
+            } else {
+                throw new RuntimeException(t.getClass().getName() +
+                    " is not a valid exception");
+            }
+        }
+    }
+
+    @Override
     public java.util.List<com.brest.ericpol.service.model.Tank> findByModification(
         java.lang.String modification)
         throws com.liferay.portal.kernel.exception.SystemException {
         Object returnObj = null;
 
         try {
-            returnObj = _invokableLocalService.invokeMethod(_methodName21,
-                    _methodParameterTypes21,
+            returnObj = _invokableLocalService.invokeMethod(_methodName22,
+                    _methodParameterTypes22,
                     new Object[] { ClpSerializer.translateInput(modification) });
         } catch (Throwable t) {
             t = ClpSerializer.translateThrowable(t);
@@ -792,8 +838,8 @@ public class TankLocalServiceClp implements TankLocalService {
         Object returnObj = null;
 
         try {
-            returnObj = _invokableLocalService.invokeMethod(_methodName22,
-                    _methodParameterTypes22,
+            returnObj = _invokableLocalService.invokeMethod(_methodName23,
+                    _methodParameterTypes23,
                     new Object[] {
                         ClpSerializer.translateInput(lowBorder),
                         
@@ -825,8 +871,8 @@ public class TankLocalServiceClp implements TankLocalService {
         Object returnObj = null;
 
         try {
-            returnObj = _invokableLocalService.invokeMethod(_methodName23,
-                    _methodParameterTypes23,
+            returnObj = _invokableLocalService.invokeMethod(_methodName24,
+                    _methodParameterTypes24,
                     new Object[] { ClpSerializer.translateInput(number) });
         } catch (Throwable t) {
             t = ClpSerializer.translateThrowable(t);
@@ -856,8 +902,8 @@ public class TankLocalServiceClp implements TankLocalService {
         Object returnObj = null;
 
         try {
-            returnObj = _invokableLocalService.invokeMethod(_methodName24,
-                    _methodParameterTypes24, new Object[] {  });
+            returnObj = _invokableLocalService.invokeMethod(_methodName25,
+                    _methodParameterTypes25, new Object[] {  });
         } catch (Throwable t) {
             t = ClpSerializer.translateThrowable(t);
 

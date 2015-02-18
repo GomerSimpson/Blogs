@@ -57,6 +57,8 @@ public class TankLocalServiceClpInvoker {
     private String[] _methodParameterTypes46;
     private String _methodName47;
     private String[] _methodParameterTypes47;
+    private String _methodName48;
+    private String[] _methodParameterTypes48;
 
     public TankLocalServiceClpInvoker() {
         _methodName0 = "addTank";
@@ -159,23 +161,30 @@ public class TankLocalServiceClpInvoker {
                 "java.lang.String", "java.lang.String", "java.lang.Long"
             };
 
-        _methodName44 = "findByModification";
+        _methodName44 = "updateTank";
 
-        _methodParameterTypes44 = new String[] { "java.lang.String" };
+        _methodParameterTypes44 = new String[] {
+                "java.lang.Long", "java.lang.String", "java.lang.String",
+                "java.lang.Long"
+            };
 
-        _methodName45 = "findByPrice";
+        _methodName45 = "findByModification";
 
-        _methodParameterTypes45 = new String[] {
+        _methodParameterTypes45 = new String[] { "java.lang.String" };
+
+        _methodName46 = "findByPrice";
+
+        _methodParameterTypes46 = new String[] {
                 "java.lang.Long", "java.lang.Long"
             };
 
-        _methodName46 = "findByNumber";
+        _methodName47 = "findByNumber";
 
-        _methodParameterTypes46 = new String[] { "java.lang.String" };
+        _methodParameterTypes47 = new String[] { "java.lang.String" };
 
-        _methodName47 = "getAllTanks";
+        _methodName48 = "getAllTanks";
 
-        _methodParameterTypes47 = new String[] {  };
+        _methodParameterTypes48 = new String[] {  };
     }
 
     public Object invokeMethod(String name, String[] parameterTypes,
@@ -292,22 +301,31 @@ public class TankLocalServiceClpInvoker {
 
         if (_methodName44.equals(name) &&
                 Arrays.deepEquals(_methodParameterTypes44, parameterTypes)) {
-            return TankLocalServiceUtil.findByModification((java.lang.String) arguments[0]);
+            TankLocalServiceUtil.updateTank((java.lang.Long) arguments[0],
+                (java.lang.String) arguments[1],
+                (java.lang.String) arguments[2], (java.lang.Long) arguments[3]);
+
+            return null;
         }
 
         if (_methodName45.equals(name) &&
                 Arrays.deepEquals(_methodParameterTypes45, parameterTypes)) {
-            return TankLocalServiceUtil.findByPrice((java.lang.Long) arguments[0],
-                (java.lang.Long) arguments[1]);
+            return TankLocalServiceUtil.findByModification((java.lang.String) arguments[0]);
         }
 
         if (_methodName46.equals(name) &&
                 Arrays.deepEquals(_methodParameterTypes46, parameterTypes)) {
-            return TankLocalServiceUtil.findByNumber((java.lang.String) arguments[0]);
+            return TankLocalServiceUtil.findByPrice((java.lang.Long) arguments[0],
+                (java.lang.Long) arguments[1]);
         }
 
         if (_methodName47.equals(name) &&
                 Arrays.deepEquals(_methodParameterTypes47, parameterTypes)) {
+            return TankLocalServiceUtil.findByNumber((java.lang.String) arguments[0]);
+        }
+
+        if (_methodName48.equals(name) &&
+                Arrays.deepEquals(_methodParameterTypes48, parameterTypes)) {
             return TankLocalServiceUtil.getAllTanks();
         }
 

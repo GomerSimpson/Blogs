@@ -266,11 +266,19 @@ public class TankLocalServiceUtil {
     }
 
     public static com.brest.ericpol.service.model.Tank addTank(
-        java.lang.String modification, java.lang.String number,
+        java.lang.String number, java.lang.String modification,
         java.lang.Long price)
         throws com.liferay.portal.kernel.exception.PortalException,
             com.liferay.portal.kernel.exception.SystemException {
-        return getService().addTank(modification, number, price);
+        return getService().addTank(number, modification, price);
+    }
+
+    public static void updateTank(java.lang.Long tankId,
+        java.lang.String number, java.lang.String modification,
+        java.lang.Long price)
+        throws com.liferay.portal.kernel.exception.PortalException,
+            com.liferay.portal.kernel.exception.SystemException {
+        getService().updateTank(tankId, number, modification, price);
     }
 
     public static java.util.List<com.brest.ericpol.service.model.Tank> findByModification(
