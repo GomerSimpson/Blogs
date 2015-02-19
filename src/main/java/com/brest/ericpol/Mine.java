@@ -13,6 +13,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
+import org.exolab.castor.mapping.xml.Param;
 
 import javax.portlet.*;
 import java.io.IOException;
@@ -80,7 +81,7 @@ public class Mine extends MVCPortlet {
 
             for (Equipment userObj : list) {
                 jsonUser = JSONFactoryUtil.createJSONObject();
-                jsonUser.put("equipmentId", userObj.getTankId());
+                jsonUser.put("equipmentId", userObj.getEquipmentId());
                 jsonUser.put("modification", userObj.getModification());
                 jsonUser.put("price", userObj.getPrice());
                 jsonUser.put("tankId", userObj.getTankId());
@@ -159,7 +160,8 @@ public class Mine extends MVCPortlet {
         Long tankId = ParamUtil.getLong(actionRequest, "addTankId");
        // System.out.println(modification + " " + price + " " + tankId);
         EquipmentLocalServiceUtil.addEquipment(modification, price, tankId);
-        PortalUtil.copyRequestParameters(actionRequest, actionResponse);
+        String pageName=ParamUtil.getString(actionRequest,"mvcPath");
+        actionResponse.setRenderParameter("mvcPath", pageName);
     }
 
     public void updateEquipment(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException {
@@ -169,12 +171,35 @@ public class Mine extends MVCPortlet {
         Long tankId = ParamUtil.getLong(actionRequest, "updateTankId");
         EquipmentLocalServiceUtil.updateEquipment(equipmentId, modification, price, tankId);
 
-        PortalUtil.copyRequestParameters(actionRequest, actionResponse);
+        String pageName=ParamUtil.getString(actionRequest,"mvcPath");
+        actionResponse.setRenderParameter("mvcPath", pageName);
     }
 
     public void deleteTank(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, NoSuchModelException {
         Long tankId = ParamUtil.getLong(actionRequest, "tankId");
         TankLocalServiceUtil.deleteTank(tankId);
+    }
+
+    public void deleteEquipment(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, PortalException {
+        Long equipmentId = ParamUtil.getLong(actionRequest, "equipmentId");
+        EquipmentLocalServiceUtil.deleteEquipment(equipmentId);
+
+        String pageName=ParamUtil.getString(actionRequest,"mvcPath");
+        actionResponse.setRenderParameter("mvcPath", pageName);
+    }
+
+    public void generateTankReport(ActionRequest actionRequest, ActionResponse actionResponse){
+        boolean tankNumber = ParamUtil.getBoolean(actionRequest, "tankNumber");
+        boolean tankModification = ParamUtil.getBoolean(actionRequest, "tankModification");
+        boolean tankPrice = ParamUtil.getBoolean(actionRequest, "tankPrice");
+        boolean equipmentModification = ParamUtil.getBoolean(actionRequest, "equipmentModification");
+        boolean equipmentPrice = ParamUtil.getBoolean(actionRequest, "equipmentPrice");
+
+        Long lowBorder = ParamUtil.getLong(actionRequest, "lowBorder");
+        Long topBorder = ParamUtil.getLong(actionRequest, "topBorder");
+
+        System.out.println(tankNumber + " " + tankModification + " " + tankPrice + " " + equipmentModification + " " + equipmentPrice + " " + lowBorder + " " + topBorder);
+
     }
 
 }

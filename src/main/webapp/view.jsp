@@ -12,6 +12,9 @@
 <portlet:actionURL var="updateTankURL" windowState="maximized" name="updateTank">
 </portlet:actionURL>
 
+<portlet:actionURL var="generateTankReportURL" windowState="maximized" name="generateTankReport">
+</portlet:actionURL>
+
 <portlet:renderURL var="toEquipmentPageURL">
     <portlet:param name="mvcPath" value="/eq.jsp"/>
 </portlet:renderURL>
@@ -56,7 +59,7 @@
                     </table>
                 </aui:form>
             </div>
-            </div class="updateTankFormDiv" id="updateTankFormDiv">
+            <div class="updateTankFormDiv" id="updateTankFormDiv">
                 <aui:form action="<%=updateTankURL%>" name="updateTankForm" method="POST">
                     <table>
                         <tbody>
@@ -80,8 +83,32 @@
                         </tbody>
                     </table>
                 </aui:form>
-
             </div>
+            <div class="selectRowsTankDiv" id="selectRowsTankDiv">
+                <aui:form action="<%=generateTankReportURL%>" name="generateTankReport" method="POST">
+                    <table>
+                        <tbody>
+                            <tr>
+                               <td><aui:input type="checkbox" name="tankNumber"/></td>
+                               <td><aui:input type="checkbox" name="tankModification"/></td>
+                               <td><aui:input type="checkbox" name="tankPrice"/></td>
+                               <td><aui:input type="checkbox" name="equipmentModification"/></td>
+                               <td><aui:input type="checkbox" name="equipmentPrice"/></td>
+                            </tr>
+                            <tr>
+                                <td><b>more expensive than</b></td>
+                                <td><aui:input type="number" name="lowBorder"/></td>
+                                <td><b>and cheaper than</b></td>
+                                <td><aui:input type="number" name="topBorder"/></td>
+                            </tr>
+                            <tr>
+                               <td><aui:input type="submit" name="" value="Create Report"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </aui:form>
+            </div>
+
             <a href="<%=toEquipmentPageURL%>">Reference to page with equipment</a>
             <div id="mainTableDiv" class="mainTableDiv">
                 <table class="features-table" id="mainTable" summary="List of tanks.">

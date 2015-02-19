@@ -14,6 +14,10 @@
     <portlet:param name="mvcPath" value="/eq.jsp"/>
 </portlet:actionURL>
 
+<portlet:actionURL var="deleteEquipmentURL" windowState="maximized" name="deleteEquipment">
+    <portlet:param name="mvcPath" value="/eq.jsp"/>
+</portlet:actionURL>
+
 <portlet:resourceURL var="res" >
     <portlet:param name="getEntities" value="equipment" />
 </portlet:resourceURL>
@@ -51,7 +55,7 @@
                     </table>
                 </aui:form>
             </div>
-            </div class="updateTankFormDiv" id="updateEquipmentFormDiv">
+            <div class="updateTankFormDiv" id="updateEquipmentFormDiv">
                 <aui:form action="<%=updateEquipmentURL%>" name="updateEquipmentForm" method="POST">
                     <table>
                         <tbody>
@@ -75,8 +79,8 @@
                         </tbody>
                     </table>
                 </aui:form>
-
             </div>
+
             <div id="mainTableDiv" class="mainTableDiv">
                 <table class="features-table" id="mainTable" summary="List of equipment.">
                             <caption>Tanks</caption>
@@ -123,6 +127,9 @@
                                     var strNumber = "\'" + obj.number + "\'";
                                     var strMod = "\'" + obj.modification + "\'";
                                     stringHtml += "<td class=\"grey\">" + "<input type=\"button\" value=\"Update\" onClick=" + "\"fillInUpdateForm(" + obj.equipmentId + ", " + strMod + ", " + obj.price + ", " + obj.tankId + ")\"" + ">";
+                                    stringHtml += "<form action=\"<%=deleteEquipmentURL%>\" name=\"deleteEquipmentForm\" method=\"POST\">" +
+                                        "<input type=\"hidden\" id=\"<portlet:namespace/>equipmentId\" name=\"<portlet:namespace/>equipmentId\" value=\"" + obj.equipmentId + "\" />" +
+                                        "<input type=\"submit\" value=\"Remove\" /><form>";
                                     document.getElementById('mainTable').innerHTML += stringHtml;
                                     stringHtml = "";
                                 });
