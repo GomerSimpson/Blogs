@@ -3,6 +3,7 @@ package com.brest.ericpol;
 import com.brest.ericpol.service.model.Equipment;
 import com.brest.ericpol.service.service.EquipmentLocalServiceUtil;
 import com.brest.ericpol.service.service.TankLocalServiceUtil;
+import com.liferay.portal.NoSuchModelException;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -166,10 +167,14 @@ public class Mine extends MVCPortlet {
         String modification = ParamUtil.getString(actionRequest, "updateEquipmentModification");
         Long price = ParamUtil.getLong(actionRequest, "updateEquipmentPrice");
         Long tankId = ParamUtil.getLong(actionRequest, "updateTankId");
-
-         //System.out.println(equipmentId + " " + modification + " " + price + " " + tankId);
         EquipmentLocalServiceUtil.updateEquipment(equipmentId, modification, price, tankId);
 
         PortalUtil.copyRequestParameters(actionRequest, actionResponse);
     }
+
+    public void deleteTank(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, NoSuchModelException {
+        Long tankId = ParamUtil.getLong(actionRequest, "tankId");
+        TankLocalServiceUtil.deleteTank(tankId);
+    }
+
 }

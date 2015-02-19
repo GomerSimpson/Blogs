@@ -58,6 +58,8 @@ public class TankLocalServiceClp implements TankLocalService {
     private String[] _methodParameterTypes24;
     private String _methodName25;
     private String[] _methodParameterTypes25;
+    private String _methodName26;
+    private String[] _methodParameterTypes26;
 
     public TankLocalServiceClp(InvokableLocalService invokableLocalService) {
         _invokableLocalService = invokableLocalService;
@@ -179,13 +181,17 @@ public class TankLocalServiceClp implements TankLocalService {
                 "java.lang.Long", "java.lang.Long"
             };
 
-        _methodName24 = "findByNumber";
+        _methodName24 = "deleteTank";
 
-        _methodParameterTypes24 = new String[] { "java.lang.String" };
+        _methodParameterTypes24 = new String[] { "java.lang.Long" };
 
-        _methodName25 = "getAllTanks";
+        _methodName25 = "findByNumber";
 
-        _methodParameterTypes25 = new String[] {  };
+        _methodParameterTypes25 = new String[] { "java.lang.String" };
+
+        _methodName26 = "getAllTanks";
+
+        _methodParameterTypes26 = new String[] {  };
     }
 
     @Override
@@ -864,6 +870,34 @@ public class TankLocalServiceClp implements TankLocalService {
     }
 
     @Override
+    public void deleteTank(java.lang.Long tankId)
+        throws com.liferay.portal.NoSuchModelException,
+            com.liferay.portal.kernel.exception.SystemException {
+        try {
+            _invokableLocalService.invokeMethod(_methodName24,
+                _methodParameterTypes24,
+                new Object[] { ClpSerializer.translateInput(tankId) });
+        } catch (Throwable t) {
+            t = ClpSerializer.translateThrowable(t);
+
+            if (t instanceof com.liferay.portal.NoSuchModelException) {
+                throw (com.liferay.portal.NoSuchModelException) t;
+            }
+
+            if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+                throw (com.liferay.portal.kernel.exception.SystemException) t;
+            }
+
+            if (t instanceof RuntimeException) {
+                throw (RuntimeException) t;
+            } else {
+                throw new RuntimeException(t.getClass().getName() +
+                    " is not a valid exception");
+            }
+        }
+    }
+
+    @Override
     public com.brest.ericpol.service.model.Tank findByNumber(
         java.lang.String number)
         throws com.brest.ericpol.service.NoSuchTankException,
@@ -871,8 +905,8 @@ public class TankLocalServiceClp implements TankLocalService {
         Object returnObj = null;
 
         try {
-            returnObj = _invokableLocalService.invokeMethod(_methodName24,
-                    _methodParameterTypes24,
+            returnObj = _invokableLocalService.invokeMethod(_methodName25,
+                    _methodParameterTypes25,
                     new Object[] { ClpSerializer.translateInput(number) });
         } catch (Throwable t) {
             t = ClpSerializer.translateThrowable(t);
@@ -902,8 +936,8 @@ public class TankLocalServiceClp implements TankLocalService {
         Object returnObj = null;
 
         try {
-            returnObj = _invokableLocalService.invokeMethod(_methodName25,
-                    _methodParameterTypes25, new Object[] {  });
+            returnObj = _invokableLocalService.invokeMethod(_methodName26,
+                    _methodParameterTypes26, new Object[] {  });
         } catch (Throwable t) {
             t = ClpSerializer.translateThrowable(t);
 

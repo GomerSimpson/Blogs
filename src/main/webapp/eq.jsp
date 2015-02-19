@@ -77,7 +77,6 @@
                 </aui:form>
 
             </div>
-            <input type="button" value="Update" name="update" id="update" onClick="fillInUpdateForm();"/>
             <div id="mainTableDiv" class="mainTableDiv">
                 <table class="features-table" id="mainTable" summary="List of equipment.">
                             <caption>Tanks</caption>

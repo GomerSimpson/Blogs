@@ -293,6 +293,12 @@ public class TankLocalServiceUtil {
         return getService().findByPrice(lowBorder, topBorder);
     }
 
+    public static void deleteTank(java.lang.Long tankId)
+        throws com.liferay.portal.NoSuchModelException,
+            com.liferay.portal.kernel.exception.SystemException {
+        getService().deleteTank(tankId);
+    }
+
     public static com.brest.ericpol.service.model.Tank findByNumber(
         java.lang.String number)
         throws com.brest.ericpol.service.NoSuchTankException,

@@ -261,6 +261,10 @@ public interface TankLocalService extends BaseLocalService, InvokableLocalServic
         java.lang.Long lowBorder, java.lang.Long topBorder)
         throws com.liferay.portal.kernel.exception.SystemException;
 
+    public void deleteTank(java.lang.Long tankId)
+        throws com.liferay.portal.NoSuchModelException,
+            com.liferay.portal.kernel.exception.SystemException;
+
     public com.brest.ericpol.service.model.Tank findByNumber(
         java.lang.String number)
         throws com.brest.ericpol.service.NoSuchTankException,

@@ -307,6 +307,13 @@ public class TankLocalServiceWrapper implements TankLocalService,
     }
 
     @Override
+    public void deleteTank(java.lang.Long tankId)
+        throws com.liferay.portal.NoSuchModelException,
+            com.liferay.portal.kernel.exception.SystemException {
+        _tankLocalService.deleteTank(tankId);
+    }
+
+    @Override
     public com.brest.ericpol.service.model.Tank findByNumber(
         java.lang.String number)
         throws com.brest.ericpol.service.NoSuchTankException,

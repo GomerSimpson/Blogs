@@ -2,10 +2,12 @@ package com.brest.ericpol.service.service.impl;
 
 import com.brest.ericpol.MyBean;
 import com.brest.ericpol.service.NoSuchTankException;
+import com.brest.ericpol.service.model.Equipment;
 import com.brest.ericpol.service.model.Tank;
 import com.brest.ericpol.service.service.base.TankLocalServiceBaseImpl;
 import com.brest.ericpol.service.service.persistence.TankUtil;
 import com.liferay.counter.service.CounterLocalServiceUtil;
+import com.liferay.portal.NoSuchModelException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 
@@ -77,6 +79,11 @@ public class TankLocalServiceImpl extends TankLocalServiceBaseImpl {
         }
 
         return list;
+    }
+
+    public void deleteTank(Long tankId) throws SystemException, NoSuchModelException {
+        equipmentPersistence.removeByTankId(tankId);
+        tankPersistence.remove(tankId);
     }
 
     public Tank findByNumber(String number) throws SystemException, NoSuchTankException {

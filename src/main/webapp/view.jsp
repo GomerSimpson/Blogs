@@ -16,6 +16,9 @@
     <portlet:param name="mvcPath" value="/eq.jsp"/>
 </portlet:renderURL>
 
+<portlet:actionURL var="deleteTankURL" windowState="maximized" name="deleteTank">
+</portlet:actionURL>
+
 <portlet:resourceURL var="res" >
     <portlet:param name="getEntities" value="tanks" />
 </portlet:resourceURL>
@@ -95,23 +98,20 @@
                 </table>
         </div>
         <script>
-                                    function fillInUpdateForm(tankId, number, modification, price){
-                                                alert("work");
-                                                    alert(tankId + ", "  + number + ", " + modification + ", " + price);
-                                                    A.one('#<portlet:namespace />updateTankId').set('value', tankId);
-                                                    A.one('#<portlet:namespace />updateTankNumber').set('value', number);
-                                                    A.one('#<portlet:namespace />updateTankModification').set('value', modification);
-                                                    A.one('#<portlet:namespace />updateTankPrice').set('value', price);
-                                                }
-
             var A = AUI();
             var stringHtml = "";
             var localStringHtml = "";
             var data;
 
+            function fillInUpdateForm(tankId, number, modification, price){
+                A.one('#<portlet:namespace/>updateTankId').set('value', tankId);
+                A.one('#<portlet:namespace/>updateTankNumber').set('value', number);
+                A.one('#<portlet:namespace/>updateTankModification').set('value', modification);
+                A.one('#<portlet:namespace/>updateTankPrice').set('value', price);
+            }
+
             AUI().ready(
                 function() {
-
 
                  AUI().use('aui-base','aui-io-request', function(A){
                         A.io.request('<%=res%>',{
@@ -130,10 +130,16 @@
                                         localStringHtml += eq.modification + "<br/>";
                                     });
 
+                                    var deleteTankURL = new Liferay.PortletURL.createActionURL();
+
+
                                     stringHtml += localStringHtml;
                                     var strNumber = "\'" + obj.number + "\'";
                                     var strMod = "\'" + obj.modification + "\'";
                                     stringHtml += "<td class=\"grey\">" + "<input type=\"button\" value=\"Update\" onClick=" + "\"fillInUpdateForm(" + obj.tankId + ", " + strNumber + ", " + strMod + ", " + obj.price + ")\"" + ">";
+                                    stringHtml += "<form action=\"<%=deleteTankURL%>\" name=\"deleteTankForm\" method=\"POST\">" +
+                                                                                                                   "<input type=\"hidden\" id=\"<portlet:namespace/>tankId\" name=\"<portlet:namespace/>tankId\" value=\"" + obj.tankId + "\" />" +
+                                                                                                                   "<input type=\"submit\" value=\"Remove\" /><form>";
                                     document.getElementById('mainTable').innerHTML += stringHtml;
                                     localStringHtml = "";
                                     stringHtml = "";

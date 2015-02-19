@@ -59,6 +59,8 @@ public class TankLocalServiceClpInvoker {
     private String[] _methodParameterTypes47;
     private String _methodName48;
     private String[] _methodParameterTypes48;
+    private String _methodName49;
+    private String[] _methodParameterTypes49;
 
     public TankLocalServiceClpInvoker() {
         _methodName0 = "addTank";
@@ -178,13 +180,17 @@ public class TankLocalServiceClpInvoker {
                 "java.lang.Long", "java.lang.Long"
             };
 
-        _methodName47 = "findByNumber";
+        _methodName47 = "deleteTank";
 
-        _methodParameterTypes47 = new String[] { "java.lang.String" };
+        _methodParameterTypes47 = new String[] { "java.lang.Long" };
 
-        _methodName48 = "getAllTanks";
+        _methodName48 = "findByNumber";
 
-        _methodParameterTypes48 = new String[] {  };
+        _methodParameterTypes48 = new String[] { "java.lang.String" };
+
+        _methodName49 = "getAllTanks";
+
+        _methodParameterTypes49 = new String[] {  };
     }
 
     public Object invokeMethod(String name, String[] parameterTypes,
@@ -321,11 +327,18 @@ public class TankLocalServiceClpInvoker {
 
         if (_methodName47.equals(name) &&
                 Arrays.deepEquals(_methodParameterTypes47, parameterTypes)) {
-            return TankLocalServiceUtil.findByNumber((java.lang.String) arguments[0]);
+            TankLocalServiceUtil.deleteTank((java.lang.Long) arguments[0]);
+
+            return null;
         }
 
         if (_methodName48.equals(name) &&
                 Arrays.deepEquals(_methodParameterTypes48, parameterTypes)) {
+            return TankLocalServiceUtil.findByNumber((java.lang.String) arguments[0]);
+        }
+
+        if (_methodName49.equals(name) &&
+                Arrays.deepEquals(_methodParameterTypes49, parameterTypes)) {
             return TankLocalServiceUtil.getAllTanks();
         }
 
