@@ -11,15 +11,12 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
-import org.exolab.castor.mapping.xml.Param;
 
 import javax.portlet.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Mine extends MVCPortlet {
@@ -105,29 +102,7 @@ public class Mine extends MVCPortlet {
         //System.out.println(tankModification + " " + tankModification + " " + tankPrice);
         TankLocalServiceUtil.addTank(tankModification, tankNumber, tankPrice);
 
-
-//        boolean tankNumber = ParamUtil.getBoolean(actionRequest, "tankNumber");
-//        boolean tankModification = ParamUtil.getBoolean(actionRequest, "tankModification");
-//        boolean tankPrice = ParamUtil.getBoolean(actionRequest, "tankPrice");
-//        boolean equipmentModification = ParamUtil.getBoolean(actionRequest, "equipmentModification");
-//        boolean equipmentPrice = ParamUtil.getBoolean(actionRequest, "equipmentPrice");
-        /*JasperReportBuilder report = DynamicReports.report();
-        report
-                .columns(
-                Columns.column("mod", "modification", DataTypes.stringType()),
-                Columns.column("First Name", "firstName", DataTypes.stringType()),
-                Columns.column("Last Name", "lastName", DataTypes.stringType()))
-                .title(Components.text("SimpleReportExample")
-                        .setHorizontalAlignment(HorizontalAlignment.CENTER))
-                .pageFooter(Components.pageXofY())//show page number on the page footer
-                .setDataSource(list);*/
-
-//        System.out.println(tankNumber);
-//        System.out.println(tankModification);
-//        System.out.println(tankPrice);
-//        System.out.println(equipmentModification);
-//        System.out.println(equipmentPrice);
-
+//
 ////        System.out.println(TankLocalServiceUtil.addTank("T-72Б", "i2567", 100000L));
 ////        System.out.println(TankLocalServiceUtil.addTank("Т-72БА", "i6209", 3000000L));
 ////        System.out.println(TankLocalServiceUtil.addTank("Т-90А", "i6349", 4500000L));
@@ -198,6 +173,32 @@ public class Mine extends MVCPortlet {
         Long lowBorder = ParamUtil.getLong(actionRequest, "lowBorder");
         Long topBorder = ParamUtil.getLong(actionRequest, "topBorder");
 
+        List<MyBean> list = null;
+
+        try {
+            if(lowBorder == 0) {
+                list = TankLocalServiceUtil.getFullEntity(TankLocalServiceUtil.getTanks(QueryUtil.ALL_POS, QueryUtil.ALL_POS));
+            } else{
+                list = TankLocalServiceUtil.getFullEntity(TankLocalServiceUtil.findByPrice(lowBorder, topBorder));
+            }
+        } catch (SystemException e) {
+            e.printStackTrace();
+        }
+
+        new FullReport(tankNumber, tankModification, tankPrice, equipmentModification, equipmentModification, list);
+/*
+        List <MyBean> list = new ArrayList<MyBean>();
+
+        JasperReportBuilder report = DynamicReports.report();
+        report
+                .columns(
+                        Columns.column("mod", "modification", DataTypes.stringType()),
+                        Columns.column("First Name", "firstName", DataTypes.stringType()),
+                        Columns.column("Last Name", "lastName", DataTypes.stringType()))
+                .title(Components.text("SimpleReportExample")
+                        .setHorizontalAlignment(HorizontalAlignment.CENTER))
+                .pageFooter(Components.pageXofY())//show page number on the page footer
+                .setDataSource(list);*/
         System.out.println(tankNumber + " " + tankModification + " " + tankPrice + " " + equipmentModification + " " + equipmentPrice + " " + lowBorder + " " + topBorder);
 
     }

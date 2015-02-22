@@ -23,8 +23,22 @@
         <!--<liferay.app.server.deploy.dir>C:\Program Files\liferay\tomcat-7.0.42\webapps</liferay.app.server.deploy.dir>-->
         <!--<liferay.app.server.lib.global.dir>C:\Program Files\liferay\tomcat-7.0.42\lib\ext</liferay.app.server.lib.global.dir>-->
         <!--<liferay.app.server.portal.dir>C:\Program Files\liferay\tomcat-7.0.42\webapps\ROOT</liferay.app.server.portal.dir>-->
-
-    </properties>
+		<jasperreportsVersion>6.0.0</jasperreportsVersion>
+		<commonslang3Version>3.1</commonslang3Version>
+		<barcode4jVersion>2.0</barcode4jVersion>
+		<barbecueVersion>1.5-beta1</barbecueVersion>
+		<batikbridgeVersion>1.7</batikbridgeVersion>
+		<springframeworkVersion>2.5</springframeworkVersion>
+		<bcprovjdk15onVersion>1.49</bcprovjdk15onVersion>
+		<poiVersion>3.10.1</poiVersion>
+		<jxlVersion>2.6.10</jxlVersion>
+		<junitVersion>4.0</junitVersion>
+		<hsqldbVersion>1.8.0.10</hsqldbVersion>
+		<xalanVersion>2.7.1</xalanVersion>
+		<groovyVersion>1.7.5</groovyVersion>
+		<velocityVersion>1.7</velocityVersion>
+		<jsonVersion>20080701</jsonVersion>
+	</properties>
 
 	<build>
 		<plugins>
@@ -152,5 +166,5 @@
 			<artifactId>dynamicreports-core</artifactId>
 			<version>3.1.3</version>
 		</dependency>
-	</dependencies>
+</dependencies>
 </project>
