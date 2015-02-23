@@ -1,4 +1,4 @@
-package com.brest.ericpol;
+package com.brest.ericpol.blog;
 
 import net.sf.dynamicreports.report.base.expression.AbstractValueFormatter;
 import net.sf.dynamicreports.report.builder.HyperLinkBuilder;

@@ -1,4 +1,4 @@
-package com.brest.ericpol;
+package com.brest.ericpol.blog;
 
 import com.brest.ericpol.service.model.Equipment;
 

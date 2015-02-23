@@ -1,4 +1,4 @@
-package com.brest.ericpol;
+package com.brest.ericpol.blog;
 
 import com.brest.ericpol.service.model.Equipment;
 import com.brest.ericpol.service.service.EquipmentLocalServiceUtil;
@@ -19,7 +19,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
 
-public class Mine extends MVCPortlet {
+public class Blog extends MVCPortlet {
 
     @Override
     public void serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws IOException, PortletException {

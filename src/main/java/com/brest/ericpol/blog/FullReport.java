@@ -1,4 +1,4 @@
-package com.brest.ericpol;
+package com.brest.ericpol.blog;
 
 import static net.sf.dynamicreports.report.builder.DynamicReports.*;
 import static org.apache.commons.lang3.BooleanUtils.isTrue;
@@ -19,7 +19,7 @@ import java.util.List;
 public class FullReport {
 
     private List<MyBean> list = null;
-
+    static int a = 0;
     private boolean tankNumber;
     private boolean tankModification;
     private boolean tankPrice;
@@ -75,7 +75,7 @@ public class FullReport {
                             cmp.verticalGap(20))
                    // .pageFooter(Templates.footerComponent)
                     .setDataSource(createDataSource())
-                    .toPdf(new FileOutputStream("/home/simpson/report.pdf"));
+                    .toPdf(new FileOutputStream("C:\\report" + a + ".pdf"));
 
         } catch (DRException e) {
             e.printStackTrace();

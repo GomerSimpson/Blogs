@@ -4,7 +4,7 @@
 
 <display>
 	<category name="Mine">
-		<portlet id="Main" />
+		<portlet id="Blog" />
         <portlet id="Shower"/>
 	</category>
 </display>

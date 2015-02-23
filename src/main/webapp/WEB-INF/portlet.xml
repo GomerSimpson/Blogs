@@ -4,9 +4,9 @@
 			 xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd
              http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" version="2.0">
 	<portlet>
-		<portlet-name>Main</portlet-name>
-		<display-name>Main</display-name>
-		<portlet-class>com.brest.ericpol.Mine</portlet-class>
+		<portlet-name>Blog</portlet-name>
+		<display-name>Blog</display-name>
+		<portlet-class>com.brest.ericpol.blog.Blog</portlet-class>
 		<init-param>
 			<name>view-jsp</name>
 			<value>/view.jsp</value>
@@ -22,9 +22,9 @@
             <window-state>maximized</window-state>
 		</supports>
 		<portlet-info>
-			<title>Main</title>
-			<short-title>Main</short-title>
-			<keywords>Main</keywords>
+			<title>Blog</title>
+			<short-title>Blog</short-title>
+			<keywords>Blog</keywords>
 		</portlet-info>
         <security-role-ref>
             <role-name>administrator</role-name>
@@ -45,7 +45,7 @@
     <portlet>
         <portlet-name>Shower</portlet-name>
         <display-name>Shower</display-name>
-        <portlet-class>com.brest.ericpol.Shower</portlet-class>
+        <portlet-class>com.brest.ericpol.blog.Shower</portlet-class>
         <init-param>
             <name>view-jsp</name>
             <value>/shower.jsp</value>

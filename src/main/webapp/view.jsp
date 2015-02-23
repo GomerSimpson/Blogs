@@ -84,7 +84,7 @@
                     </table>
                 </aui:form>
             </div>
-            <div class="selectRowsTankDiv" id="selectRowsTankDiv">
+            <div class="box" id="selectRowsTankDiv">
                 <aui:form action="<%=generateTankReportURL%>" name="generateTankReport" method="POST">
                     <table>
                         <tbody>
@@ -110,7 +110,12 @@
             </div>
 
             <a href="<%=toEquipmentPageURL%>">Reference to page with equipment</a>
-            <div id="mainTableDiv" class="mainTableDiv">
+<!--
+            <aui:button cssClass="btn-primary" name="btn0" value="btn0" id="btn0"/>
+            <aui:button cssClass="btn-info" name="btn1" value="btn1" id="btn1"/>
+            <aui:button cssClass="btn-success" name="btn2" value="btn2" id="btn2"/>
+-->
+            <div class="box" id="mainTableDiv" class="mainTableDiv">
                 <table class="features-table" id="mainTable" summary="List of tanks.">
                             <caption>Tanks</caption>
                                 <tr>
@@ -123,13 +128,18 @@
 
                                 </tbody>
                 </table>
-        </div>
-        <script>
+            </div>
+        <!--<link href="http://cdn.alloyui.com/3.0.0/aui-css/css/bootstrap.min.css" rel="stylesheet"></link>-->
+        <aui:script use="aui-base">
             var A = AUI();
             var stringHtml = "";
             var localStringHtml = "";
             var data;
-
+/*
+            A.one("#<portlet:namespace/>btn").onClick('click', function(){
+                alert("work");
+            });
+*/
             function fillInUpdateForm(tankId, number, modification, price){
                 A.one('#<portlet:namespace/>updateTankId').set('value', tankId);
                 A.one('#<portlet:namespace/>updateTankNumber').set('value', number);
@@ -184,7 +194,7 @@
             );
 
 
-        </script>
+        </aui:script>
 
     </body>
 </html>
