@@ -15,29 +15,15 @@
 		<service.api.dir>src/main/java-service-api</service.api.dir>
 		<project.built.sourceEncoding>UTF-8</project.built.sourceEncoding>
 		<liferay.version>6.2.2</liferay.version>
-		<!--<liferay.auto.deploy.dir>/home/simpson/liferay/deploy</liferay.auto.deploy.dir>-->
-		<!--<liferay.app.server.deploy.dir>/home/simpson/liferay/tomcat-7.0.42/webapps</liferay.app.server.deploy.dir>-->
-		<!--<liferay.app.server.lib.global.dir>/home/simpson/liferay/tomcat-7.0.42/lib</liferay.app.server.lib.global.dir>-->
-		<!--<liferay.app.server.portal.dir>/home/simpson/liferay/tomcat-7.0.42/webapps/ROOT</liferay.app.server.portal.dir>-->
-        <liferay.auto.deploy.dir>C:\Program Files\liferay\deploy</liferay.auto.deploy.dir>
-        <liferay.app.server.deploy.dir>C:\Program Files\liferay\tomcat-7.0.42\webapps</liferay.app.server.deploy.dir>
-        <liferay.app.server.lib.global.dir>C:\Program Files\liferay\tomcat-7.0.42\lib\ext</liferay.app.server.lib.global.dir>
-        <liferay.app.server.portal.dir>C:\Program Files\liferay\tomcat-7.0.42\webapps\ROOT</liferay.app.server.portal.dir>
-		<jasperreportsVersion>6.0.0</jasperreportsVersion>
-		<commonslang3Version>3.1</commonslang3Version>
-		<barcode4jVersion>2.0</barcode4jVersion>
-		<barbecueVersion>1.5-beta1</barbecueVersion>
-		<batikbridgeVersion>1.7</batikbridgeVersion>
-		<springframeworkVersion>2.5</springframeworkVersion>
-		<bcprovjdk15onVersion>1.49</bcprovjdk15onVersion>
-		<poiVersion>3.10.1</poiVersion>
-		<jxlVersion>2.6.10</jxlVersion>
-		<junitVersion>4.0</junitVersion>
-		<hsqldbVersion>1.8.0.10</hsqldbVersion>
-		<xalanVersion>2.7.1</xalanVersion>
-		<groovyVersion>1.7.5</groovyVersion>
-		<velocityVersion>1.7</velocityVersion>
-		<jsonVersion>20080701</jsonVersion>
+		<liferay.auto.deploy.dir>/home/simpson/liferay/deploy</liferay.auto.deploy.dir>
+		<liferay.app.server.deploy.dir>/home/simpson/liferay/tomcat-7.0.42/webapps</liferay.app.server.deploy.dir>
+		<liferay.app.server.lib.global.dir>/home/simpson/liferay/tomcat-7.0.42/lib</liferay.app.server.lib.global.dir>
+		<liferay.app.server.portal.dir>/home/simpson/liferay/tomcat-7.0.42/webapps/ROOT</liferay.app.server.portal.dir>
+        <!--<liferay.auto.deploy.dir>C:\Program Files\liferay\deploy</liferay.auto.deploy.dir>-->
+        <!--<liferay.app.server.deploy.dir>C:\Program Files\liferay\tomcat-7.0.42\webapps</liferay.app.server.deploy.dir>-->
+        <!--<liferay.app.server.lib.global.dir>C:\Program Files\liferay\tomcat-7.0.42\lib\ext</liferay.app.server.lib.global.dir>-->
+        <!--<liferay.app.server.portal.dir>C:\Program Files\liferay\tomcat-7.0.42\webapps\ROOT</liferay.app.server.portal.dir>-->
+
 	</properties>
 
 	<build>

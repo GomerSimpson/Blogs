@@ -1,200 +1,223 @@
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@page import="java.util.Map"%>
+<%@taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@page import="java.util.List"%>
+<%@page import="com.liferay.portal.kernel.util.ListUtil"%>
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
 <%@ taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet" %>
 <%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 <%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
-
-<portlet:defineObjects/>
-<portlet:actionURL var="addTankURL" windowState="maximized" name="addTank">
-</portlet:actionURL>
-
-<portlet:actionURL var="updateTankURL" windowState="maximized" name="updateTank">
-</portlet:actionURL>
-
-<portlet:actionURL var="generateTankReportURL" windowState="maximized" name="generateTankReport">
-</portlet:actionURL>
-
-<portlet:renderURL var="toEquipmentPageURL">
+<portlet:defineObjects />
+<portlet:actionURL var="testURL" windowState="maximized" name="addEquipment">
     <portlet:param name="mvcPath" value="/eq.jsp"/>
-</portlet:renderURL>
-
-<portlet:actionURL var="deleteTankURL" windowState="maximized" name="deleteTank">
 </portlet:actionURL>
 
-<portlet:resourceURL var="res" >
-    <portlet:param name="getEntities" value="tanks" />
-</portlet:resourceURL>
-
-<!DOCTYPE html>
-
-<html>
-    <head>
-            <title>Tanks Page</title>
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    </head>
-
-    <body>
-
-        <div class="mainDiv" id="mainDiv">
-            <div class="addTankFormDiv" id="addTankFormDiv">
-                <aui:form action="<%=addTankURL%>" name="addTankForm" method="POST">
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td><aui:input type="text" id="addTankNumber" name="addTankNumber" value="i" label="Tank Number"/></td>
-                            </tr>
-                            <tr>
-                                <td><aui:input type="text" id="addTankModification" name="addTankModification" value="" label="Tank Modification"/></td>
-                            </tr>
-                            <tr>
-                                <td><aui:input type="number" id="addTankPrice" name="addTankPrice" value="" label="Tank Price"/></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                	<aui:input type="submit" name="submit" value="Add Tank" label=""/>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </aui:form>
-            </div>
-            <div class="updateTankFormDiv" id="updateTankFormDiv">
-                <aui:form action="<%=updateTankURL%>" name="updateTankForm" method="POST">
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td><aui:input type="hidden" id="updateTankId" name="updateTankId" value=""/></td>
-                            </tr>
-                            <tr>
-                                <td><aui:input type="text" id="updateTankNumber" name="updateTankNumber" value="i" label="Tank Number"/></td>
-                            </tr>
-                            <tr>
-                                <td><aui:input type="text" id="updateTankModification" name="updateTankModification" value="" label="Tank Modification"/></td>
-                            </tr>
-                            <tr>
-                                <td><aui:input type="number" id="updateTankPrice" name="updateTankPrice" value="" label="Tank Price"/></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                	<aui:input type="submit" name="submit" value="Update tank" label=""/>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </aui:form>
-            </div>
-            <div class="box" id="selectRowsTankDiv">
-                <aui:form action="<%=generateTankReportURL%>" name="generateTankReport" method="POST">
-                    <table>
-                        <tbody>
-                            <tr>
-                               <td><aui:input type="checkbox" name="tankNumber"/></td>
-                               <td><aui:input type="checkbox" name="tankModification"/></td>
-                               <td><aui:input type="checkbox" name="tankPrice"/></td>
-                               <td><aui:input type="checkbox" name="equipmentModification"/></td>
-                               <td><aui:input type="checkbox" name="equipmentPrice"/></td>
-                            </tr>
-                            <tr>
-                                <td><b>more expensive than</b></td>
-                                <td><aui:input type="number" name="lowBorder"/></td>
-                                <td><b>and cheaper than</b></td>
-                                <td><aui:input type="number" name="topBorder"/></td>
-                            </tr>
-                            <tr>
-                               <td><aui:input type="submit" name="" value="Create Report"/></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </aui:form>
-            </div>
-
-            <a href="<%=toEquipmentPageURL%>">Reference to page with equipment</a>
-<!--
-            <aui:button cssClass="btn-primary" name="btn0" value="btn0" id="btn0"/>
-            <aui:button cssClass="btn-info" name="btn1" value="btn1" id="btn1"/>
-            <aui:button cssClass="btn-success" name="btn2" value="btn2" id="btn2"/>
--->
-            <div class="box" id="mainTableDiv" class="mainTableDiv">
-                <table class="features-table" id="mainTable" summary="List of tanks.">
-                            <caption>Tanks</caption>
-                                <tr>
-                                    <td><h2>Number</h2></td>
-                                    <td><h2>Modification</h2></td>
-                                    <td><h2>Price</h2></td>
-                                    <td><h2>Equipment</h2></td>
-                                </tr>
-                                <tbody>
-
-                                </tbody>
-                </table>
-            </div>
-        <!--<link href="http://cdn.alloyui.com/3.0.0/aui-css/css/bootstrap.min.css" rel="stylesheet"></link>-->
-        <aui:script use="aui-base">
-            var A = AUI();
-            var stringHtml = "";
-            var localStringHtml = "";
-            var data;
-/*
-            A.one("#<portlet:namespace/>btn").onClick('click', function(){
-                alert("work");
-            });
-*/
-            function fillInUpdateForm(tankId, number, modification, price){
-                A.one('#<portlet:namespace/>updateTankId').set('value', tankId);
-                A.one('#<portlet:namespace/>updateTankNumber').set('value', number);
-                A.one('#<portlet:namespace/>updateTankModification').set('value', modification);
-                A.one('#<portlet:namespace/>updateTankPrice').set('value', price);
-            }
-
-            AUI().ready(
-                function() {
-
-                 AUI().use('aui-base','aui-io-request', function(A){
-                        A.io.request('<%=res%>',{
-                            dataType: 'json',
-                            method: 'GET',
-                            on: {
-                            success: function() {
-                                data=this.get('responseData');
-                                A.Array.each(data, function(obj, idx){
-
-                                    stringHtml += "<tr><td class=\"grey\">" + obj.number;
-                                    stringHtml += "<td class=\"green\">"  + obj.modification;
-                                    stringHtml += "<td class=\"green\">" + obj.price;
-                                    localStringHtml += "<td class=\"green\">";
-                                    A.Array.each(obj.equipment, function(eq, idx){
-                                        localStringHtml += eq.modification + "<br/>";
-                                    });
-
-                                    var deleteTankURL = new Liferay.PortletURL.createActionURL();
-
-
-                                    stringHtml += localStringHtml;
-                                    var strNumber = "\'" + obj.number + "\'";
-                                    var strMod = "\'" + obj.modification + "\'";
-                                    stringHtml += "<td class=\"grey\">" + "<input type=\"button\" value=\"Update\" onClick=" + "\"fillInUpdateForm(" + obj.tankId + ", " + strNumber + ", " + strMod + ", " + obj.price + ")\"" + ">";
-                                    stringHtml += "<form action=\"<%=deleteTankURL%>\" name=\"deleteTankForm\" method=\"POST\">" +
-                                                                                                                   "<input type=\"hidden\" id=\"<portlet:namespace/>tankId\" name=\"<portlet:namespace/>tankId\" value=\"" + obj.tankId + "\" />" +
-                                                                                                                   "<input type=\"submit\" value=\"Remove\" /><form>";
-                                    document.getElementById('mainTable').innerHTML += stringHtml;
-                                    localStringHtml = "";
-                                    stringHtml = "";
-                                });
+<aui:form action="<%=testURL%>" method="get" name="fm1">
+	<liferay-portlet:renderURLParams varImpl="adsfg" />
+	<aui:input name="redirect" type="hidden" value="ag" />
+</aui:form>
 
 
 
-                            }
+<c:if test="true">
+	<aui:nav-bar>
+		<c:if test="true">
+			<aui:nav>
+				<c:if test="true">
+					<portlet:renderURL var="testURL">
+						<portlet:param name="struts_action" value="/blogs/edit_entry" />
+						<portlet:param name="redirect" value="<%= testURL %>" />
+						<portlet:param name="testURL" value="<%= testURL %>" />
+					</portlet:renderURL>
 
-                            }
-                        });
-                 });
+					<aui:nav-item href="<%= testURL %>" label="add-blog-entry" name="addEntryButton" />
+				</c:if>
 
-                }
-            );
+				<c:if test="<%= testURL %>">
 
+					<aui:nav-item href="<%= testURL %>" label="permissions" title="edit-permissions" useDialog="<%= true %>" />
+				</c:if>
+			</aui:nav>
+		</c:if>
 
-        </aui:script>
+		<c:if test="<%= testURL %>">
+			<aui:nav-bar-search cssClass="pull-right">
+				<div class="form-search">
+					<liferay-ui:input-search autoFocus="" id="keywords1" name="keywords" placeholder='' />
+				</div>
+			</aui:nav-bar-search>
+		</c:if>
+	</aui:nav-bar>
+</c:if>
 
-    </body>
-</html>
+<liferay-ui:categorization-filter
+	assetType="entries"
+	portletURL="<%= renderResponse.createRenderURL() %>"
+/>
+
+<c:choose>
+	<c:when test="true">
+		<div class="entry" id="<portlet:namespace />5">
+			<div class="entry-content">
+				start of entry
+				<portlet:renderURL var="testURL">
+					<portlet:param name="struts_action" value="/blogs/view_entry" />
+					<portlet:param name="redirect" value="<%= testURL %>" />
+					<portlet:param name="urlTitle" value="entry.getUrlTitle()" />
+				</portlet:renderURL>
+
+				<c:if test='true'>
+					<div class="entry-title">
+						<h2><aui:a href="<%= testURL %>"></aui:a></h2>
+					</div>
+				</c:if>
+
+				<div class="entry-date">
+					<span class="hide-accessible"></span>
+							<liferay-ui:icon
+								image="date"
+								label="<%= true %>"
+							/>
+					<h5>Date is here</h5>
+				</div>
+			</div>
+
+			<c:if test="true ">
+				<ul class="edit-actions entry icons-container lfr-meta-actions">
+					<c:if test="true">
+						<li class="edit-entry">
+							<portlet:renderURL var="testURL">
+								<portlet:param name="struts_action" value="/blogs/edit_entry" />
+								<portlet:param name="redirect" value="sfgh" />
+								<portlet:param name="testURL" value="currentURL" />
+								<portlet:param name="entryId" value="entry_getEntryId" />
+							</portlet:renderURL>
+
+							<liferay-ui:icon
+								image="edit"
+								label="<%= true %>"
+								url="<%= testURL %>"
+							/>
+						</li>
+					</c:if>
+
+					<c:if test="true">
+						<li class="edit-entry-permissions">
+							<h6>Edit permision was here</h6>
+						</li>
+					</c:if>
+
+					<c:if test="true">
+						<li class="delete-entry">
+							<portlet:renderURL var="testURL">
+								<portlet:param name="struts_action" value="/blogs/view" />
+							</portlet:renderURL>
+
+							<portlet:actionURL var="testURL">
+								<portlet:param name="struts_action" value="/blogs/edit_entry" />
+								<portlet:param name="Constants" value="TrashUtil" />
+								<portlet:param name="redirect" value="testURL" />
+								<portlet:param name="entryId" value="tring" />
+							</portlet:actionURL>
+
+							<liferay-ui:icon-delete
+								label="<%= true %>"
+
+								url="<%= testURL %>"
+							/>
+						</li>
+					</c:if>
+				</ul>
+			</c:if>
+
+			<div class="entry-body">
+				<c:choose>
+					<c:when test='true'>
+						<aui:a href="<%= testURL %>"><h2>read more (title)</h2></aui:a>
+					</c:when>
+					<c:when test='true'>
+
+						<liferay-ui:custom-attributes-available className="class name">
+							<liferay-ui:custom-attribute-list
+								className="class name"
+								classPK="4"
+								editable="<%= false %>"
+								label="<%= true %>"
+							/>
+						</liferay-ui:custom-attributes-available>
+
+						<c:if test="<%= true %>">
+							<portlet:actionURL var="updateEntryContent">
+								<portlet:param name="struts_action" value="/blogs/edit_entry" />
+								<portlet:param name="CMD" value="UPDATE_CONTENT" />
+								<portlet:param name="entryId" value="entryId" />
+							</portlet:actionURL>
+
+							<liferay-ui:input-editor
+								editorImpl="ckeditor"
+								inlineEdit="<%= true %>"
+								inlineEditSaveURL="<%= testURL %>"
+								name=" entryContentId"
+							/>
+						</c:if>
+					</c:when>
+					<c:when test='true'>
+						<aui:a href="<%= testURL %>"><h6>view entry url</h6></aui:a>
+					</c:when>
+				</c:choose>
+			</div>
+
+			<div class="entry-footer">
+				<div class="entry-author">
+					<liferay-ui:message key="written-by" /><h6>get username</h6>
+				</div>
+
+				<div class="stats">
+					<c:if test="true">
+						<span class="view-count">
+							<c:choose>
+								<c:when test="true">
+									<h2>show info</h2>
+								</c:when>
+								<c:when test="true">
+									<h2>show info2</h2>
+								</c:when>
+							</c:choose>
+						</span>
+					</c:if>
+				</div>
+
+				<span class="entry-categories">
+					<liferay-ui:asset-categories-summary
+						className="class name"
+						classPK="110"
+						portletURL="<%= renderResponse.createRenderURL() %>"
+					/>
+				</span>
+
+				<span class="entry-tags">
+					<liferay-ui:asset-tags-summary
+						className="classname"
+						classPK="12"
+						portletURL="<%= renderResponse.createRenderURL() %>"
+					/>
+				</span>
+
+				<c:if test='true'>
+					<c:if test="true">
+						<div class="entry-links">
+							<liferay-ui:asset-links
+								assetEntryId="13"
+								className="className"
+								classPK="14"
+							/>
+						</div>
+					</c:if>
+
+				</c:if>
+			</div>
+		</div>
+
+		<div class="separator"><!-- --></div>
+	</c:when>
+</c:choose>

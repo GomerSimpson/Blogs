@@ -4,12 +4,13 @@
 <service-builder package-path="com.brest.ericpol.blog.service">
     <author>Viktor Kolbik</author>
     <namespace>blog</namespace>
-    <entity name="Entry" local-service="true" remote-service="true">
+    <entity name="BlogEntry" local-service="true" remote-service="false">
         <column name="entryId" type="long" primary="true"/>
         <column name="userId" type="long"/>
         <column name="groupId" type="long"/>
         <column name="companyId" type="long"/>
         <column name="entryText" type="String"/>
+        <column name="entryDate" type="Date"/>
         <finder name="UserId" return-type="Collection">
             <finder-column name="userId"/>
         </finder>
@@ -19,8 +20,22 @@
         <finder name="CompanyId" return-type="Collection">
             <finder-column name="companyId"/>
         </finder>
-        <finder name="lowerPrice" return-type="Collection">
-            <finder-column name="price" comparator="&gt;"/>
+        <finder name="UserGroupCompanyId" return-type="Collection">
+            <finder-column name="userId"/>
+            <finder-column name="groupId"/>
+            <finder-column name="companyId"/>
+        </finder>
+        <finder name="DateLaterThan" return-type="Collection">
+            <finder-column name="entryDate" comparator="&gt;"/>
+            <finder-column name="userId"/>
+            <finder-column name="groupId"/>
+            <finder-column name="companyId"/>
+        </finder>
+        <finder name="DateEarlierThan" return-type="Collection">
+            <finder-column name="entryDate" comparator="&lt;"/>
+            <finder-column name="userId"/>
+            <finder-column name="groupId"/>
+            <finder-column name="companyId"/>
         </finder>
     </entity>
 </service-builder>

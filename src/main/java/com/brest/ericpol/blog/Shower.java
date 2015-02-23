@@ -1,7 +1,5 @@
 package com.brest.ericpol.blog;
 
-import com.brest.ericpol.service.service.EquipmentLocalServiceUtil;
-import com.brest.ericpol.service.service.impl.EquipmentLocalServiceImpl;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.util.bridges.mvc.MVCPortlet;
@@ -81,6 +79,6 @@ public class Shower extends MVCPortlet {
         List<MyUser> list = MyUserLocalServiceUtil.getMyUsers(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
         actionRequest.setAttribute("list", list);
-        actionResponse.setRenderParameter("jspPage", "/shower.jsp");
+        actionResponse.setRenderParameter("jspPage", "/view.jsp");
     }*/
 }
