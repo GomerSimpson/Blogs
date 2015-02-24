@@ -3567,6 +3567,7 @@ public class BlogEntryPersistenceImpl extends BasePersistenceImpl<BlogEntry>
         blogEntryImpl.setUserId(blogEntry.getUserId());
         blogEntryImpl.setGroupId(blogEntry.getGroupId());
         blogEntryImpl.setCompanyId(blogEntry.getCompanyId());
+        blogEntryImpl.setTitle(blogEntry.getTitle());
         blogEntryImpl.setEntryText(blogEntry.getEntryText());
         blogEntryImpl.setEntryDate(blogEntry.getEntryDate());
 

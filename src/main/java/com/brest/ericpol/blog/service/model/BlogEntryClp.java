@@ -26,6 +26,7 @@ public class BlogEntryClp extends BaseModelImpl<BlogEntry> implements BlogEntry 
     private String _userUuid;
     private long _groupId;
     private long _companyId;
+    private String _title;
     private String _entryText;
     private Date _entryDate;
     private BaseModel<?> _blogEntryRemoteModel;
@@ -72,6 +73,7 @@ public class BlogEntryClp extends BaseModelImpl<BlogEntry> implements BlogEntry 
         attributes.put("userId", getUserId());
         attributes.put("groupId", getGroupId());
         attributes.put("companyId", getCompanyId());
+        attributes.put("title", getTitle());
         attributes.put("entryText", getEntryText());
         attributes.put("entryDate", getEntryDate());
 
@@ -102,6 +104,12 @@ public class BlogEntryClp extends BaseModelImpl<BlogEntry> implements BlogEntry 
 
         if (companyId != null) {
             setCompanyId(companyId);
+        }
+
+        String title = (String) attributes.get("title");
+
+        if (title != null) {
+            setTitle(title);
         }
 
         String entryText = (String) attributes.get("entryText");
@@ -209,6 +217,28 @@ public class BlogEntryClp extends BaseModelImpl<BlogEntry> implements BlogEntry 
                 Method method = clazz.getMethod("setCompanyId", long.class);
 
                 method.invoke(_blogEntryRemoteModel, companyId);
+            } catch (Exception e) {
+                throw new UnsupportedOperationException(e);
+            }
+        }
+    }
+
+    @Override
+    public String getTitle() {
+        return _title;
+    }
+
+    @Override
+    public void setTitle(String title) {
+        _title = title;
+
+        if (_blogEntryRemoteModel != null) {
+            try {
+                Class<?> clazz = _blogEntryRemoteModel.getClass();
+
+                Method method = clazz.getMethod("setTitle", String.class);
+
+                method.invoke(_blogEntryRemoteModel, title);
             } catch (Exception e) {
                 throw new UnsupportedOperationException(e);
             }
@@ -330,6 +360,7 @@ public class BlogEntryClp extends BaseModelImpl<BlogEntry> implements BlogEntry 
         clone.setUserId(getUserId());
         clone.setGroupId(getGroupId());
         clone.setCompanyId(getCompanyId());
+        clone.setTitle(getTitle());
         clone.setEntryText(getEntryText());
         clone.setEntryDate(getEntryDate());
 
@@ -381,7 +412,7 @@ public class BlogEntryClp extends BaseModelImpl<BlogEntry> implements BlogEntry 
 
     @Override
     public String toString() {
-        StringBundler sb = new StringBundler(13);
+        StringBundler sb = new StringBundler(15);
 
         sb.append("{entryId=");
         sb.append(getEntryId());
@@ -391,6 +422,8 @@ public class BlogEntryClp extends BaseModelImpl<BlogEntry> implements BlogEntry 
         sb.append(getGroupId());
         sb.append(", companyId=");
         sb.append(getCompanyId());
+        sb.append(", title=");
+        sb.append(getTitle());
         sb.append(", entryText=");
         sb.append(getEntryText());
         sb.append(", entryDate=");
@@ -402,7 +435,7 @@ public class BlogEntryClp extends BaseModelImpl<BlogEntry> implements BlogEntry 
 
     @Override
     public String toXmlString() {
-        StringBundler sb = new StringBundler(22);
+        StringBundler sb = new StringBundler(25);
 
         sb.append("<model><model-name>");
         sb.append("com.brest.ericpol.blog.service.model.BlogEntry");
@@ -423,6 +456,10 @@ public class BlogEntryClp extends BaseModelImpl<BlogEntry> implements BlogEntry 
         sb.append(
             "<column><column-name>companyId</column-name><column-value><![CDATA[");
         sb.append(getCompanyId());
+        sb.append("]]></column-value></column>");
+        sb.append(
+            "<column><column-name>title</column-name><column-value><![CDATA[");
+        sb.append(getTitle());
         sb.append("]]></column-value></column>");
         sb.append(
             "<column><column-name>entryText</column-name><column-value><![CDATA[");

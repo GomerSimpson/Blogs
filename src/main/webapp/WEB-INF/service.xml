@@ -9,6 +9,7 @@
         <column name="userId" type="long"/>
         <column name="groupId" type="long"/>
         <column name="companyId" type="long"/>
+        <column name="title" type="String"/>
         <column name="entryText" type="String"/>
         <column name="entryDate" type="Date"/>
         <finder name="UserId" return-type="Collection">

@@ -11,6 +11,7 @@
 		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="title" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="entryText" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="entryDate" type="org.hibernate.type.TimestampType" />
 	</class>

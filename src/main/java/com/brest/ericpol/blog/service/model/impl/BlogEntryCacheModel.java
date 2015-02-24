@@ -26,12 +26,13 @@ public class BlogEntryCacheModel implements CacheModel<BlogEntry>,
     public long userId;
     public long groupId;
     public long companyId;
+    public String title;
     public String entryText;
     public long entryDate;
 
     @Override
     public String toString() {
-        StringBundler sb = new StringBundler(13);
+        StringBundler sb = new StringBundler(15);
 
         sb.append("{entryId=");
         sb.append(entryId);
@@ -41,6 +42,8 @@ public class BlogEntryCacheModel implements CacheModel<BlogEntry>,
         sb.append(groupId);
         sb.append(", companyId=");
         sb.append(companyId);
+        sb.append(", title=");
+        sb.append(title);
         sb.append(", entryText=");
         sb.append(entryText);
         sb.append(", entryDate=");
@@ -58,6 +61,12 @@ public class BlogEntryCacheModel implements CacheModel<BlogEntry>,
         blogEntryImpl.setUserId(userId);
         blogEntryImpl.setGroupId(groupId);
         blogEntryImpl.setCompanyId(companyId);
+
+        if (title == null) {
+            blogEntryImpl.setTitle(StringPool.BLANK);
+        } else {
+            blogEntryImpl.setTitle(title);
+        }
 
         if (entryText == null) {
             blogEntryImpl.setEntryText(StringPool.BLANK);
@@ -82,6 +91,7 @@ public class BlogEntryCacheModel implements CacheModel<BlogEntry>,
         userId = objectInput.readLong();
         groupId = objectInput.readLong();
         companyId = objectInput.readLong();
+        title = objectInput.readUTF();
         entryText = objectInput.readUTF();
         entryDate = objectInput.readLong();
     }
@@ -93,6 +103,12 @@ public class BlogEntryCacheModel implements CacheModel<BlogEntry>,
         objectOutput.writeLong(userId);
         objectOutput.writeLong(groupId);
         objectOutput.writeLong(companyId);
+
+        if (title == null) {
+            objectOutput.writeUTF(StringPool.BLANK);
+        } else {
+            objectOutput.writeUTF(title);
+        }
 
         if (entryText == null) {
             objectOutput.writeUTF(StringPool.BLANK);

@@ -277,21 +277,21 @@ public class BlogEntryLocalServiceWrapper implements BlogEntryLocalService,
     @Override
     public com.brest.ericpol.blog.service.model.BlogEntry addBlogEntry(
         java.lang.Long userId, java.lang.Long groupId,
-        java.lang.Long companyId, java.lang.String entryText,
-        java.sql.Date entryDate)
+        java.lang.Long companyId, java.lang.String title,
+        java.lang.String entryText, java.sql.Date entryDate)
         throws com.liferay.portal.kernel.exception.SystemException {
         return _blogEntryLocalService.addBlogEntry(userId, groupId, companyId,
-            entryText, entryDate);
+            title, entryText, entryDate);
     }
 
     @Override
     public com.brest.ericpol.blog.service.model.BlogEntry updateBlogEntry(
         java.lang.Long entryId, java.lang.Long userId, java.lang.Long groupId,
-        java.lang.Long companyId, java.lang.String entryText,
-        java.sql.Date entryDate)
+        java.lang.Long companyId, java.lang.String title,
+        java.lang.String entryText, java.sql.Date entryDate)
         throws com.liferay.portal.kernel.exception.SystemException {
         return _blogEntryLocalService.updateBlogEntry(entryId, userId, groupId,
-            companyId, entryText, entryDate);
+            companyId, title, entryText, entryDate);
     }
 
     @Override

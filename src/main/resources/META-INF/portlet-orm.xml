@@ -13,6 +13,7 @@
 			<basic name="userId" />
 			<basic name="groupId" />
 			<basic name="companyId" />
+			<basic name="title" />
 			<basic name="entryText" />
 			<basic name="entryDate">
 				<temporal>TIMESTAMP</temporal>

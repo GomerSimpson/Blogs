@@ -32,7 +32,7 @@ public class BlogEntryLocalServiceImpl extends BlogEntryLocalServiceBaseImpl {
      * Never reference this interface directly. Always use {@link com.brest.ericpol.blog.service.service.BlogEntryLocalServiceUtil} to access the blog entry local service.
      */
 
-    public BlogEntry addBlogEntry(Long userId, Long groupId, Long companyId,
+    public BlogEntry addBlogEntry(Long userId, Long groupId, Long companyId, String title,
                                   String entryText, Date entryDate) throws SystemException {
         long newEntryId = CounterLocalServiceUtil.increment(BlogEntry.class.getName());
 
@@ -40,6 +40,7 @@ public class BlogEntryLocalServiceImpl extends BlogEntryLocalServiceBaseImpl {
         blogEntry.setUserId(userId);
         blogEntry.setGroupId(groupId);
         blogEntry.setCompanyId(companyId);
+        blogEntry.setTitle(title);
         blogEntry.setEntryText(entryText);
         blogEntry.setEntryDate(entryDate);
 
@@ -47,12 +48,13 @@ public class BlogEntryLocalServiceImpl extends BlogEntryLocalServiceBaseImpl {
     }
 
     public BlogEntry updateBlogEntry(Long entryId, Long userId, Long groupId, Long companyId,
-                                     String entryText, Date entryDate) throws SystemException {
+                                     String title, String entryText, Date entryDate) throws SystemException {
         BlogEntry blogEntry = blogEntryPersistence.create(entryId);
         blogEntry.setNew(false);
         blogEntry.setUserId(userId);
         blogEntry.setGroupId(groupId);
         blogEntry.setCompanyId(companyId);
+        blogEntry.setTitle(title);
         blogEntry.setEntryText(entryText);
         blogEntry.setEntryDate(entryDate);
 

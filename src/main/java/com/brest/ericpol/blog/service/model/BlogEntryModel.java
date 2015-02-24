@@ -118,6 +118,21 @@ public interface BlogEntryModel extends BaseModel<BlogEntry> {
     public void setCompanyId(long companyId);
 
     /**
+     * Returns the title of this blog entry.
+     *
+     * @return the title of this blog entry
+     */
+    @AutoEscape
+    public String getTitle();
+
+    /**
+     * Sets the title of this blog entry.
+     *
+     * @param title the title of this blog entry
+     */
+    public void setTitle(String title);
+
+    /**
      * Returns the entry text of this blog entry.
      *
      * @return the entry text of this blog entry

@@ -6,6 +6,7 @@
 		<field name="userId" type="long" />
 		<field name="groupId" type="long" />
 		<field name="companyId" type="long" />
+		<field name="title" type="String" />
 		<field name="entryText" type="String" />
 		<field name="entryDate" type="Date" />
 	</model>

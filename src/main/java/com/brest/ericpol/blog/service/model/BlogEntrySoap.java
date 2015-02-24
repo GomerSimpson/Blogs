@@ -17,6 +17,7 @@ public class BlogEntrySoap implements Serializable {
     private long _userId;
     private long _groupId;
     private long _companyId;
+    private String _title;
     private String _entryText;
     private Date _entryDate;
 
@@ -30,6 +31,7 @@ public class BlogEntrySoap implements Serializable {
         soapModel.setUserId(model.getUserId());
         soapModel.setGroupId(model.getGroupId());
         soapModel.setCompanyId(model.getCompanyId());
+        soapModel.setTitle(model.getTitle());
         soapModel.setEntryText(model.getEntryText());
         soapModel.setEntryDate(model.getEntryDate());
 
@@ -110,6 +112,14 @@ public class BlogEntrySoap implements Serializable {
 
     public void setCompanyId(long companyId) {
         _companyId = companyId;
+    }
+
+    public String getTitle() {
+        return _title;
+    }
+
+    public void setTitle(String title) {
+        _title = title;
     }
 
     public String getEntryText() {

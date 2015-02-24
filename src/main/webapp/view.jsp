@@ -12,6 +12,10 @@
 <portlet:resourceURL var="resourceURL">
 </portlet:resourceURL>
 
+<portlet:renderURL var="testRender">
+    <portlet:param name="mvcPath" value="/eq.jsp"/>
+</portlet:renderURL>
+
 <portlet:actionURL var="testURL" windowState="maximized" name="addEquipment">
     <portlet:param name="mvcPath" value="/eq.jsp"/>
 </portlet:actionURL>
@@ -42,20 +46,10 @@
 	</aui:nav-bar>
 </c:if>
 
-		<div class="entry">
+<div id="anchor">
 
-			<div class="entry-content">
-
-				<div class="entry-date">
-					<span class="hide-accessible"></span>
-							<liferay-ui:icon
-								image="date"
-								label="true"
-							/>					<h6>Date is here</h6>
-				</div>
-			</div>
-
-			<c:if test="true ">
+</div>
+<%--
 				<ul class="edit-actions entry icons-container lfr-meta-actions">
 					<c:if test="true">
 						<li class="edit-entry">
@@ -65,9 +59,7 @@
 								url="<%= testURL %>"
 							/>
 						</li>
-					</c:if>
 
-					<c:if test="true">
 						<li class="delete-entry">
 
 							<liferay-ui:icon-delete
@@ -76,9 +68,7 @@
 								url="<%= testURL %>"
 							/>
 						</li>
-					</c:if>
 				</ul>
-			</c:if>
 
 			<div class="entry-body" id="test">
 				<c:choose>
@@ -95,8 +85,18 @@
 			</div>
 		</div>
 		<div class="separator"><!-- --></div>
+--%>
 
-<aui:script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.15/require.min.js"></script>
+        <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui.js"></script>
+        <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui-experimental.js"></script>
+        <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui-datepicker.js"></script>
+        <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.7/css/aui.css"/>
+        <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.7/css/aui-experimental.css"/>
+<aui:script use="liferay-portlet-url, liferay-search-container">
+	var stringHtml = "";
+
      AUI().ready(
                     function() {
                      AUI().use('aui-base','aui-io-request', function(A){
@@ -107,9 +107,10 @@
                                     success: function() {
                                         data=this.get('responseData');
                                         A.Array.each(data, function(obj, idx){
-                                              var stringHtml = obj.entryText;
-                                              document.getElementById('test').innerHTML += stringHtml;
-                                              var deleteTankURL = new Liferay.PortletURL.createActionURL();
+                                              document.getElementById('anchor').innerHTML += addEntry(obj.entryId, obj.userId, obj.groupId,
+                                               		obj.companyId, obj.title, obj.entryText, obj.entryDate);
+
+                                             //var deleteTankURL = new Liferay.PortletURL.createActionURL();
                                         });
                                     }
                                 }
@@ -117,4 +118,30 @@
                      });
                     }
                 );
+
+     function addEntry(entryId, userId, groupId, companyId, title1, entryText1, entryDate1){
+			var entryDate = new Date(entryDate1);
+			var title = new String(title1);
+			var entryText = new String(entryText1);
+			var editEntryURL = new Liferay.PortletURL.createRenderURL();
+            editEntryURL.setParameter('jspPage', '/eq.jsp');
+            //из-за этого го*на не работало
+            editEntryURL.setPortletId('<%=themeDisplay.getPortletDisplay().getId()%>');
+			alert('<%=themeDisplay.getPortletDisplay().getId()%>');
+            var url = editEntryURL.toString();
+            alert(url);
+            stringHtml += '<a href="'+ url + '">Test</a>';
+			stringHtml += '<div class="entry">';
+			stringHtml += '<div class="entry-content">';
+			stringHtml += '<div class="entry-date">';
+			stringHtml += '<ul class="edit-actions entry icons-container lfr-meta-actions"><li class="date-entry"><span class="aui-icon aui-icon-small aui-iconfont-time"></span>';
+            stringHtml += ' ' + entryDate.getDate() + '-' + (entryDate.getMonth() + 1) + '-' + (entryDate.getYear() + 1900) + '</li>';
+            stringHtml += '<li class="edit-entry">';
+            stringHtml += '<span class="aui-icon aui-icon-small aui-iconfont-edit"></span>Edit</li>';
+            stringHtml += '<li class="delete-entry">';
+            stringHtml += '<span class="aui-icon aui-icon-small aui-iconfont-remove"></span>Delete</li></ul></div></div>';
+            return stringHtml;
+     }
+
+
 </aui:script>

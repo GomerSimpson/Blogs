@@ -31,7 +31,6 @@ public class Blog extends MVCPortlet {
 
         JSONObject entryJSON = null;
         JSONArray entriesJSONArray = JSONFactoryUtil.createJSONArray();
-
         ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
         User user = themeDisplay.getUser();
@@ -51,6 +50,7 @@ public class Blog extends MVCPortlet {
                 entryJSON.put("userId", be.getUserId());
                 entryJSON.put("groupId",  be.getGroupId());
                 entryJSON.put("companyId",  be.getCompanyId());
+                entryJSON.put("title", be.getTitle());
                 entryJSON.put("entryText",  be.getEntryText());
                 entryJSON.put("entryDate", be.getEntryDate());
 

@@ -41,6 +41,7 @@ public class BlogEntryWrapper implements BlogEntry, ModelWrapper<BlogEntry> {
         attributes.put("userId", getUserId());
         attributes.put("groupId", getGroupId());
         attributes.put("companyId", getCompanyId());
+        attributes.put("title", getTitle());
         attributes.put("entryText", getEntryText());
         attributes.put("entryDate", getEntryDate());
 
@@ -71,6 +72,12 @@ public class BlogEntryWrapper implements BlogEntry, ModelWrapper<BlogEntry> {
 
         if (companyId != null) {
             setCompanyId(companyId);
+        }
+
+        String title = (String) attributes.get("title");
+
+        if (title != null) {
+            setTitle(title);
         }
 
         String entryText = (String) attributes.get("entryText");
@@ -209,6 +216,26 @@ public class BlogEntryWrapper implements BlogEntry, ModelWrapper<BlogEntry> {
     }
 
     /**
+    * Returns the title of this blog entry.
+    *
+    * @return the title of this blog entry
+    */
+    @Override
+    public java.lang.String getTitle() {
+        return _blogEntry.getTitle();
+    }
+
+    /**
+    * Sets the title of this blog entry.
+    *
+    * @param title the title of this blog entry
+    */
+    @Override
+    public void setTitle(java.lang.String title) {
+        _blogEntry.setTitle(title);
+    }
+
+    /**
     * Returns the entry text of this blog entry.
     *
     * @return the entry text of this blog entry
@@ -312,7 +339,8 @@ public class BlogEntryWrapper implements BlogEntry, ModelWrapper<BlogEntry> {
     }
 
     @Override
-    public int compareTo(BlogEntry blogEntry) {
+    public int compareTo(
+        com.brest.ericpol.blog.service.model.BlogEntry blogEntry) {
         return _blogEntry.compareTo(blogEntry);
     }
 
@@ -322,17 +350,17 @@ public class BlogEntryWrapper implements BlogEntry, ModelWrapper<BlogEntry> {
     }
 
     @Override
-    public com.liferay.portal.model.CacheModel<BlogEntry> toCacheModel() {
+    public com.liferay.portal.model.CacheModel<com.brest.ericpol.blog.service.model.BlogEntry> toCacheModel() {
         return _blogEntry.toCacheModel();
     }
 
     @Override
-    public BlogEntry toEscapedModel() {
+    public com.brest.ericpol.blog.service.model.BlogEntry toEscapedModel() {
         return new BlogEntryWrapper(_blogEntry.toEscapedModel());
     }
 
     @Override
-    public BlogEntry toUnescapedModel() {
+    public com.brest.ericpol.blog.service.model.BlogEntry toUnescapedModel() {
         return new BlogEntryWrapper(_blogEntry.toUnescapedModel());
     }
 

@@ -51,10 +51,11 @@ public class BlogEntryModelImpl extends BaseModelImpl<BlogEntry>
             { "userId", Types.BIGINT },
             { "groupId", Types.BIGINT },
             { "companyId", Types.BIGINT },
+            { "title", Types.VARCHAR },
             { "entryText", Types.VARCHAR },
             { "entryDate", Types.TIMESTAMP }
         };
-    public static final String TABLE_SQL_CREATE = "create table blog_BlogEntry (entryId LONG not null primary key,userId LONG,groupId LONG,companyId LONG,entryText VARCHAR(75) null,entryDate DATE null)";
+    public static final String TABLE_SQL_CREATE = "create table blog_BlogEntry (entryId LONG not null primary key,userId LONG,groupId LONG,companyId LONG,title VARCHAR(75) null,entryText VARCHAR(75) null,entryDate DATE null)";
     public static final String TABLE_SQL_DROP = "drop table blog_BlogEntry";
     public static final String ORDER_BY_JPQL = " ORDER BY blogEntry.entryId ASC";
     public static final String ORDER_BY_SQL = " ORDER BY blog_BlogEntry.entryId ASC";
@@ -92,6 +93,7 @@ public class BlogEntryModelImpl extends BaseModelImpl<BlogEntry>
     private long _companyId;
     private long _originalCompanyId;
     private boolean _setOriginalCompanyId;
+    private String _title;
     private String _entryText;
     private Date _entryDate;
     private Date _originalEntryDate;
@@ -139,6 +141,7 @@ public class BlogEntryModelImpl extends BaseModelImpl<BlogEntry>
         attributes.put("userId", getUserId());
         attributes.put("groupId", getGroupId());
         attributes.put("companyId", getCompanyId());
+        attributes.put("title", getTitle());
         attributes.put("entryText", getEntryText());
         attributes.put("entryDate", getEntryDate());
 
@@ -169,6 +172,12 @@ public class BlogEntryModelImpl extends BaseModelImpl<BlogEntry>
 
         if (companyId != null) {
             setCompanyId(companyId);
+        }
+
+        String title = (String) attributes.get("title");
+
+        if (title != null) {
+            setTitle(title);
         }
 
         String entryText = (String) attributes.get("entryText");
@@ -271,6 +280,20 @@ public class BlogEntryModelImpl extends BaseModelImpl<BlogEntry>
     }
 
     @Override
+    public String getTitle() {
+        if (_title == null) {
+            return StringPool.BLANK;
+        } else {
+            return _title;
+        }
+    }
+
+    @Override
+    public void setTitle(String title) {
+        _title = title;
+    }
+
+    @Override
     public String getEntryText() {
         if (_entryText == null) {
             return StringPool.BLANK;
@@ -339,6 +362,7 @@ public class BlogEntryModelImpl extends BaseModelImpl<BlogEntry>
         blogEntryImpl.setUserId(getUserId());
         blogEntryImpl.setGroupId(getGroupId());
         blogEntryImpl.setCompanyId(getCompanyId());
+        blogEntryImpl.setTitle(getTitle());
         blogEntryImpl.setEntryText(getEntryText());
         blogEntryImpl.setEntryDate(getEntryDate());
 
@@ -419,6 +443,14 @@ public class BlogEntryModelImpl extends BaseModelImpl<BlogEntry>
 
         blogEntryCacheModel.companyId = getCompanyId();
 
+        blogEntryCacheModel.title = getTitle();
+
+        String title = blogEntryCacheModel.title;
+
+        if ((title != null) && (title.length() == 0)) {
+            blogEntryCacheModel.title = null;
+        }
+
         blogEntryCacheModel.entryText = getEntryText();
 
         String entryText = blogEntryCacheModel.entryText;
@@ -440,7 +472,7 @@ public class BlogEntryModelImpl extends BaseModelImpl<BlogEntry>
 
     @Override
     public String toString() {
-        StringBundler sb = new StringBundler(13);
+        StringBundler sb = new StringBundler(15);
 
         sb.append("{entryId=");
         sb.append(getEntryId());
@@ -450,6 +482,8 @@ public class BlogEntryModelImpl extends BaseModelImpl<BlogEntry>
         sb.append(getGroupId());
         sb.append(", companyId=");
         sb.append(getCompanyId());
+        sb.append(", title=");
+        sb.append(getTitle());
         sb.append(", entryText=");
         sb.append(getEntryText());
         sb.append(", entryDate=");
@@ -461,7 +495,7 @@ public class BlogEntryModelImpl extends BaseModelImpl<BlogEntry>
 
     @Override
     public String toXmlString() {
-        StringBundler sb = new StringBundler(22);
+        StringBundler sb = new StringBundler(25);
 
         sb.append("<model><model-name>");
         sb.append("com.brest.ericpol.blog.service.model.BlogEntry");
@@ -482,6 +516,10 @@ public class BlogEntryModelImpl extends BaseModelImpl<BlogEntry>
         sb.append(
             "<column><column-name>companyId</column-name><column-value><![CDATA[");
         sb.append(getCompanyId());
+        sb.append("]]></column-value></column>");
+        sb.append(
+            "<column><column-name>title</column-name><column-value><![CDATA[");
+        sb.append(getTitle());
         sb.append("]]></column-value></column>");
         sb.append(
             "<column><column-name>entryText</column-name><column-value><![CDATA[");

@@ -265,21 +265,21 @@ public class BlogEntryLocalServiceUtil {
 
     public static com.brest.ericpol.blog.service.model.BlogEntry addBlogEntry(
         java.lang.Long userId, java.lang.Long groupId,
-        java.lang.Long companyId, java.lang.String entryText,
-        java.sql.Date entryDate)
+        java.lang.Long companyId, java.lang.String title,
+        java.lang.String entryText, java.sql.Date entryDate)
         throws com.liferay.portal.kernel.exception.SystemException {
         return getService()
-                   .addBlogEntry(userId, groupId, companyId, entryText,
+                   .addBlogEntry(userId, groupId, companyId, title, entryText,
             entryDate);
     }
 
     public static com.brest.ericpol.blog.service.model.BlogEntry updateBlogEntry(
         java.lang.Long entryId, java.lang.Long userId, java.lang.Long groupId,
-        java.lang.Long companyId, java.lang.String entryText,
-        java.sql.Date entryDate)
+        java.lang.Long companyId, java.lang.String title,
+        java.lang.String entryText, java.sql.Date entryDate)
         throws com.liferay.portal.kernel.exception.SystemException {
         return getService()
-                   .updateBlogEntry(entryId, userId, groupId, companyId,
+                   .updateBlogEntry(entryId, userId, groupId, companyId, title,
             entryText, entryDate);
     }
 

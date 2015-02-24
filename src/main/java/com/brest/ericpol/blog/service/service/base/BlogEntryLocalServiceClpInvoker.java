@@ -153,14 +153,15 @@ public class BlogEntryLocalServiceClpInvoker {
 
         _methodParameterTypes38 = new String[] {
                 "java.lang.Long", "java.lang.Long", "java.lang.Long",
-                "java.lang.String", "java.sql.Date"
+                "java.lang.String", "java.lang.String", "java.sql.Date"
             };
 
         _methodName39 = "updateBlogEntry";
 
         _methodParameterTypes39 = new String[] {
                 "java.lang.Long", "java.lang.Long", "java.lang.Long",
-                "java.lang.Long", "java.lang.String", "java.sql.Date"
+                "java.lang.Long", "java.lang.String", "java.lang.String",
+                "java.sql.Date"
             };
 
         _methodName40 = "findByUserGroupCompanyId";
@@ -296,7 +297,8 @@ public class BlogEntryLocalServiceClpInvoker {
                 Arrays.deepEquals(_methodParameterTypes38, parameterTypes)) {
             return BlogEntryLocalServiceUtil.addBlogEntry((java.lang.Long) arguments[0],
                 (java.lang.Long) arguments[1], (java.lang.Long) arguments[2],
-                (java.lang.String) arguments[3], (java.sql.Date) arguments[4]);
+                (java.lang.String) arguments[3],
+                (java.lang.String) arguments[4], (java.sql.Date) arguments[5]);
         }
 
         if (_methodName39.equals(name) &&
@@ -304,7 +306,7 @@ public class BlogEntryLocalServiceClpInvoker {
             return BlogEntryLocalServiceUtil.updateBlogEntry((java.lang.Long) arguments[0],
                 (java.lang.Long) arguments[1], (java.lang.Long) arguments[2],
                 (java.lang.Long) arguments[3], (java.lang.String) arguments[4],
-                (java.sql.Date) arguments[5]);
+                (java.lang.String) arguments[5], (java.sql.Date) arguments[6]);
         }
 
         if (_methodName40.equals(name) &&

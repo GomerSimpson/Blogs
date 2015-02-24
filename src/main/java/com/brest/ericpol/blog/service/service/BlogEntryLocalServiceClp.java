@@ -154,14 +154,15 @@ public class BlogEntryLocalServiceClp implements BlogEntryLocalService {
 
         _methodParameterTypes19 = new String[] {
                 "java.lang.Long", "java.lang.Long", "java.lang.Long",
-                "java.lang.String", "java.sql.Date"
+                "java.lang.String", "java.lang.String", "java.sql.Date"
             };
 
         _methodName20 = "updateBlogEntry";
 
         _methodParameterTypes20 = new String[] {
                 "java.lang.Long", "java.lang.Long", "java.lang.Long",
-                "java.lang.Long", "java.lang.String", "java.sql.Date"
+                "java.lang.Long", "java.lang.String", "java.lang.String",
+                "java.sql.Date"
             };
 
         _methodName21 = "findByUserGroupCompanyId";
@@ -709,8 +710,8 @@ public class BlogEntryLocalServiceClp implements BlogEntryLocalService {
     @Override
     public com.brest.ericpol.blog.service.model.BlogEntry addBlogEntry(
         java.lang.Long userId, java.lang.Long groupId,
-        java.lang.Long companyId, java.lang.String entryText,
-        java.sql.Date entryDate)
+        java.lang.Long companyId, java.lang.String title,
+        java.lang.String entryText, java.sql.Date entryDate)
         throws com.liferay.portal.kernel.exception.SystemException {
         Object returnObj = null;
 
@@ -723,6 +724,8 @@ public class BlogEntryLocalServiceClp implements BlogEntryLocalService {
                     ClpSerializer.translateInput(groupId),
                         
                     ClpSerializer.translateInput(companyId),
+                        
+                    ClpSerializer.translateInput(title),
                         
                     ClpSerializer.translateInput(entryText),
                         
@@ -749,8 +752,8 @@ public class BlogEntryLocalServiceClp implements BlogEntryLocalService {
     @Override
     public com.brest.ericpol.blog.service.model.BlogEntry updateBlogEntry(
         java.lang.Long entryId, java.lang.Long userId, java.lang.Long groupId,
-        java.lang.Long companyId, java.lang.String entryText,
-        java.sql.Date entryDate)
+        java.lang.Long companyId, java.lang.String title,
+        java.lang.String entryText, java.sql.Date entryDate)
         throws com.liferay.portal.kernel.exception.SystemException {
         Object returnObj = null;
 
@@ -765,6 +768,8 @@ public class BlogEntryLocalServiceClp implements BlogEntryLocalService {
                     ClpSerializer.translateInput(groupId),
                         
                     ClpSerializer.translateInput(companyId),
+                        
+                    ClpSerializer.translateInput(title),
                         
                     ClpSerializer.translateInput(entryText),
                         
