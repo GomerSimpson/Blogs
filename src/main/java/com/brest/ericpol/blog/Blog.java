@@ -10,6 +10,10 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 import javax.portlet.*;
@@ -21,13 +25,46 @@ import java.util.List;
 
 public class Blog extends MVCPortlet {
 
+    @Override
+    public void serveResource(ResourceRequest resourceRequest,
+                        ResourceResponse resourceResponse) throws IOException, PortletException {
 
-    public void testBehaviour(ActionRequest actionRequest,
-                        ActionResponse actionResponse) throws IOException, PortletException, SQLException, SystemException, PortalException {
+        JSONObject entryJSON = null;
+        JSONArray entriesJSONArray = JSONFactoryUtil.createJSONArray();
 
+        ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
-        /*QName qName = new QName("http://liferay.com/events", "ipc.mine");
-        actionResponse.setEvent(qName, new ArrayList<String>(list));*/
+        User user = themeDisplay.getUser();
+        try {
+            System.out.println(user.getUserId() + " " + user.getGroupId() + " " + user.getCompanyId());
+        } catch (PortalException e) {
+            e.printStackTrace();
+        } catch (SystemException e) {
+            e.printStackTrace();
+        }
+        try {
+            List<BlogEntry> list = BlogEntryLocalServiceUtil.findByUserGroupCompanyId(user.getUserId(), user.getGroupId(), user.getCompanyId());
+
+            for(BlogEntry be : list){
+                entryJSON = JSONFactoryUtil.createJSONObject();
+                entryJSON.put("entryId",  be.getEntryId());
+                entryJSON.put("userId", be.getUserId());
+                entryJSON.put("groupId",  be.getGroupId());
+                entryJSON.put("companyId",  be.getCompanyId());
+                entryJSON.put("entryText",  be.getEntryText());
+                entryJSON.put("entryDate", be.getEntryDate());
+
+                entriesJSONArray.put(entryJSON);
+            }
+
+            PrintWriter out = resourceResponse.getWriter();
+            out.print(entriesJSONArray.toString());
+        } catch (SystemException e) {
+            e.printStackTrace();
+        } catch (PortalException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

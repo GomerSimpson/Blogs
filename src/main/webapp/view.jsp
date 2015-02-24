@@ -8,6 +8,10 @@
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 <%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
 <portlet:defineObjects />
+
+<portlet:resourceURL var="resourceURL">
+</portlet:resourceURL>
+
 <portlet:actionURL var="testURL" windowState="maximized" name="addEquipment">
     <portlet:param name="mvcPath" value="/eq.jsp"/>
 </portlet:actionURL>
@@ -18,29 +22,17 @@
 </aui:form>
 
 
+<liferay-theme:defineObjects />
 
 <c:if test="true">
 	<aui:nav-bar>
 		<c:if test="true">
 			<aui:nav>
-				<c:if test="true">
-					<portlet:renderURL var="testURL">
-						<portlet:param name="struts_action" value="/blogs/edit_entry" />
-						<portlet:param name="redirect" value="<%= testURL %>" />
-						<portlet:param name="testURL" value="<%= testURL %>" />
-					</portlet:renderURL>
-
-					<aui:nav-item href="<%= testURL %>" label="add-blog-entry" name="addEntryButton" />
-				</c:if>
-
-				<c:if test="<%= testURL %>">
-
-					<aui:nav-item href="<%= testURL %>" label="permissions" title="edit-permissions" useDialog="<%= true %>" />
-				</c:if>
+					<aui:nav-item href="#" label="add-blog-entry" name="addEntryButton" />
 			</aui:nav>
 		</c:if>
 
-		<c:if test="<%= testURL %>">
+		<c:if test="true">
 			<aui:nav-bar-search cssClass="pull-right">
 				<div class="form-search">
 					<liferay-ui:input-search autoFocus="" id="keywords1" name="keywords" placeholder='' />
@@ -50,35 +42,16 @@
 	</aui:nav-bar>
 </c:if>
 
-<liferay-ui:categorization-filter
-	assetType="entries"
-	portletURL="<%= renderResponse.createRenderURL() %>"
-/>
+		<div class="entry">
 
-<c:choose>
-	<c:when test="true">
-		<div class="entry" id="<portlet:namespace />5">
 			<div class="entry-content">
-				start of entry
-				<portlet:renderURL var="testURL">
-					<portlet:param name="struts_action" value="/blogs/view_entry" />
-					<portlet:param name="redirect" value="<%= testURL %>" />
-					<portlet:param name="urlTitle" value="entry.getUrlTitle()" />
-				</portlet:renderURL>
-
-				<c:if test='true'>
-					<div class="entry-title">
-						<h2><aui:a href="<%= testURL %>"></aui:a></h2>
-					</div>
-				</c:if>
 
 				<div class="entry-date">
 					<span class="hide-accessible"></span>
 							<liferay-ui:icon
 								image="date"
-								label="<%= true %>"
-							/>
-					<h5>Date is here</h5>
+								label="true"
+							/>					<h6>Date is here</h6>
 				</div>
 			</div>
 
@@ -86,13 +59,6 @@
 				<ul class="edit-actions entry icons-container lfr-meta-actions">
 					<c:if test="true">
 						<li class="edit-entry">
-							<portlet:renderURL var="testURL">
-								<portlet:param name="struts_action" value="/blogs/edit_entry" />
-								<portlet:param name="redirect" value="sfgh" />
-								<portlet:param name="testURL" value="currentURL" />
-								<portlet:param name="entryId" value="entry_getEntryId" />
-							</portlet:renderURL>
-
 							<liferay-ui:icon
 								image="edit"
 								label="<%= true %>"
@@ -102,23 +68,7 @@
 					</c:if>
 
 					<c:if test="true">
-						<li class="edit-entry-permissions">
-							<h6>Edit permision was here</h6>
-						</li>
-					</c:if>
-
-					<c:if test="true">
 						<li class="delete-entry">
-							<portlet:renderURL var="testURL">
-								<portlet:param name="struts_action" value="/blogs/view" />
-							</portlet:renderURL>
-
-							<portlet:actionURL var="testURL">
-								<portlet:param name="struts_action" value="/blogs/edit_entry" />
-								<portlet:param name="Constants" value="TrashUtil" />
-								<portlet:param name="redirect" value="testURL" />
-								<portlet:param name="entryId" value="tring" />
-							</portlet:actionURL>
 
 							<liferay-ui:icon-delete
 								label="<%= true %>"
@@ -130,39 +80,10 @@
 				</ul>
 			</c:if>
 
-			<div class="entry-body">
+			<div class="entry-body" id="test">
 				<c:choose>
 					<c:when test='true'>
-						<aui:a href="<%= testURL %>"><h2>read more (title)</h2></aui:a>
-					</c:when>
-					<c:when test='true'>
-
-						<liferay-ui:custom-attributes-available className="class name">
-							<liferay-ui:custom-attribute-list
-								className="class name"
-								classPK="4"
-								editable="<%= false %>"
-								label="<%= true %>"
-							/>
-						</liferay-ui:custom-attributes-available>
-
-						<c:if test="<%= true %>">
-							<portlet:actionURL var="updateEntryContent">
-								<portlet:param name="struts_action" value="/blogs/edit_entry" />
-								<portlet:param name="CMD" value="UPDATE_CONTENT" />
-								<portlet:param name="entryId" value="entryId" />
-							</portlet:actionURL>
-
-							<liferay-ui:input-editor
-								editorImpl="ckeditor"
-								inlineEdit="<%= true %>"
-								inlineEditSaveURL="<%= testURL %>"
-								name=" entryContentId"
-							/>
-						</c:if>
-					</c:when>
-					<c:when test='true'>
-						<aui:a href="<%= testURL %>"><h6>view entry url</h6></aui:a>
+						<aui:a href="#"><h4>read more (title)</h4></aui:a>
 					</c:when>
 				</c:choose>
 			</div>
@@ -171,53 +92,29 @@
 				<div class="entry-author">
 					<liferay-ui:message key="written-by" /><h6>get username</h6>
 				</div>
-
-				<div class="stats">
-					<c:if test="true">
-						<span class="view-count">
-							<c:choose>
-								<c:when test="true">
-									<h2>show info</h2>
-								</c:when>
-								<c:when test="true">
-									<h2>show info2</h2>
-								</c:when>
-							</c:choose>
-						</span>
-					</c:if>
-				</div>
-
-				<span class="entry-categories">
-					<liferay-ui:asset-categories-summary
-						className="class name"
-						classPK="110"
-						portletURL="<%= renderResponse.createRenderURL() %>"
-					/>
-				</span>
-
-				<span class="entry-tags">
-					<liferay-ui:asset-tags-summary
-						className="classname"
-						classPK="12"
-						portletURL="<%= renderResponse.createRenderURL() %>"
-					/>
-				</span>
-
-				<c:if test='true'>
-					<c:if test="true">
-						<div class="entry-links">
-							<liferay-ui:asset-links
-								assetEntryId="13"
-								className="className"
-								classPK="14"
-							/>
-						</div>
-					</c:if>
-
-				</c:if>
 			</div>
 		</div>
-
 		<div class="separator"><!-- --></div>
-	</c:when>
-</c:choose>
+
+<aui:script>
+     AUI().ready(
+                    function() {
+                     AUI().use('aui-base','aui-io-request', function(A){
+                            A.io.request('<%=resourceURL%>',{
+                                dataType: 'json',
+                                method: 'GET',
+                                on: {
+                                    success: function() {
+                                        data=this.get('responseData');
+                                        A.Array.each(data, function(obj, idx){
+                                              var stringHtml = obj.entryText;
+                                              document.getElementById('test').innerHTML += stringHtml;
+                                              var deleteTankURL = new Liferay.PortletURL.createActionURL();
+                                        });
+                                    }
+                                }
+                            });
+                     });
+                    }
+                );
+</aui:script>
