@@ -11,5 +11,5 @@
 
 <b>Page of editing of an entry</b>
 <aui:script use="liferay-portlet-url, liferay-search-container">
-    alert('<%= request.getParameter("userId") %>, <%= request.getParameter("entryDate") %>');
+    alert("edit.jsp" + '<%= request.getParameter("userId") %>, <%= request.getParameter("entryDate") %>');
 </aui:script>

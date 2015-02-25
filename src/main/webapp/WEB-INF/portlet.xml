@@ -12,8 +12,12 @@
 			<value>/view.jsp</value>
 		</init-param>
         <init-param>
-            <name>eq-jsp</name>
-            <value>/eq.jsp</value>
+            <name>edit-jsp</name>
+            <value>/edit.jsp</value>
+        </init-param>
+        <init-param>
+            <name>showEntry-jsp</name>
+            <value>/showEntry.jsp</value>
         </init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>

@@ -46,10 +46,12 @@ public class Blog extends MVCPortlet {
 
             for(BlogEntry be : list){
                 entryJSON = JSONFactoryUtil.createJSONObject();
+                String userName = UserLocalServiceUtil.getUserById(be.getUserId()).getFullName();
                 entryJSON.put("entryId",  be.getEntryId());
                 entryJSON.put("userId", be.getUserId());
                 entryJSON.put("groupId",  be.getGroupId());
                 entryJSON.put("companyId",  be.getCompanyId());
+                entryJSON.put("userName", userName);
                 entryJSON.put("title", be.getTitle());
                 entryJSON.put("entryText",  be.getEntryText());
                 entryJSON.put("entryDate", be.getEntryDate());
@@ -71,6 +73,8 @@ public class Blog extends MVCPortlet {
         long entryId = ParamUtil.getLong(actionRequest, "entryId");
         System.out.println("Entry Id to delete: " + entryId);
         //BlogEntryLocalServiceUtil.deleteBlogEntry(entryId);
+
+
     }
 
 

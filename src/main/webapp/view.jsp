@@ -7,6 +7,7 @@
 <%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 <%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
+<%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
 <portlet:defineObjects />
 
 <portlet:resourceURL var="resourceURL">
@@ -23,7 +24,6 @@
 	<liferay-portlet:renderURLParams varImpl="adsfg" />
 	<aui:input name="redirect" type="hidden" value="ag" />
 </aui:form>
-
 
 <liferay-theme:defineObjects />
 
@@ -44,19 +44,10 @@
 		</c:if>
 	</aui:nav-bar>
 </c:if>
-
 <div id="anchor">
 
 </div>
 <%--
-
-			<div class="entry-body" id="test">
-				<c:choose>
-					<c:when test='true'>
-						<aui:a href="#"><h4>read more (title)</h4></aui:a>
-					</c:when>
-				</c:choose>
-			</div>
 
 			<div class="entry-footer">
 				<div class="entry-author">
@@ -74,7 +65,9 @@
         <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui-datepicker.js"></script>
         <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.7/css/aui.css"/>
         <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.7/css/aui-experimental.css"/>
-<aui:script use="liferay-portlet-url, liferay-search-container, aui-node">
+
+<aui:script use="liferay-portlet-url, liferay-search-container, aui-node, liferay-service">
+
 	var stringHtml = "";
 
      AUI().ready(
@@ -88,7 +81,7 @@
                                             data=this.get('responseData');
                                             A.Array.each(data, function(obj, idx){
                                                   document.getElementById('anchor').innerHTML += addEntry(obj.entryId, obj.userId, obj.groupId,
-                                                        obj.companyId, obj.title, obj.entryText, obj.entryDate);
+                                                        obj.companyId, obj.userName, obj.title, obj.entryText, obj.entryDate);
 
                                             });
                                         }
@@ -98,16 +91,17 @@
                         }
                 );
 
-     function addEntry(entryId, userId, groupId, companyId, title1, entryText1, entryDate1){
+     function addEntry(entryId, userId, groupId, companyId, userName1, title1, entryText1, entryDate1){
             stringHtml = "";
 			var entryDate = new Date(entryDate1);
 			var title = new String(title1);
+			var userName = new String(userName1);
 			var entryText = new String(entryText1);
-            var editUrl = createEditEntryURL(entryId, userId, groupId, companyId, title, entryText, entryDate);
-
-
-            var deleteUrl = createDeleteURL(entryId);;
-
+			var showEntryUrl = createShowEntryURL(entryId, userId, groupId, companyId, userName, title, entryText, entryDate);
+            var editUrl = createEditEntryURL(entryId, userId, groupId, companyId, userName, title, entryText, entryDate);
+            var deleteUrl = createDeleteURL(entryId);
+           // alert(userId.getFullName());
+            stringHtml += '</div></div><div class="separator"><!-- --></div>';
 			stringHtml += '<div class="entry">';
 			stringHtml += '<div class="entry-content">';
 			stringHtml += '<div class="entry-date">';
@@ -116,22 +110,41 @@
             stringHtml += '<li class="edit-entry">';
             stringHtml += '<a href="' + editUrl + '"><span class="aui-icon aui-icon-small aui-iconfont-edit"></span>Edit</a></li>';
             stringHtml += '<li class="delete-entry">';
-            stringHtml += '<a href="' + deleteUrl + '"><span class="aui-icon aui-icon-small aui-iconfont-remove"></span>Delete</a></li></ul></div></div>';
+            stringHtml += '<a href="' + deleteUrl + '"><span class="aui-icon aui-icon-small aui-iconfont-remove"></span>Delete</a></li>';
+            stringHtml += '<li><div class="entry-author"><span class="aui-icon aui-icon-small aui-iconfont-group"></span> by' + userName + '</div></div></li></ul>';
+            stringHtml += '<div class="entry-title"><a href="' + showEntryUrl + '"><h3>' + title + '</h2></a></div>';
+            stringHtml += '<div class="entry-body">' + entryText + '</div>';
             return stringHtml;
      }
 
-    function createEditEntryURL(entryId, userId, groupId, companyId, title, entryText, entryDate){
+    function createEditEntryURL(entryId, userId, groupId, companyId, userName, title, entryText, entryDate){
 			var editEntryURL = new Liferay.PortletURL.createRenderURL();
-            editEntryURL.setParameter('jspPage', '/eq.jsp');
+            editEntryURL.setParameter('jspPage', '/edit.jsp');
             editEntryURL.setParameter('entryId', entryId);
             editEntryURL.setParameter('userId', userId);
             editEntryURL.setParameter('groupId', groupId);
             editEntryURL.setParameter('companyId', companyId);
+            editEntryURL.setParameter('userName', userName);
             editEntryURL.setParameter('title', title);
             editEntryURL.setParameter('entryText', entryText);
             editEntryURL.setParameter('entryDate', new Date(entryDate).toString());
             editEntryURL.setPortletId('<%=themeDisplay.getPortletDisplay().getId()%>');
             return editEntryURL.toString();
+    }
+
+    function createShowEntryURL(entryId, userId, groupId, companyId, userName, title, entryText, entryDate){
+			var showEntryURL = new Liferay.PortletURL.createRenderURL();
+            showEntryURL.setParameter('jspPage', '/showEntry.jsp');
+            showEntryURL.setParameter('entryId', entryId);
+            showEntryURL.setParameter('userId', userId);
+            showEntryURL.setParameter('groupId', groupId);
+            showEntryURL.setParameter('companyId', companyId);
+            showEntryURL.setParameter('userName', userName);
+            showEntryURL.setParameter('title', title);
+            showEntryURL.setParameter('entryText', entryText);
+            showEntryURL.setParameter('entryDate', new Date(entryDate).toString());
+            showEntryURL.setPortletId('<%=themeDisplay.getPortletDisplay().getId()%>');
+            return showEntryURL.toString();
     }
 
     function createDeleteURL(entryId){
@@ -144,6 +157,5 @@
 
             return deleteEntryURL.toString();
     }
-
 
 </aui:script>
