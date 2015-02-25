@@ -16,11 +16,10 @@
     <portlet:param name="mvcPath" value="/eq.jsp"/>
 </portlet:renderURL>
 
-<portlet:actionURL var="testURL" windowState="maximized" name="addEquipment">
-    <portlet:param name="mvcPath" value="/eq.jsp"/>
+<portlet:actionURL var="deleteEntryURL" name="deleteEntry">
 </portlet:actionURL>
 
-<aui:form action="<%=testURL%>" method="get" name="fm1">
+<aui:form action="#" method="get" name="fm1">
 	<liferay-portlet:renderURLParams varImpl="adsfg" />
 	<aui:input name="redirect" type="hidden" value="ag" />
 </aui:form>
@@ -50,25 +49,6 @@
 
 </div>
 <%--
-				<ul class="edit-actions entry icons-container lfr-meta-actions">
-					<c:if test="true">
-						<li class="edit-entry">
-							<liferay-ui:icon
-								image="edit"
-								label="<%= true %>"
-								url="<%= testURL %>"
-							/>
-						</li>
-
-						<li class="delete-entry">
-
-							<liferay-ui:icon-delete
-								label="<%= true %>"
-
-								url="<%= testURL %>"
-							/>
-						</li>
-				</ul>
 
 			<div class="entry-body" id="test">
 				<c:choose>
@@ -94,54 +74,76 @@
         <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui-datepicker.js"></script>
         <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.7/css/aui.css"/>
         <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.7/css/aui-experimental.css"/>
-<aui:script use="liferay-portlet-url, liferay-search-container">
+<aui:script use="liferay-portlet-url, liferay-search-container, aui-node">
 	var stringHtml = "";
 
      AUI().ready(
                     function() {
-                     AUI().use('aui-base','aui-io-request', function(A){
-                            A.io.request('<%=resourceURL%>',{
-                                dataType: 'json',
-                                method: 'GET',
-                                on: {
-                                    success: function() {
-                                        data=this.get('responseData');
-                                        A.Array.each(data, function(obj, idx){
-                                              document.getElementById('anchor').innerHTML += addEntry(obj.entryId, obj.userId, obj.groupId,
-                                               		obj.companyId, obj.title, obj.entryText, obj.entryDate);
+                         AUI().use('aui-base','aui-io-request', function(A){
+                                A.io.request('<%=resourceURL%>',{
+                                    dataType: 'json',
+                                    method: 'GET',
+                                    on: {
+                                        success: function() {
+                                            data=this.get('responseData');
+                                            A.Array.each(data, function(obj, idx){
+                                                  document.getElementById('anchor').innerHTML += addEntry(obj.entryId, obj.userId, obj.groupId,
+                                                        obj.companyId, obj.title, obj.entryText, obj.entryDate);
 
-                                             //var deleteTankURL = new Liferay.PortletURL.createActionURL();
-                                        });
+                                            });
+                                        }
                                     }
-                                }
-                            });
-                     });
-                    }
+                                });
+                         });
+                        }
                 );
 
      function addEntry(entryId, userId, groupId, companyId, title1, entryText1, entryDate1){
+            stringHtml = "";
 			var entryDate = new Date(entryDate1);
 			var title = new String(title1);
 			var entryText = new String(entryText1);
-			var editEntryURL = new Liferay.PortletURL.createRenderURL();
-            editEntryURL.setParameter('jspPage', '/eq.jsp');
-            //из-за этого го*на не работало
-            editEntryURL.setPortletId('<%=themeDisplay.getPortletDisplay().getId()%>');
-			alert('<%=themeDisplay.getPortletDisplay().getId()%>');
-            var url = editEntryURL.toString();
-            alert(url);
-            stringHtml += '<a href="'+ url + '">Test</a>';
+            var editUrl = createEditEntryURL(entryId, userId, groupId, companyId, title, entryText, entryDate);
+
+
+            var deleteUrl = createDeleteURL(entryId);;
+
 			stringHtml += '<div class="entry">';
 			stringHtml += '<div class="entry-content">';
 			stringHtml += '<div class="entry-date">';
 			stringHtml += '<ul class="edit-actions entry icons-container lfr-meta-actions"><li class="date-entry"><span class="aui-icon aui-icon-small aui-iconfont-time"></span>';
             stringHtml += ' ' + entryDate.getDate() + '-' + (entryDate.getMonth() + 1) + '-' + (entryDate.getYear() + 1900) + '</li>';
             stringHtml += '<li class="edit-entry">';
-            stringHtml += '<span class="aui-icon aui-icon-small aui-iconfont-edit"></span>Edit</li>';
+            stringHtml += '<a href="' + editUrl + '"><span class="aui-icon aui-icon-small aui-iconfont-edit"></span>Edit</a></li>';
             stringHtml += '<li class="delete-entry">';
-            stringHtml += '<span class="aui-icon aui-icon-small aui-iconfont-remove"></span>Delete</li></ul></div></div>';
+            stringHtml += '<a href="' + deleteUrl + '"><span class="aui-icon aui-icon-small aui-iconfont-remove"></span>Delete</a></li></ul></div></div>';
             return stringHtml;
      }
+
+    function createEditEntryURL(entryId, userId, groupId, companyId, title, entryText, entryDate){
+			var editEntryURL = new Liferay.PortletURL.createRenderURL();
+            editEntryURL.setParameter('jspPage', '/eq.jsp');
+            editEntryURL.setParameter('entryId', entryId);
+            editEntryURL.setParameter('userId', userId);
+            editEntryURL.setParameter('groupId', groupId);
+            editEntryURL.setParameter('companyId', companyId);
+            editEntryURL.setParameter('title', title);
+            editEntryURL.setParameter('entryText', entryText);
+            editEntryURL.setParameter('entryDate', new Date(entryDate).toString());
+            editEntryURL.setPortletId('<%=themeDisplay.getPortletDisplay().getId()%>');
+            return editEntryURL.toString();
+    }
+
+    function createDeleteURL(entryId){
+            var deleteEntryURL = Liferay.PortletURL.createActionURL();
+            deleteEntryURL.setParameter('p_auth', Liferay.authToken);
+            deleteEntryURL.setParameter('entryId', entryId);
+            deleteEntryURL.setPortletId('${themeDisplay.portletDisplay.rootPortletId}');
+            deleteEntryURL.setWindowState('normal');
+            deleteEntryURL.setName('deleteEntry');
+
+            return deleteEntryURL.toString();
+    }
 
 
 </aui:script>

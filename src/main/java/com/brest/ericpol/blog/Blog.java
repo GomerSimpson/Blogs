@@ -67,6 +67,12 @@ public class Blog extends MVCPortlet {
 
     }
 
+    public void deleteEntry(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, PortalException {
+        long entryId = ParamUtil.getLong(actionRequest, "entryId");
+        System.out.println("Entry Id to delete: " + entryId);
+        //BlogEntryLocalServiceUtil.deleteBlogEntry(entryId);
+    }
+
 
 
 }
