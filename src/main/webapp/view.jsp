@@ -44,6 +44,23 @@
 		</c:if>
 	</aui:nav-bar>
 </c:if>
+
+
+<div class="content">
+  <div id="1">
+    <h3>Page 1</h3>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+  </div>
+  <div id="2">
+    <h3>Page 2</h3>
+    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+  </div>
+  <div id="3">
+    <h3>Page 3</h3>
+    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </div>
+</div>
+
 <div id="anchor">
 
 </div>
@@ -59,16 +76,55 @@
 --%>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.15/require.min.js"></script>
         <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui.js"></script>
         <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui-experimental.js"></script>
         <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui-datepicker.js"></script>
         <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.7/css/aui.css"/>
-        <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.7/css/aui-experimental.css"/>
-
+<link href="http://cdn.alloyui.com/2.5.0/aui-css/css/bootstrap.min.css" rel="stylesheet"></link>
 <aui:script use="liferay-portlet-url, liferay-search-container, aui-node, liferay-service">
 
 	var stringHtml = "";
+	var entryAmount = 0;
+	var pageAmount = 0;
+	var entryCounter = 0;
+	var currentPage = 0;
+
+                                                    var e = document.getElementById(2);
+                                                        e.style.display = 'none';
+                                                        var e = document.getElementById(3);
+                                                                                                                e.style.display = 'none';
+
+    YUI().use(
+          'aui-pagination',
+          function(Y) {
+            var pages = Y.all('.content div');
+
+            new Y.Pagination(
+              {
+                boundingBox: '#pagination',
+                circular: false,
+                contentBox: '#pagination .pagination-content',
+                on: {
+                  changeRequest: function(event) {
+                    var instance = this,
+                        state = event.state,
+                        lastState = event.lastState;
+
+                    if (lastState) {
+                        pages.item(lastState.page - 1).setStyle('display', 'none');
+                    }
+
+                    pages.item(state.page - 1).setStyle('display', 'block');
+                  }
+                },
+                page: 1
+              }
+            ).render();
+          }
+        );
+
+
+
 
      AUI().ready(
                     function() {
@@ -79,11 +135,28 @@
                                     on: {
                                         success: function() {
                                             data=this.get('responseData');
+
+                                            entryAmount = data.length;
+                                            if(entryAmount % 2 != 0){
+                                               pageAmount = Math.ceil(entryAmount/ 2);
+                                            } else {
+                                                pageAmount = Math.floor(entryAmount / 2);
+                                            }
+
                                             A.Array.each(data, function(obj, idx){
+                                                  currentPage = idx;
                                                   document.getElementById('anchor').innerHTML += addEntry(obj.entryId, obj.userId, obj.groupId,
                                                         obj.companyId, obj.userName, obj.title, obj.entryText, obj.entryDate);
 
+                                                  if(idx >= 2){
+                                                    var e = document.getElementById(idx);
+                                                        e.style.display = 'none';
+                                                  }
                                             });
+
+                                        stringHtml += '<div id="pagination"><ul class="pagination pagination-content"><li><a href="#">Prev</a></li><li><a href="#">1</a></li><li><a href="#">2</a></li><li><a href="#">3</a></li><li><a href="#">Next</a></li></ul></div>';
+
+                                         document.getElementById('anchor').innerHTML += stringHtml;
                                         }
                                     }
                                 });
@@ -100,9 +173,9 @@
 			var showEntryUrl = createShowEntryURL(entryId, userId, groupId, companyId, userName, title, entryText, entryDate);
             var editUrl = createEditEntryURL(entryId, userId, groupId, companyId, userName, title, entryText, entryDate);
             var deleteUrl = createDeleteURL(entryId);
-           // alert(userId.getFullName());
-            stringHtml += '</div></div><div class="separator"><!-- --></div>';
-			stringHtml += '<div class="entry">';
+
+			stringHtml += '<div class="entry" id="' + currentPage + '">';
+			stringHtml += '<div class="separator"><!-- --></div>';
 			stringHtml += '<div class="entry-content">';
 			stringHtml += '<div class="entry-date">';
 			stringHtml += '<ul class="edit-actions entry icons-container lfr-meta-actions"><li class="date-entry"><span class="aui-icon aui-icon-small aui-iconfont-time"></span>';
@@ -113,7 +186,7 @@
             stringHtml += '<a href="' + deleteUrl + '"><span class="aui-icon aui-icon-small aui-iconfont-remove"></span>Delete</a></li>';
             stringHtml += '<li><div class="entry-author"><span class="aui-icon aui-icon-small aui-iconfont-group"></span> by' + userName + '</div></div></li></ul>';
             stringHtml += '<div class="entry-title"><a href="' + showEntryUrl + '"><h3>' + title + '</h2></a></div>';
-            stringHtml += '<div class="entry-body">' + entryText + '</div>';
+            stringHtml += '<div class="entry-body">' + entryText + '</div></div></div>';
             return stringHtml;
      }
 
@@ -156,6 +229,10 @@
             deleteEntryURL.setName('deleteEntry');
 
             return deleteEntryURL.toString();
+    }
+
+    function addPagination(){
+
     }
 
 </aui:script>
