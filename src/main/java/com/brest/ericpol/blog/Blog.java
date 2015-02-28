@@ -74,6 +74,16 @@ public class Blog extends MVCPortlet{
         }
     }
 
+    public void addEntry(ActionRequest actionRequest, ActionResponse actionResponse){
+        String entryText = ParamUtil.getString(actionRequest, "entryText");
+        System.out.println("Text: " + entryText);
+        String title = ParamUtil.getString(actionRequest, "updateTitle");
+        System.out.println("title:  " + title);
+        String date  = ParamUtil.getString(actionRequest, "date");
+        Date date1 = Date.valueOf(date);
+        System.out.println("Date: " + date1);
+    }
+
     public void deleteEntry(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, PortalException {
         long entryId = ParamUtil.getLong(actionRequest, "entryId");
         System.out.println("Entry Id to delete: " + entryId);
@@ -84,6 +94,10 @@ public class Blog extends MVCPortlet{
     public void updateEntry(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, PortalException, ParseException {
         long entryId = ParamUtil.getLong(actionRequest, "entryId");
         System.out.println("Entry Id: " + entryId);
+        long groupId = ParamUtil.getLong(actionRequest, "groupId");
+        System.out.println("Group Id: " + groupId);
+        long companyId = ParamUtil.getLong(actionRequest, "companyId");
+        System.out.println("Company Id: " + companyId);
         String entryText = ParamUtil.getString(actionRequest, "entryText");
         System.out.println("Text: " + entryText);
         String title = ParamUtil.getString(actionRequest, "updateTitle");

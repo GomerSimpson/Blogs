@@ -20,6 +20,9 @@
 <portlet:actionURL var="updateEntry" name="updateEntry">
 </portlet:actionURL>
 
+<portlet:actionURL var="addEntry" name="addEntry">
+</portlet:actionURL>
+
 
 <portlet:defineObjects />
 
@@ -50,31 +53,53 @@
 			<aui:button name="addButton" type="submit" value="Add" />
 		</c:if>
 		<c:if test="<%=add_flag == false %>">
+			<aui:input type="hidden" id="entryId" name="entryId" value='<%=request.getParameter("entryId")%>'/>
+			<aui:input type="hidden" id="groupId" name="groupId" value='<%=request.getParameter("groupId")%>'/>
+			<aui:input type="hidden" id="companyId" name="companyId" value='<%=request.getParameter("companyId")%>'/>
+		</c:if>
+		<c:if test="<%=add_flag == false %>">
 			<aui:button name="updateButton" type="submit" value="Update" />
 		</c:if>
 
 	</aui:form>
 <aui:script>
 
-$(setCurrentDate);
-            function setCurrentDate(){
+		$(setDateAndTitle);
 
-			var date = new Date('<%=request.getParameter("entryDate")%>');
-			var values = [ date.getDate(), date.getMonth() + 1 ];
 
-			for( var id in values ) {
-  				values[ id ] = values[ id ].toString().replace( /^([0-9])$/, '0$1' );
-			}
+            function setDateAndTitle(){
+            	var flag = <%=add_flag%>;
+				var date;
 
-            var element = document.getElementById('<portlet:namespace/>date');
-            element.setAttribute("value", date.getFullYear()+'-'+values[ 1 ]+'-'+values[ 0 ]);
+				if(flag){
+					date = new Date();
+
+					var values = [ date.getDate(), date.getMonth() + 1 ];
+
+					for( var id in values ) {
+						values[ id ] = values[ id ].toString().replace( /^([0-9])$/, '0$1' );
+					}
+
+					var element = document.getElementById('<portlet:namespace/>date');
+					element.setAttribute("value", date.getFullYear()+'-'+values[ 1 ]+'-'+values[ 0 ]);
+					return;
+				} else{
+
+					date = new Date('<%=request.getParameter("entryDate")%>');
+					var values = [ date.getDate(), date.getMonth() + 1 ];
+
+					for( var id in values ) {
+						values[ id ] = values[ id ].toString().replace( /^([0-9])$/, '0$1' );
+					}
+
+					var element = document.getElementById('<portlet:namespace/>date');
+					element.setAttribute("value", date.getFullYear()+'-'+values[ 1 ]+'-'+values[ 0 ]);
+
+					document.getElementById('<portlet:namespace/>updateTitle').setAttribute("value", '<%=request.getParameter("title")%>');
+            	}
             }
 
-	var flag = <%=add_flag%>;
 
-	if(!flag){
-		document.getElementById('<portlet:namespace/>updateTitle').setAttribute("value", '<%=request.getParameter("title")%>');
-	}
 
 
 

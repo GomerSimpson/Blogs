@@ -13,6 +13,11 @@
 <portlet:resourceURL var="resourceURL">
 </portlet:resourceURL>
 
+<portlet:renderURL var="addEntryURL">
+    <portlet:param name="mvcPath" value="/edit.jsp"/>
+    <liferay-portlet:param name="add_flag" value="true"/>
+</portlet:renderURL>
+
 <aui:form action="#" method="get" name="fm1">
 	<liferay-portlet:renderURLParams varImpl="adsfg" />
 	<aui:input name="redirect" type="hidden" value="ag" />
@@ -24,7 +29,7 @@
 	<aui:nav-bar>
 		<c:if test="true">
 			<aui:nav>
-					<aui:nav-item href="#" label="add-blog-entry" name="addEntryButton" />
+					<aui:nav-item href="<%=addEntryURL%>" label="add-blog-entry" name="addEntryButton" />
 			</aui:nav>
 		</c:if>
 
