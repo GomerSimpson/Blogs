@@ -1,78 +1,101 @@
-<%@page import="java.util.Map"%>
-<%@taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
-<%@page import="java.util.List"%>
-<%@page import="com.liferay.portal.kernel.util.ListUtil"%>
+
+<%@ page import="java.util.Map"%>
+<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@ page import="java.util.HashMap"%>
+<%@ page import="java.util.List"%>
+<%@ page import="java.util.ArrayList"%>
+
+<%@ page import="com.liferay.portal.kernel.util.ListUtil"%>
+<%@ page import="com.liferay.portal.kernel.util.ParamUtil"%>
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
 <%@ taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet" %>
 <%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 <%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
+<%@ page import="com.liferay.portal.service.UserLocalServiceUtil"%>
+<%@ taglib uri="http://ckeditor.com" prefix="ckeditor" %>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<portlet:actionURL var="updateEntry" name="updateEntry">
+</portlet:actionURL>
+
+
 <portlet:defineObjects />
 
-<b>Page of editing of an entry</b>
 
-<link href="http://cdn.alloyui.com/2.5.0/aui-css/css/bootstrap.min.css" rel="stylesheet"></link>
+<%
+	String add_flag_str = ParamUtil.getString(request, "add_flag");
+	boolean add_flag = Boolean.valueOf(add_flag_str);
 
-<div id="anchor"></div>
+%>
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.15/require.min.js"></script>
+        <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui.js"></script>
+        <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui-experimental.js"></script>
+        <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui-datepicker.js"></script>
+        <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.7/css/aui.css"/>
+        <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.7/css/aui-experimental.css"/>
+<script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
+
+	<aui:form action="<%=updateEntry%>" name="updateEntry" method="POST">
+		<label name="label" for="demo-range-always">Date</label>
+		<input class="aui-date-picker" name="<portlet:namespace/>date" id="<portlet:namespace/>date" type="date" max="2019-01-05" min="2011-12-25" />
+		<aui:input type="text" id="updateTitle" name="updateTitle" value="" label="Title"/>
+		<label name="editorLabel" for="entryText">Text</label>
+		<textarea id="<portlet:namespace/>entryText" name="<portlet:namespace/>entryText"><c:if test="<%=add_flag == false %>"><%=request.getParameter("entryText")%></c:if></textarea>
+		<c:if test="<%=add_flag %>">
+			<aui:button name="addButton" type="submit" value="Add" />
+		</c:if>
+		<c:if test="<%=add_flag == false %>">
+			<aui:button name="updateButton" type="submit" value="Update" />
+		</c:if>
+
+	</aui:form>
 <aui:script>
-    alert("edit.jsp" + '<%= request.getParameter("userId") %>, <%= request.getParameter("entryDate") %>');
+
+$(setCurrentDate);
+            function setCurrentDate(){
+
+			var date = new Date('<%=request.getParameter("entryDate")%>');
+			var values = [ date.getDate(), date.getMonth() + 1 ];
+
+			for( var id in values ) {
+  				values[ id ] = values[ id ].toString().replace( /^([0-9])$/, '0$1' );
+			}
+
+            var element = document.getElementById('<portlet:namespace/>date');
+            element.setAttribute("value", date.getFullYear()+'-'+values[ 1 ]+'-'+values[ 0 ]);
+            }
+
+	var flag = <%=add_flag%>;
+
+	if(!flag){
+		document.getElementById('<portlet:namespace/>updateTitle').setAttribute("value", '<%=request.getParameter("title")%>');
+	}
 
 
-var string = "";
-string += '<div class="content">'+
-  '<div id="1">'+
-    '<h3>Page 1</h3>'+
-    'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'+
-  '</div>'+
-  '<div id="2">'+
-    '<h3>Page 2</h3>'+
-    'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'+
-  '</div>'+
-  '<div id="3">'+
-    '<h3>Page 3</h3>'+
-    't enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'+
-  '</div>'+
-'</div>'+
-'<div id="pagination">'+
-  '<ul class="pagination pagination-content">'+
-    '<li><a href="#">Prev</a></li>'+
-    '<li><a href="#">1</a></li>'+
-    '<li><a href="#">2</a></li>'+
-    '<li><a href="#">3</a></li>'+
-    '<li><a href="#">Next</a></li>'+
-  '</ul>'+
-'</div>';
+
+AJS.$(document).ready(function() {
+   AJS.$('#<portlet:namespace/>date').datePicker({'overrideBrowserDefault': true});
+});
+	window.onload = function()
+	{
+		CKEDITOR.replace( '<portlet:namespace/>entryText',
+    {
+        toolbar : 'Base',
+        uiColor : '#009ae5'
+    });
+	};
 
 
-document.getElementById('anchor').innerHTML += string;
-
-
-    YUI().use(
-      'aui-pagination',
-      function(Y) {
-        var pages = Y.all('.content div');
-
-        new Y.Pagination(
-          {
-            boundingBox: '#pagination',
-            circular: false,
-            contentBox: '#pagination .pagination-content',
-            on: {
-              changeRequest: function(event) {
-                var instance = this,
-                    state = event.state,
-                    lastState = event.lastState;
-
-                if (lastState) {
-                    pages.item(lastState.page - 1).setStyle('display', 'none');
-                }
-
-                pages.item(state.page - 1).setStyle('display', 'block');
-              }
-            },
-            page: 1
+	AUI().ready(
+          function() {
+          	var editor_data = CKEDITOR.instances.editor1.getData();
+			alert(editor_data);
           }
-        ).render();
-      }
     );
+
 </aui:script>

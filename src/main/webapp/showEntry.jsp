@@ -13,7 +13,7 @@
 </portlet:resourceURL>
 
 <portlet:actionURL var="deleteEntryURL" name="deleteEntry">
-<portlet:param name="entryId" value='<%=request.getParameter("title")%>'/>
+<portlet:param name="entryId" value='<%=request.getParameter("entryId")%>'/>
 </portlet:actionURL>
 
 <portlet:renderURL var="editEntryURL" copyCurrentRenderParameters="true">

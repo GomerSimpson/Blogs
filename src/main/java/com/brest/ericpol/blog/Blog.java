@@ -2,6 +2,7 @@ package com.brest.ericpol.blog;
 
 import com.brest.ericpol.blog.service.model.BlogEntry;
 import com.brest.ericpol.blog.service.service.BlogEntryLocalServiceUtil;
+import com.ckeditor.CKEditorConfig;
 import com.liferay.portal.NoSuchModelException;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -19,20 +20,25 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 import javax.portlet.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Blog extends MVCPortlet {
+public class Blog extends MVCPortlet{
+
+
 
     @Override
     public void serveResource(ResourceRequest resourceRequest,
                         ResourceResponse resourceResponse) throws IOException, PortletException {
-
         JSONObject entryJSON = null;
+        CKEditorConfig cke = new CKEditorConfig();
         JSONArray entriesJSONArray = JSONFactoryUtil.createJSONArray();
         ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
-
         User user = themeDisplay.getUser();
         try {
             System.out.println(user.getUserId() + " " + user.getGroupId() + " " + user.getCompanyId());
@@ -66,7 +72,6 @@ public class Blog extends MVCPortlet {
         } catch (PortalException e) {
             e.printStackTrace();
         }
-
     }
 
     public void deleteEntry(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, PortalException {
@@ -74,9 +79,18 @@ public class Blog extends MVCPortlet {
         System.out.println("Entry Id to delete: " + entryId);
         //BlogEntryLocalServiceUtil.deleteBlogEntry(entryId);
 
-
     }
 
-
+    public void updateEntry(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, PortalException, ParseException {
+        long entryId = ParamUtil.getLong(actionRequest, "entryId");
+        System.out.println("Entry Id: " + entryId);
+        String entryText = ParamUtil.getString(actionRequest, "entryText");
+        System.out.println("Text: " + entryText);
+        String title = ParamUtil.getString(actionRequest, "updateTitle");
+        System.out.println("title:  " + title);
+        String date  = ParamUtil.getString(actionRequest, "date");
+        Date date1 = Date.valueOf(date);
+        System.out.println("Date: " + date1);
+    }
 
 }

@@ -130,10 +130,11 @@
             editEntryURL.setParameter('userId', userId);
             editEntryURL.setParameter('groupId', groupId);
             editEntryURL.setParameter('companyId', companyId);
-            editEntryURL.setParameter('userName', userName);
-            editEntryURL.setParameter('title', title);
-            editEntryURL.setParameter('entryText', entryText);
+            editEntryURL.setParameter('userName', new String(userName).toString());
+            editEntryURL.setParameter('title', new String(title).toString());
+            editEntryURL.setParameter('entryText', new String(entryText).toString());
             editEntryURL.setParameter('entryDate', new Date(entryDate).toString());
+            editEntryURL.setParameter('add_flag', new String("false").toString());
             editEntryURL.setPortletId('<%=themeDisplay.getPortletDisplay().getId()%>');
             return editEntryURL.toString();
     }
