@@ -13,30 +13,41 @@
 <portlet:resourceURL var="resourceURL">
 </portlet:resourceURL>
 
-<portlet:renderURL var="addEntryURL">
-    <portlet:param name="mvcPath" value="/edit.jsp"/>
+<portlet:actionURL var="updateEntry" name="updateEntry">
+</portlet:actionURL>
+<liferay-theme:defineObjects />
+
+
+    <!---------------------------start of Pop up------------------------------------>
+    <div class="popup__overlay">
+        <div class="popup">
+            <a href="#" class="popup__close">X</a>
+               <%@ include file="/add.jsp" %>
+        </div>
+    </div>
+   <!---------------------------end of Pop up-------------------------------------->
+
+<portlet:renderURL var="testURL">
+    <portlet:param name="mvcPath" value="/test.jsp"/>
     <liferay-portlet:param name="add_flag" value="true"/>
 </portlet:renderURL>
 
-<aui:form action="#" method="get" name="fm1">
-	<liferay-portlet:renderURLParams varImpl="adsfg" />
-	<aui:input name="redirect" type="hidden" value="ag" />
-</aui:form>
-
-<liferay-theme:defineObjects />
+<a href="<%=testURL%>">Test</a>
 
 <c:if test="true">
 	<aui:nav-bar>
 		<c:if test="true">
+		                <div class="spacer"></div>
 			<aui:nav>
-					<aui:nav-item href="<%=addEntryURL%>" label="add-blog-entry" name="addEntryButton" />
+                <button class="aui-button aui-button-subtle" id="popup__toggle"  >
+                 Add entry</button>
 			</aui:nav>
 		</c:if>
 
 		<c:if test="true">
 			<aui:nav-bar-search cssClass="pull-right">
 				<div class="form-search">
-					<liferay-ui:input-search autoFocus="" id="keywords1" name="keywords" placeholder='' />
+					  <input class="text" type="text" id="tags" name="d-fname" title="Choose a user"><!--<button class="aui-button" onClick="resetData()">Button</button>-->
 				</div>
 			</aui:nav-bar-search>
 		</c:if>
@@ -46,21 +57,10 @@
 <div id="anchor">
 </div>
 <div id="pager"></div>
-<%--
 
-			<div class="entry-footer">
-				<div class="entry-author">
-					<liferay-ui:message key="written-by" /><h6>get username</h6>
-				</div>
-			</div>
-		</div>
-		<div class="separator"><!-- --></div>
---%>
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-        <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui.js"></script>
-        <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.7/css/aui.css"/>
-<link href="http://cdn.alloyui.com/2.5.0/aui-css/css/bootstrap.min.css" rel="stylesheet"></link>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
 <aui:script use="liferay-portlet-url, liferay-search-container, aui-node, liferay-service, aui-pagination">
 
 	var stringHtml = "";
@@ -68,6 +68,9 @@
 	var pageAmount = 0;
 	var entryCounter = 0;
 	var currentPage = 0;
+	var data;
+	var searchPartOfData = [];
+	var tempArray;
 
      AUI().ready(
                     function() {
@@ -100,13 +103,65 @@
                         }
                 );
 
-     function addEntry(entryId, userId, groupId, companyId, userName1, title1, entryText1, entryDate1, index){
+$(setTimeout(fillSearch, 2000));
+
+function unique(arr) {
+  var obj = {};
+
+  for(var i=0; i<arr.length; i++) {
+    var str = arr[i];
+    obj[str] = true;
+  }
+
+  return Object.keys(obj);
+}
+
+    function fillSearch() {
+        var availableTags=[];
+
+        for (var idx in data) {
+            availableTags.push(data[idx].userName);
+        }
+
+        availableTags = unique(availableTags);
+
+        $( "#tags" ).autocomplete({
+          source: availableTags
+        });
+      }
+
+        $( "#tags" ).autocomplete({
+          select: function( event, ui ) {
+
+          for(var idx in data){
+            if(data[idx].userName == ui.item.value){
+                searchPartOfData.push(data[idx]);
+            }
+
+          }
+
+            $('#anchor').empty();
+
+       for(var idx in searchPartOfData){
+
+            document.getElementById('anchor').innerHTML += addEntry(searchPartOfData[idx].entryId, searchPartOfData[idx].userId, searchPartOfData[idx].groupId,
+                                                        searchPartOfData[idx].companyId, searchPartOfData[idx].userName, searchPartOfData[idx].title, searchPartOfData[idx].entryText, searchPartOfData[idx].entryDate);
+
+       }
+
+        searchPartOfData = [];
+           // alert( ui.item.value);
+          }
+        });
+
+
+     function addEntry(entryId, userId, groupId, companyId, userName1, title1, entryText1, entryDate1){
             stringHtml = "";
 			var entryDate = new Date(entryDate1);
 			var title = new String(title1);
 			var userName = new String(userName1);
 			var entryText = new String(entryText1);
-			var showEntryUrl = createShowEntryURL(entryId, userId, groupId, companyId, userName, title, entryText, entryDate, index);
+			var showEntryUrl = createShowEntryURL(entryId, userId, groupId, companyId, userName, title, entryText, entryDate);
             var editUrl = createEditEntryURL(entryId, userId, groupId, companyId, userName, title, entryText, entryDate);
             var deleteUrl = createDeleteURL(entryId);
 
@@ -144,7 +199,7 @@
             return editEntryURL.toString();
     }
 
-    function createShowEntryURL(entryId, userId, groupId, companyId, userName, title, entryText, entryDate, index){
+    function createShowEntryURL(entryId, userId, groupId, companyId, userName, title, entryText, entryDate){
 			var showEntryURL = new Liferay.PortletURL.createRenderURL();
             showEntryURL.setParameter('jspPage', '/showEntry.jsp');
             showEntryURL.setParameter('entryId', entryId);
@@ -153,7 +208,6 @@
             showEntryURL.setParameter('companyId', companyId);
             showEntryURL.setParameter('userName', new String(userName).toString());
             showEntryURL.setParameter('title', new String(title).toString());
-            showEntryURL.setParameter('idx', index);
             showEntryURL.setParameter('entryText', new String(entryText).toString());
             showEntryURL.setParameter('entryDate', new Date(entryDate).toString());
             showEntryURL.setPortletId('<%=themeDisplay.getPortletDisplay().getId()%>');
@@ -171,48 +225,30 @@
             return deleteEntryURL.toString();
     }
         var string = "";
-/*
-        string += '<div id="pagination">'+
-          '<ul class="pagination pagination-content">'+
-            '<li><a href="#">Prev</a></li>'+
-            '<li><a href="#">1</a></li>'+
-            '<li><a href="#">2</a></li>'+
-            '<li><a href="#">3</a></li>'+
-            '<li><a href="#">Next</a></li>'+
-          '</ul>'+
-        '</div>';
 
-
-        document.getElementById('pager').innerHTML += string;
-
-
-            YUI().use(
-              'aui-pagination',
-              function(Y) {
-                var pages = Y.all('.pager div');
-
-                new Y.Pagination(
-                  {
-                    boundingBox: '#pagination',
-                    circular: false,
-                    contentBox: '#pagination .pagination-content',
-                    on: {
-                      changeRequest: function(event) {
-                        var instance = this,
-                            state = event.state,
-                            lastState = event.lastState;
-
-                        if (lastState) {
-                            pages.item(lastState.page - 1).setStyle('display', 'none');
-                        }
-
-                        pages.item(state.page - 1).setStyle('display', 'block');
-                      }
-                    },
-                    page: 1
-                  }
-                ).render();
-              }
-            );
-*/
 </aui:script>
+
+    <script type="text/javascript">
+
+     function resetData(){
+            //alert(document.getElementById('tags').value);
+        }
+
+
+
+
+        p = $('.popup__overlay');
+        $('#popup__toggle').click(function() {
+            p.css('display', 'block');
+        });
+        p.click(function(event) {
+            e = event || window.event;
+            if (e.target == this) {
+                $(p).css('display', 'none');
+            }
+        });
+        $('.popup__close').click(function() {
+            p.css('display', 'none');
+        });
+
+    </script>

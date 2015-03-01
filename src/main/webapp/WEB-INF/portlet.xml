@@ -19,6 +19,14 @@
             <name>showEntry-jsp</name>
             <value>/showEntry.jsp</value>
         </init-param>
+        <init-param>
+            <name>add-jsp</name>
+            <value>/add.jsp</value>
+        </init-param>
+        <init-param>
+            <name>test-jsp</name>
+            <value>/test.jsp</value>
+        </init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>

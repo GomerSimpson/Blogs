@@ -257,6 +257,9 @@ public interface BlogEntryLocalService extends BaseLocalService,
         java.lang.Long userId, java.lang.Long groupId, java.lang.Long companyId)
         throws com.liferay.portal.kernel.exception.SystemException;
 
+    public java.util.List<com.brest.ericpol.blog.service.model.BlogEntry> findAllEntries()
+        throws com.liferay.portal.kernel.exception.SystemException;
+
     public java.util.List<com.brest.ericpol.blog.service.model.BlogEntry> findByDateLaterThan(
         java.lang.Long userId, java.lang.Long groupId,
         java.lang.Long companyId, java.sql.Date date)

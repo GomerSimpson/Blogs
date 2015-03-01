@@ -13,6 +13,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.util.bridges.mvc.MVCPortlet;
@@ -36,10 +37,10 @@ public class Blog extends MVCPortlet{
     public void serveResource(ResourceRequest resourceRequest,
                         ResourceResponse resourceResponse) throws IOException, PortletException {
         JSONObject entryJSON = null;
-        CKEditorConfig cke = new CKEditorConfig();
         JSONArray entriesJSONArray = JSONFactoryUtil.createJSONArray();
         ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
         User user = themeDisplay.getUser();
+
         try {
             System.out.println(user.getUserId() + " " + user.getGroupId() + " " + user.getCompanyId());
         } catch (PortalException e) {
@@ -48,7 +49,8 @@ public class Blog extends MVCPortlet{
             e.printStackTrace();
         }
         try {
-            List<BlogEntry> list = BlogEntryLocalServiceUtil.findByUserGroupCompanyId(user.getUserId(), user.getGroupId(), user.getCompanyId());
+            List<BlogEntry> list = BlogEntryLocalServiceUtil.findAllEntries();
+            //List<BlogEntry> list = BlogEntryLocalServiceUtil.findByUserGroupCompanyId(user.getUserId(), user.getGroupId(), user.getCompanyId());
 
             for(BlogEntry be : list){
                 entryJSON = JSONFactoryUtil.createJSONObject();
@@ -74,20 +76,34 @@ public class Blog extends MVCPortlet{
         }
     }
 
-    public void addEntry(ActionRequest actionRequest, ActionResponse actionResponse){
+    public void addEntry(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, PortalException {
+
+        ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+        User user = themeDisplay.getUser();
+
+        long userId = user.getUserId();
+        long groupId = user.getGroupId();
+        long companyId = user.getCompanyId();
+        System.out.println("UserId: " + userId);
+
+        System.out.println("GroupId: " + groupId);
+
+        System.out.println("companyId: " + companyId);
+
         String entryText = ParamUtil.getString(actionRequest, "entryText");
         System.out.println("Text: " + entryText);
-        String title = ParamUtil.getString(actionRequest, "updateTitle");
+        String title = ParamUtil.getString(actionRequest, "title");
         System.out.println("title:  " + title);
-        String date  = ParamUtil.getString(actionRequest, "date");
-        Date date1 = Date.valueOf(date);
-        System.out.println("Date: " + date1);
+        String strDate  = ParamUtil.getString(actionRequest, "date");
+        Date date = Date.valueOf(strDate);
+        System.out.println("Date: " + date);
+
+        BlogEntryLocalServiceUtil.addBlogEntry(userId, groupId, companyId, title, entryText, date);
     }
 
     public void deleteEntry(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, PortalException {
         long entryId = ParamUtil.getLong(actionRequest, "entryId");
-        System.out.println("Entry Id to delete: " + entryId);
-        //BlogEntryLocalServiceUtil.deleteBlogEntry(entryId);
+        BlogEntryLocalServiceUtil.deleteBlogEntry(entryId);
 
     }
 
