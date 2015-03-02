@@ -19,6 +19,7 @@ import com.liferay.portal.service.UserGroupLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.util.bridges.mvc.MVCPortlet;
+import org.exolab.castor.mapping.xml.Param;
 
 import javax.portlet.*;
 import java.io.IOException;
@@ -33,8 +34,6 @@ import java.util.List;
 
 public class Blog extends MVCPortlet{
 
-
-
     @Override
     public void serveResource(ResourceRequest resourceRequest,
                         ResourceResponse resourceResponse) throws IOException, PortletException {
@@ -48,7 +47,14 @@ public class Blog extends MVCPortlet{
         try {
             //List<BlogEntry> list = BlogEntryLocalServiceUtil.findAllEntries();
             //List<BlogEntry> list = BlogEntryLocalServiceUtil.findByUserGroupCompanyId(user.getUserId(), user.getGroupId(), user.getCompanyId());
-            List<BlogEntry> list = BlogEntryLocalServiceUtil.findByGroupId(themeDisplay.getScopeGroupId());
+            List<BlogEntry> list = null;
+            boolean flag = ParamUtil.getBoolean(resourceRequest, "amount");
+
+            if(flag) {
+                list = BlogEntryLocalServiceUtil.findByGroupId(themeDisplay.getScopeGroupId());
+            } else{
+                list = BlogEntryLocalServiceUtil.findByUserGroupCompanyId(user.getUserId(), themeDisplay.getScopeGroupId(), user.getCompanyId());
+            }
 
             for(BlogEntry be : list){
                 entryJSON = JSONFactoryUtil.createJSONObject();

@@ -3,7 +3,7 @@ create table blog_BlogEntry (
 	userId LONG,
 	groupId LONG,
 	companyId LONG,
-	title VARCHAR(75) null,
-	entryText VARCHAR(75) null,
+	title VARCHAR(50) null,
+	entryText VARCHAR(1000) null,
 	entryDate DATE null
 );

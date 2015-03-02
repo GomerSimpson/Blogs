@@ -33,6 +33,7 @@
 			<portlet-mode>view</portlet-mode>
             <window-state>maximized</window-state>
 		</supports>
+        <resource-bundle>language.language</resource-bundle>
 		<portlet-info>
 			<title>Blog</title>
 			<short-title>Blog</short-title>
