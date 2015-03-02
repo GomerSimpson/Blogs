@@ -16,6 +16,8 @@
 <portlet:actionURL var="updateEntry" name="updateEntry">
 </portlet:actionURL>
 <liferay-theme:defineObjects />
+<div id="main" name="main" style="text-align: center;">
+
 
 
     <!---------------------------start of Pop up------------------------------------>
@@ -32,32 +34,32 @@
     <liferay-portlet:param name="add_flag" value="true"/>
 </portlet:renderURL>
 
-<a href="<%=testURL%>">Test</a>
 
-<c:if test="true">
-	<aui:nav-bar>
-		<c:if test="true">
-		                <div class="spacer"></div>
-			<aui:nav>
-                <button class="aui-button aui-button-subtle" id="popup__toggle"  >
-                 Add entry</button>
-			</aui:nav>
-		</c:if>
+<div class="topContainer">
+<a href="#dwarfers" aria-owns="dwarfers" aria-haspopup="true" class="aui-button aui-dropdown2-trigger aui-style-default">Shipmates</a></p>
+<!-- Simple Dropdown - dropdown -->
+<div id="dwarfers" class="aui-dropdown2 aui-style-default">
+    <ul class="aui-list-truncate">
+        <li><a href="http://example.com/">Lister</a></li>
+        <li><a href="http://example.com/">Rimmer</a></li>
+        <li><a href="http://example.com/">Cat</a></li>
+        <li><a href="http://example.com/">Kryten</a></li>
+    </ul>
+</div>
+    <button class="btn btn-primary" id="popup__toggle"  >Add entry</button>
+    <input type="checkbox" id="byAll" class="checkbox" name="byAll">
+    <input class="text" type="text" id="byTitle" name="d-fname" title="choseEntry">
 
-		<c:if test="true">
-			<aui:nav-bar-search cssClass="pull-right">
-				<div class="form-search">
-					  <input class="text" type="text" id="tags" name="d-fname" title="Choose a user"><!--<button class="aui-button" onClick="resetData()">Button</button>-->
-				</div>
-			</aui:nav-bar-search>
-		</c:if>
-	</aui:nav-bar>
-</c:if>
+	<div class="form-search">
+	    <input class="text" type="text" id="tags" name="d-fname" title="Choose a user"><!--<button class="aui-button" onClick="resetData()">Button</button>-->
+	</div>
 
-<div id="anchor">
+</div>
+
+<div id="anchor" style="text-align: center;">
 </div>
 <div id="pager"></div>
-
+</div>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
@@ -165,9 +167,9 @@ function unique(arr) {
             var editUrl = createEditEntryURL(entryId, userId, groupId, companyId, userName, title, entryText, entryDate);
             var deleteUrl = createDeleteURL(entryId);
 
-			stringHtml += '<div class="entry">';
+			stringHtml += '<div class="entry" style="text-align: center;">';
 			stringHtml += '<div class="separator"><!-- --></div>';
-			stringHtml += '<div class="entry-content">';
+			stringHtml += '<div class="entry-content" style="text-align: center;">';
 			stringHtml += '<div class="entry-date">';
 			stringHtml += '<ul class="edit-actions entry icons-container lfr-meta-actions"><li class="date-entry"><span class="aui-icon aui-icon-small aui-iconfont-time"></span>';
             stringHtml += ' ' + entryDate.getDate() + '-' + (entryDate.getMonth() + 1) + '-' + (entryDate.getYear() + 1900) + '</li>';
@@ -236,18 +238,20 @@ function unique(arr) {
 
 
 
-
         p = $('.popup__overlay');
         $('#popup__toggle').click(function() {
+                $('#tags').hide();
             p.css('display', 'block');
         });
         p.click(function(event) {
             e = event || window.event;
             if (e.target == this) {
+                $('#tags').show();
                 $(p).css('display', 'none');
             }
         });
         $('.popup__close').click(function() {
+            $('#tags').show();
             p.css('display', 'none');
         });
 
