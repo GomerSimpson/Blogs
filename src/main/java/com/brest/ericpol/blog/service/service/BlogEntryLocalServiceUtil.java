@@ -294,6 +294,12 @@ public class BlogEntryLocalServiceUtil {
         return getService().findAllEntries();
     }
 
+    public static java.util.List<com.brest.ericpol.blog.service.model.BlogEntry> findByGroupId(
+        long groupId)
+        throws com.liferay.portal.kernel.exception.SystemException {
+        return getService().findByGroupId(groupId);
+    }
+
     public static java.util.List<com.brest.ericpol.blog.service.model.BlogEntry> findByDateLaterThan(
         java.lang.Long userId, java.lang.Long groupId,
         java.lang.Long companyId, java.sql.Date date)

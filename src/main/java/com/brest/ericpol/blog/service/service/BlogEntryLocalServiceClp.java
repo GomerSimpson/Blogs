@@ -58,6 +58,8 @@ public class BlogEntryLocalServiceClp implements BlogEntryLocalService {
     private String[] _methodParameterTypes24;
     private String _methodName25;
     private String[] _methodParameterTypes25;
+    private String _methodName26;
+    private String[] _methodParameterTypes26;
 
     public BlogEntryLocalServiceClp(InvokableLocalService invokableLocalService) {
         _invokableLocalService = invokableLocalService;
@@ -177,23 +179,27 @@ public class BlogEntryLocalServiceClp implements BlogEntryLocalService {
 
         _methodParameterTypes22 = new String[] {  };
 
-        _methodName23 = "findByDateLaterThan";
+        _methodName23 = "findByGroupId";
 
-        _methodParameterTypes23 = new String[] {
-                "java.lang.Long", "java.lang.Long", "java.lang.Long",
-                "java.sql.Date"
-            };
+        _methodParameterTypes23 = new String[] { "long" };
 
-        _methodName24 = "findByDateEarlierThan";
+        _methodName24 = "findByDateLaterThan";
 
         _methodParameterTypes24 = new String[] {
                 "java.lang.Long", "java.lang.Long", "java.lang.Long",
                 "java.sql.Date"
             };
 
-        _methodName25 = "findByTimePeriod";
+        _methodName25 = "findByDateEarlierThan";
 
         _methodParameterTypes25 = new String[] {
+                "java.lang.Long", "java.lang.Long", "java.lang.Long",
+                "java.sql.Date"
+            };
+
+        _methodName26 = "findByTimePeriod";
+
+        _methodParameterTypes26 = new String[] {
                 "java.lang.Long", "java.lang.Long", "java.lang.Long",
                 "java.sql.Date", "java.sql.Date"
             };
@@ -860,24 +866,14 @@ public class BlogEntryLocalServiceClp implements BlogEntryLocalService {
     }
 
     @Override
-    public java.util.List<com.brest.ericpol.blog.service.model.BlogEntry> findByDateLaterThan(
-        java.lang.Long userId, java.lang.Long groupId,
-        java.lang.Long companyId, java.sql.Date date)
+    public java.util.List<com.brest.ericpol.blog.service.model.BlogEntry> findByGroupId(
+        long groupId)
         throws com.liferay.portal.kernel.exception.SystemException {
         Object returnObj = null;
 
         try {
             returnObj = _invokableLocalService.invokeMethod(_methodName23,
-                    _methodParameterTypes23,
-                    new Object[] {
-                        ClpSerializer.translateInput(userId),
-                        
-                    ClpSerializer.translateInput(groupId),
-                        
-                    ClpSerializer.translateInput(companyId),
-                        
-                    ClpSerializer.translateInput(date)
-                    });
+                    _methodParameterTypes23, new Object[] { groupId });
         } catch (Throwable t) {
             t = ClpSerializer.translateThrowable(t);
 
@@ -897,7 +893,7 @@ public class BlogEntryLocalServiceClp implements BlogEntryLocalService {
     }
 
     @Override
-    public java.util.List<com.brest.ericpol.blog.service.model.BlogEntry> findByDateEarlierThan(
+    public java.util.List<com.brest.ericpol.blog.service.model.BlogEntry> findByDateLaterThan(
         java.lang.Long userId, java.lang.Long groupId,
         java.lang.Long companyId, java.sql.Date date)
         throws com.liferay.portal.kernel.exception.SystemException {
@@ -934,6 +930,43 @@ public class BlogEntryLocalServiceClp implements BlogEntryLocalService {
     }
 
     @Override
+    public java.util.List<com.brest.ericpol.blog.service.model.BlogEntry> findByDateEarlierThan(
+        java.lang.Long userId, java.lang.Long groupId,
+        java.lang.Long companyId, java.sql.Date date)
+        throws com.liferay.portal.kernel.exception.SystemException {
+        Object returnObj = null;
+
+        try {
+            returnObj = _invokableLocalService.invokeMethod(_methodName25,
+                    _methodParameterTypes25,
+                    new Object[] {
+                        ClpSerializer.translateInput(userId),
+                        
+                    ClpSerializer.translateInput(groupId),
+                        
+                    ClpSerializer.translateInput(companyId),
+                        
+                    ClpSerializer.translateInput(date)
+                    });
+        } catch (Throwable t) {
+            t = ClpSerializer.translateThrowable(t);
+
+            if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+                throw (com.liferay.portal.kernel.exception.SystemException) t;
+            }
+
+            if (t instanceof RuntimeException) {
+                throw (RuntimeException) t;
+            } else {
+                throw new RuntimeException(t.getClass().getName() +
+                    " is not a valid exception");
+            }
+        }
+
+        return (java.util.List<com.brest.ericpol.blog.service.model.BlogEntry>) ClpSerializer.translateOutput(returnObj);
+    }
+
+    @Override
     public java.util.List<com.brest.ericpol.blog.service.model.BlogEntry> findByTimePeriod(
         java.lang.Long userId, java.lang.Long groupId,
         java.lang.Long companyId, java.sql.Date lowBorder,
@@ -942,8 +975,8 @@ public class BlogEntryLocalServiceClp implements BlogEntryLocalService {
         Object returnObj = null;
 
         try {
-            returnObj = _invokableLocalService.invokeMethod(_methodName25,
-                    _methodParameterTypes25,
+            returnObj = _invokableLocalService.invokeMethod(_methodName26,
+                    _methodParameterTypes26,
                     new Object[] {
                         ClpSerializer.translateInput(userId),
                         

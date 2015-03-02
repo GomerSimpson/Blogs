@@ -65,3 +65,25 @@
             .spacer{
                 height: 10px;
             }
+            .topContainer{
+                    margin:0 auto;/*Центрирование блока*/
+                    background:#ccc;/*Цвет блока*/
+                    max-width:12800px;/*Максимальная ширина при больших разрешениях*/
+                    min-width:300px;/*Минимальная ширина при маленьких разрешениях*/
+                    height: 150px;
+                    width:auto;/*Ширина в зависимости от разрешения экрана*/
+
+                    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=48)";
+                    filter: alpha(opacity=48);
+                    -moz-opacity: 0.48;
+                    -khtml-opacity: 0.48;
+                    opacity: 0.48;
+                    border: 1px #888888 solid;
+
+                    background-color: #358d89;
+
+                    -webkit-border-radius: 15px;
+                    -moz-border-radius: 15px;
+                    border-radius: 15px;
+
+            }

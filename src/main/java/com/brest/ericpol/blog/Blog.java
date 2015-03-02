@@ -14,6 +14,8 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.OrganizationLocalServiceUtil;
+import com.liferay.portal.service.UserGroupLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.util.bridges.mvc.MVCPortlet;
@@ -41,16 +43,12 @@ public class Blog extends MVCPortlet{
         ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
         User user = themeDisplay.getUser();
 
+        System.out.println(user.getUserId() + " " + themeDisplay.getScopeGroupId() + " " + user.getCompanyId());
+
         try {
-            System.out.println(user.getUserId() + " " + user.getGroupId() + " " + user.getCompanyId());
-        } catch (PortalException e) {
-            e.printStackTrace();
-        } catch (SystemException e) {
-            e.printStackTrace();
-        }
-        try {
-            List<BlogEntry> list = BlogEntryLocalServiceUtil.findAllEntries();
+            //List<BlogEntry> list = BlogEntryLocalServiceUtil.findAllEntries();
             //List<BlogEntry> list = BlogEntryLocalServiceUtil.findByUserGroupCompanyId(user.getUserId(), user.getGroupId(), user.getCompanyId());
+            List<BlogEntry> list = BlogEntryLocalServiceUtil.findByGroupId(themeDisplay.getScopeGroupId());
 
             for(BlogEntry be : list){
                 entryJSON = JSONFactoryUtil.createJSONObject();
@@ -81,8 +79,10 @@ public class Blog extends MVCPortlet{
         ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
         User user = themeDisplay.getUser();
 
+        //List<User> gg= UserLocalServiceUtil.getGroupUsers(user.getGroupId());
+
         long userId = user.getUserId();
-        long groupId = user.getGroupId();
+        long groupId = themeDisplay.getScopeGroupId();
         long companyId = user.getCompanyId();
         System.out.println("UserId: " + userId);
 
@@ -110,6 +110,8 @@ public class Blog extends MVCPortlet{
     public void updateEntry(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, PortalException, ParseException {
         long entryId = ParamUtil.getLong(actionRequest, "entryId");
         System.out.println("Entry Id: " + entryId);
+        long userId = ParamUtil.getLong(actionRequest, "userId");
+        System.out.println("User Id: " + userId);
         long groupId = ParamUtil.getLong(actionRequest, "groupId");
         System.out.println("Group Id: " + groupId);
         long companyId = ParamUtil.getLong(actionRequest, "companyId");
@@ -118,9 +120,11 @@ public class Blog extends MVCPortlet{
         System.out.println("Text: " + entryText);
         String title = ParamUtil.getString(actionRequest, "updateTitle");
         System.out.println("title:  " + title);
-        String date  = ParamUtil.getString(actionRequest, "date");
-        Date date1 = Date.valueOf(date);
-        System.out.println("Date: " + date1);
+        String strDate  = ParamUtil.getString(actionRequest, "date");
+        Date date = Date.valueOf(strDate);
+        System.out.println("Date: " + date);
+
+        BlogEntryLocalServiceUtil.addBlogEntry(userId, groupId, companyId, title, entryText, date);
     }
 
 }

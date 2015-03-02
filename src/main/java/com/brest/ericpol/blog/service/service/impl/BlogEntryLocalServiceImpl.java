@@ -69,6 +69,10 @@ public class BlogEntryLocalServiceImpl extends BlogEntryLocalServiceBaseImpl {
         return blogEntryPersistence.findAll();
     }
 
+    public List<BlogEntry> findByGroupId(long groupId) throws SystemException {
+        return blogEntryPersistence.findByGroupId(groupId);
+    }
+
     public List<BlogEntry> findByDateLaterThan(Long userId, Long groupId, Long companyId, Date date) throws SystemException {
         return blogEntryPersistence.findByDateLaterThan(date, userId, groupId, companyId);
     }
