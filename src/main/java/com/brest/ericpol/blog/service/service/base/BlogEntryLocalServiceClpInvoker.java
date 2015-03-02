@@ -57,6 +57,8 @@ public class BlogEntryLocalServiceClpInvoker {
     private String[] _methodParameterTypes42;
     private String _methodName43;
     private String[] _methodParameterTypes43;
+    private String _methodName44;
+    private String[] _methodParameterTypes44;
 
     public BlogEntryLocalServiceClpInvoker() {
         _methodName0 = "addBlogEntry";
@@ -170,23 +172,27 @@ public class BlogEntryLocalServiceClpInvoker {
                 "java.lang.Long", "java.lang.Long", "java.lang.Long"
             };
 
-        _methodName41 = "findByDateLaterThan";
+        _methodName41 = "findAllEntries";
 
-        _methodParameterTypes41 = new String[] {
-                "java.lang.Long", "java.lang.Long", "java.lang.Long",
-                "java.sql.Date"
-            };
+        _methodParameterTypes41 = new String[] {  };
 
-        _methodName42 = "findByDateEarlierThan";
+        _methodName42 = "findByDateLaterThan";
 
         _methodParameterTypes42 = new String[] {
                 "java.lang.Long", "java.lang.Long", "java.lang.Long",
                 "java.sql.Date"
             };
 
-        _methodName43 = "findByTimePeriod";
+        _methodName43 = "findByDateEarlierThan";
 
         _methodParameterTypes43 = new String[] {
+                "java.lang.Long", "java.lang.Long", "java.lang.Long",
+                "java.sql.Date"
+            };
+
+        _methodName44 = "findByTimePeriod";
+
+        _methodParameterTypes44 = new String[] {
                 "java.lang.Long", "java.lang.Long", "java.lang.Long",
                 "java.sql.Date", "java.sql.Date"
             };
@@ -317,20 +323,25 @@ public class BlogEntryLocalServiceClpInvoker {
 
         if (_methodName41.equals(name) &&
                 Arrays.deepEquals(_methodParameterTypes41, parameterTypes)) {
-            return BlogEntryLocalServiceUtil.findByDateLaterThan((java.lang.Long) arguments[0],
-                (java.lang.Long) arguments[1], (java.lang.Long) arguments[2],
-                (java.sql.Date) arguments[3]);
+            return BlogEntryLocalServiceUtil.findAllEntries();
         }
 
         if (_methodName42.equals(name) &&
                 Arrays.deepEquals(_methodParameterTypes42, parameterTypes)) {
-            return BlogEntryLocalServiceUtil.findByDateEarlierThan((java.lang.Long) arguments[0],
+            return BlogEntryLocalServiceUtil.findByDateLaterThan((java.lang.Long) arguments[0],
                 (java.lang.Long) arguments[1], (java.lang.Long) arguments[2],
                 (java.sql.Date) arguments[3]);
         }
 
         if (_methodName43.equals(name) &&
                 Arrays.deepEquals(_methodParameterTypes43, parameterTypes)) {
+            return BlogEntryLocalServiceUtil.findByDateEarlierThan((java.lang.Long) arguments[0],
+                (java.lang.Long) arguments[1], (java.lang.Long) arguments[2],
+                (java.sql.Date) arguments[3]);
+        }
+
+        if (_methodName44.equals(name) &&
+                Arrays.deepEquals(_methodParameterTypes44, parameterTypes)) {
             return BlogEntryLocalServiceUtil.findByTimePeriod((java.lang.Long) arguments[0],
                 (java.lang.Long) arguments[1], (java.lang.Long) arguments[2],
                 (java.sql.Date) arguments[3], (java.sql.Date) arguments[4]);

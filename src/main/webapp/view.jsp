@@ -13,127 +13,64 @@
 <portlet:resourceURL var="resourceURL">
 </portlet:resourceURL>
 
-<portlet:renderURL var="testRender">
-    <portlet:param name="mvcPath" value="/eq.jsp"/>
+<portlet:actionURL var="updateEntry" name="updateEntry">
+</portlet:actionURL>
+<liferay-theme:defineObjects />
+
+
+    <!---------------------------start of Pop up------------------------------------>
+    <div class="popup__overlay">
+        <div class="popup">
+            <a href="#" class="popup__close">X</a>
+               <%@ include file="/add.jsp" %>
+        </div>
+    </div>
+   <!---------------------------end of Pop up-------------------------------------->
+
+<portlet:renderURL var="testURL">
+    <portlet:param name="mvcPath" value="/test.jsp"/>
+    <liferay-portlet:param name="add_flag" value="true"/>
 </portlet:renderURL>
 
-<portlet:actionURL var="deleteEntryURL" name="deleteEntry">
-</portlet:actionURL>
-
-<aui:form action="#" method="get" name="fm1">
-	<liferay-portlet:renderURLParams varImpl="adsfg" />
-	<aui:input name="redirect" type="hidden" value="ag" />
-</aui:form>
-
-<liferay-theme:defineObjects />
+<a href="<%=testURL%>">Test</a>
 
 <c:if test="true">
 	<aui:nav-bar>
 		<c:if test="true">
+		                <div class="spacer"></div>
 			<aui:nav>
-					<aui:nav-item href="#" label="add-blog-entry" name="addEntryButton" />
+                <button class="aui-button aui-button-subtle" id="popup__toggle"  >
+                 Add entry</button>
 			</aui:nav>
 		</c:if>
 
 		<c:if test="true">
 			<aui:nav-bar-search cssClass="pull-right">
 				<div class="form-search">
-					<liferay-ui:input-search autoFocus="" id="keywords1" name="keywords" placeholder='' />
+					  <input class="text" type="text" id="tags" name="d-fname" title="Choose a user"><!--<button class="aui-button" onClick="resetData()">Button</button>-->
 				</div>
 			</aui:nav-bar-search>
 		</c:if>
 	</aui:nav-bar>
 </c:if>
 
-
-<div class="content">
-  <div id="1">
-    <h3>Page 1</h3>
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-  </div>
-  <div id="2">
-    <h3>Page 2</h3>
-    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-  </div>
-  <div id="3">
-    <h3>Page 3</h3>
-    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-  </div>
-</div>
-
-<div id="pagination">
-  <ul class="pagination pagination-content">
-    <li><a href="#">Prev</a></li>
-    <li><a href="#">1</a></li>
-    <li><a href="#">2</a></li>
-    <li><a href="#">3</a></li>
-    <li><a href="#">Next</a></li>
-  </ul>
-</div>
 <div id="anchor">
-
 </div>
-<%--
+<div id="pager"></div>
 
-			<div class="entry-footer">
-				<div class="entry-author">
-					<liferay-ui:message key="written-by" /><h6>get username</h6>
-				</div>
-			</div>
-		</div>
-		<div class="separator"><!-- --></div>
---%>
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-        <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui.js"></script>
-        <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui-experimental.js"></script>
-        <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui-datepicker.js"></script>
-        <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.7/css/aui.css"/>
-<link href="http://cdn.alloyui.com/2.5.0/aui-css/css/bootstrap.min.css" rel="stylesheet"></link>
-<aui:script use="liferay-portlet-url, liferay-search-container, aui-node, liferay-service">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
+<aui:script use="liferay-portlet-url, liferay-search-container, aui-node, liferay-service, aui-pagination">
 
 	var stringHtml = "";
 	var entryAmount = 0;
 	var pageAmount = 0;
 	var entryCounter = 0;
 	var currentPage = 0;
-
-                                                    var e = document.getElementById(2);
-                                                        e.style.display = 'none';
-                                                        var e = document.getElementById(3);
-                                                                                                                e.style.display = 'none';
-
-    YUI().use(
-          'aui-pagination',
-          function(Y) {
-            var pages = Y.all('.content div');
-
-            new Y.Pagination(
-              {
-                boundingBox: '#pagination',
-                circular: false,
-                contentBox: '#pagination .pagination-content',
-                on: {
-                  changeRequest: function(event) {
-                    var instance = this,
-                        state = event.state,
-                        lastState = event.lastState;
-
-                    if (lastState) {
-                        pages.item(lastState.page - 1).setStyle('display', 'none');
-                    }
-
-                    pages.item(state.page - 1).setStyle('display', 'block');
-                  }
-                },
-                page: 1
-              }
-            ).render();
-          }
-        );
-
-
-
+	var data;
+	var searchPartOfData = [];
+	var tempArray;
 
      AUI().ready(
                     function() {
@@ -153,25 +90,70 @@
                                             }
 
                                             A.Array.each(data, function(obj, idx){
-                                                  currentPage = idx;
                                                   document.getElementById('anchor').innerHTML += addEntry(obj.entryId, obj.userId, obj.groupId,
-                                                        obj.companyId, obj.userName, obj.title, obj.entryText, obj.entryDate);
+                                                        obj.companyId, obj.userName, obj.title, obj.entryText, obj.entryDate, idx);
 
-                                                  if(idx >= 2){
-                                                    var e = document.getElementById(idx);
-                                                        e.style.display = 'none';
-                                                  }
                                             });
 
-                                        stringHtml += '<li><a href="#">4</a></li>';
 
-                                         document.getElementByClass('pagination').innerHTML += stringHtml;
                                         }
                                     }
                                 });
                          });
                         }
                 );
+
+$(setTimeout(fillSearch, 2000));
+
+function unique(arr) {
+  var obj = {};
+
+  for(var i=0; i<arr.length; i++) {
+    var str = arr[i];
+    obj[str] = true;
+  }
+
+  return Object.keys(obj);
+}
+
+    function fillSearch() {
+        var availableTags=[];
+
+        for (var idx in data) {
+            availableTags.push(data[idx].userName);
+        }
+
+        availableTags = unique(availableTags);
+
+        $( "#tags" ).autocomplete({
+          source: availableTags
+        });
+      }
+
+        $( "#tags" ).autocomplete({
+          select: function( event, ui ) {
+
+          for(var idx in data){
+            if(data[idx].userName == ui.item.value){
+                searchPartOfData.push(data[idx]);
+            }
+
+          }
+
+            $('#anchor').empty();
+
+       for(var idx in searchPartOfData){
+
+            document.getElementById('anchor').innerHTML += addEntry(searchPartOfData[idx].entryId, searchPartOfData[idx].userId, searchPartOfData[idx].groupId,
+                                                        searchPartOfData[idx].companyId, searchPartOfData[idx].userName, searchPartOfData[idx].title, searchPartOfData[idx].entryText, searchPartOfData[idx].entryDate);
+
+       }
+
+        searchPartOfData = [];
+           // alert( ui.item.value);
+          }
+        });
+
 
      function addEntry(entryId, userId, groupId, companyId, userName1, title1, entryText1, entryDate1){
             stringHtml = "";
@@ -183,7 +165,7 @@
             var editUrl = createEditEntryURL(entryId, userId, groupId, companyId, userName, title, entryText, entryDate);
             var deleteUrl = createDeleteURL(entryId);
 
-			stringHtml += '<div class="entry" id="' + currentPage + '">';
+			stringHtml += '<div class="entry">';
 			stringHtml += '<div class="separator"><!-- --></div>';
 			stringHtml += '<div class="entry-content">';
 			stringHtml += '<div class="entry-date">';
@@ -193,23 +175,26 @@
             stringHtml += '<a href="' + editUrl + '"><span class="aui-icon aui-icon-small aui-iconfont-edit"></span>Edit</a></li>';
             stringHtml += '<li class="delete-entry">';
             stringHtml += '<a href="' + deleteUrl + '"><span class="aui-icon aui-icon-small aui-iconfont-remove"></span>Delete</a></li>';
-            stringHtml += '<li><div class="entry-author"><span class="aui-icon aui-icon-small aui-iconfont-group"></span> by' + userName + '</div></div></li></ul>';
-            stringHtml += '<div class="entry-title"><a href="' + showEntryUrl + '"><h3>' + title + '</h2></a></div>';
+            stringHtml += '<li><div class="entry-author"><span class="aui-icon aui-icon-small aui-iconfont-group"></span> by' + userName + '</div></li></ul>';
+            stringHtml += '<div class="entry-title"><a href="' + showEntryUrl + '"><h3>' + title + '</h3></a></div>';
             stringHtml += '<div class="entry-body">' + entryText + '</div></div></div>';
+            stringHtml += '</div>';
             return stringHtml;
      }
 
-    function createEditEntryURL(entryId, userId, groupId, companyId, userName, title, entryText, entryDate){
+    function createEditEntryURL(entryId, userId, groupId, companyId, userName1, title, entryText, entryDate){
 			var editEntryURL = new Liferay.PortletURL.createRenderURL();
+			var userName = new String(userName1);
             editEntryURL.setParameter('jspPage', '/edit.jsp');
             editEntryURL.setParameter('entryId', entryId);
             editEntryURL.setParameter('userId', userId);
             editEntryURL.setParameter('groupId', groupId);
             editEntryURL.setParameter('companyId', companyId);
-            editEntryURL.setParameter('userName', userName);
-            editEntryURL.setParameter('title', title);
-            editEntryURL.setParameter('entryText', entryText);
+            editEntryURL.setParameter('userName', new String(userName).toString());
+            editEntryURL.setParameter('title', new String(title).toString());
+            editEntryURL.setParameter('entryText', new String(entryText).toString());
             editEntryURL.setParameter('entryDate', new Date(entryDate).toString());
+            editEntryURL.setParameter('add_flag', new String("false").toString());
             editEntryURL.setPortletId('<%=themeDisplay.getPortletDisplay().getId()%>');
             return editEntryURL.toString();
     }
@@ -221,9 +206,9 @@
             showEntryURL.setParameter('userId', userId);
             showEntryURL.setParameter('groupId', groupId);
             showEntryURL.setParameter('companyId', companyId);
-            showEntryURL.setParameter('userName', userName);
-            showEntryURL.setParameter('title', title);
-            showEntryURL.setParameter('entryText', entryText);
+            showEntryURL.setParameter('userName', new String(userName).toString());
+            showEntryURL.setParameter('title', new String(title).toString());
+            showEntryURL.setParameter('entryText', new String(entryText).toString());
             showEntryURL.setParameter('entryDate', new Date(entryDate).toString());
             showEntryURL.setPortletId('<%=themeDisplay.getPortletDisplay().getId()%>');
             return showEntryURL.toString();
@@ -239,9 +224,31 @@
 
             return deleteEntryURL.toString();
     }
-
-    function addPagination(){
-
-    }
+        var string = "";
 
 </aui:script>
+
+    <script type="text/javascript">
+
+     function resetData(){
+            //alert(document.getElementById('tags').value);
+        }
+
+
+
+
+        p = $('.popup__overlay');
+        $('#popup__toggle').click(function() {
+            p.css('display', 'block');
+        });
+        p.click(function(event) {
+            e = event || window.event;
+            if (e.target == this) {
+                $(p).css('display', 'none');
+            }
+        });
+        $('.popup__close').click(function() {
+            p.css('display', 'none');
+        });
+
+    </script>

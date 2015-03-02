@@ -17,14 +17,14 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<portlet:actionURL var="updateEntry" name="updateEntry">
+<portlet:actionURL var="addEntry" name="addEntry">
 </portlet:actionURL>
+
 
 <portlet:defineObjects />
 
-
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.15/require.min.js"></script>
+
         <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui.js"></script>
         <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui-experimental.js"></script>
         <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui-datepicker.js"></script>
@@ -32,30 +32,30 @@
         <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.7/css/aui-experimental.css"/>
 <script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
 
+        <div id="myAlert" class="alert alert-info">
+            Please, fill in this form to add an entry.
+        </div>
+		<aui:form action="<%=addEntry%>" name="addEntry" method="POST">
 
-
-		<aui:form action="<%=updateEntry%>" name="updateEntry" method="POST">
 		<label name="label" for="demo-range-always">Date</label>
 		<input class="aui-date-picker" name="<portlet:namespace/>date" id="<portlet:namespace/>date" type="date" max="2019-01-05" min="2011-12-25" />
 		<aui:input type="text" id="title" name="title" value="" label="Title"/>
 		<label name="editorLabel" for="entryText">Text</label>
-		<textarea id="<portlet:namespace/>entryText" name="<portlet:namespace/>entryText"><%=request.getParameter("entryText")%></textarea>
-			<aui:input type="hidden" id="entryId" name="entryId" value='<%=request.getParameter("entryId")%>'/>
-			<aui:input type="hidden" id="groupId" name="groupId" value='<%=request.getParameter("groupId")%>'/>
-			<aui:input type="hidden" id="companyId" name="companyId" value='<%=request.getParameter("companyId")%>'/>
-			<aui:button name="updateButton" type="submit" value="Update" />
+		<textarea id="<portlet:namespace/>entryText" name="<portlet:namespace/>entryText"></textarea>
+		<aui:button name="addButton" type="submit" value="Add" />
+
 
 	</aui:form>
+
 <aui:script>
 
-		$(setDateAndTitle);
+		$(setDate);
 
 
-            function setDateAndTitle(){
-				var date;
+            function setDate(){
 
+					date = new Date();
 
-					date = new Date('<%=request.getParameter("entryDate")%>');
 					var values = [ date.getDate(), date.getMonth() + 1 ];
 
 					for( var id in values ) {
@@ -63,20 +63,17 @@
 					}
 
 					var element = document.getElementById('<portlet:namespace/>date');
-					alert(date.getFullYear()+'-'+values[ 1 ]+'-'+values[ 0 ]);
 					element.setAttribute("value", date.getFullYear()+'-'+values[ 1 ]+'-'+values[ 0 ]);
 
-					document.getElementById('<portlet:namespace/>title').setAttribute("value", '<%=request.getParameter("title")%>');
             }
 
 
 
 
 
-	AJS.$(document).ready(function() {
-	   AJS.$('#<portlet:namespace/>date').datePicker({'overrideBrowserDefault': true});
-	});
-
+AJS.$(document).ready(function() {
+   AJS.$('#<portlet:namespace/>date').datePicker({'overrideBrowserDefault': true});
+});
 	window.onload = function()
 	{
 		CKEDITOR.replace( '<portlet:namespace/>entryText',
