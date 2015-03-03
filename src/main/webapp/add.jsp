@@ -54,16 +54,8 @@
 
             function setDate(){
 
-					date = new Date();
-
-					var values = [ date.getDate(), date.getMonth() + 1 ];
-
-					for( var id in values ) {
-						values[ id ] = values[ id ].toString().replace( /^([0-9])$/, '0$1' );
-					}
-
 					var element = document.getElementById('<portlet:namespace/>date');
-					element.setAttribute("value", date.getFullYear()+'-'+values[ 1 ]+'-'+values[ 0 ]);
+					element.setAttribute("value", getCurrentFormattedDate());
 
             }
 

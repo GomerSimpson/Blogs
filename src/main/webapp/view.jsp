@@ -10,12 +10,16 @@
 <%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
 <portlet:defineObjects />
 
-<portlet:resourceURL var="getAllEntriesURL">
-    <portlet:param name="amount" value="true" />
+<portlet:renderURL var="redirectThisPageURL">
+    <portlet:param name="mvcPath" value="/view.jsp"/>
+</portlet:renderURL>
+
+<portlet:resourceURL var="getNamesOfUsersURL">
+    <portlet:param name="flag" value="allNames" />
 </portlet:resourceURL>
 
-<portlet:resourceURL var="getUsersEntriesURL">
-    <portlet:param name="amount" value="false" />
+<portlet:resourceURL var="currentUsersEntriesURL">
+    <portlet:param name="flag" value="currentUsersEntries" />
 </portlet:resourceURL>
 
 <portlet:actionURL var="updateEntry" name="updateEntry">
@@ -31,15 +35,21 @@
     </div>
    <!---------------------------end of Pop up-------------------------------------->
 <div id="main" name="main" style="text-align: center;">
-
+<a href="<%=redirectThisPageURL%>">Back</a>
 <portlet:renderURL var="testURL">
     <portlet:param name="mvcPath" value="/test.jsp"/>
     <liferay-portlet:param name="add_flag" value="true"/>
 </portlet:renderURL>
-
 <div class="topContainer">
-<a href="#dwarfers" aria-owns="dwarfers" aria-haspopup="true" class="aui-button aui-dropdown2-trigger aui-style-default"><liferay-ui:message key="how_to_search" /></a></p>
-<!-- Simple Dropdown - dropdown -->
+    <button class="btn btn-primary" id="popup__toggle"  ><liferay-ui:message key="add_entry" /></button>
+    <div id="datePicker">
+        <label for="fromDate">From</label>
+        <input type="text" id="fromDate">
+        <label for="toDate">From</label>
+        <input type="text" id="toDate">
+    </div>
+<!--<a href="#dwarfers" aria-owns="dwarfers" aria-haspopup="true" class="aui-button aui-dropdown2-trigger aui-style-default"><liferay-ui:message key="how_to_search" /></a></p>
+
 <div id="dwarfers" class="aui-dropdown2 aui-style-default">
     <ul class="aui-list-truncate">
         <li><a href="#" id="byUser"><liferay-ui:message key="by_user" /></a></li>
@@ -47,12 +57,12 @@
         <li><a href="#" id="byContent"><liferay-ui:message key="by_content" /></a></li>
     </ul>
 </div>
-    <button class="btn btn-primary" id="popup__toggle"  ><liferay-ui:message key="add_entry" /></button>
-    <input type="checkbox" id="byAll" class="checkbox" name="byAll">
+    <input type="checkbox" id="byAll" class="checkbox" name="byAll">-->
 
 	<div class="form-search">
 	    <input class="text" type="text" id="tags" name="d-fname" title="Choose a user">
 	</div>
+	    <button class="btn btn-primary" id="find_an_entry"  >Find an entry</button>
 
 </div>
 
@@ -72,199 +82,157 @@
 	var currentPage = 0;
 	var data;
 	var searchPartOfData = [];
+	var arrayOfNamesAndIdOfUsers = [];
+	var arrayOfNamesOfUsers = [];
 	var tempArray;
 	var flagOfStateOfSearch = "byUser";
 
-
      AUI().ready(
                     function() {
-                         AUI().use('aui-base','aui-io-request', function(A){
-                                A.io.request('<%=getAllEntriesURL%>',{
-                                    dataType: 'json',
-                                    method: 'GET',
-                                    on: {
-                                        success: function() {
-                                            data = this.get('responseData');
 
-                                            A.Array.each(data, function(obj, idx){
-                                                  document.getElementById('anchor').innerHTML += addEntry(obj.entryId, obj.userId, obj.groupId,
-                                                        obj.companyId, obj.userName, obj.title, obj.entryText, obj.entryDate, idx);
+                        if(0){
+                           //if an user is an administrator
+                           //to get names of users from server
 
-                                            });
+                            $('#datePicker').hide();
+                            $('#find_an_entry').hide();
 
+                            AUI().use('aui-base','aui-io-request', function(A){
+                                    A.io.request('<%=getNamesOfUsersURL%>',{
+                                        dataType: 'json',
+                                        method: 'GET',
+                                        on: {
+                                            success: function() {
+                                                arrayOfNamesAndIdOfUsers = this.get('responseData');
 
+                                                A.Array.each(arrayOfNamesAndIdOfUsers, function(obj, idx){
+                                                    arrayOfNamesOfUsers.push(obj.userName);
+                                                });
+
+                                                $( "#tags" ).autocomplete({
+                                                    source: arrayOfNamesOfUsers
+                                                });
+
+                                            }
                                         }
-                                    }
-                                });
-                         });
+                                    });
+                             });
+
+
+                        } else{
+                             AUI().use('aui-base','aui-io-request', function(A){
+                                    A.io.request('<%=currentUsersEntriesURL%>',{
+                                        dataType: 'json',
+                                        method: 'GET',
+                                        on: {
+                                            success: function() {
+                                                data = this.get('responseData');
+
+                                                A.Array.each(data, function(obj, idx){
+                                                      document.getElementById('anchor').innerHTML += addEntry(obj.entryId, obj.userId, obj.groupId,
+                                                            obj.companyId, obj.userName, obj.title, obj.entryText, obj.entryDate);
+
+                                                });
+
+
+                                            }
+                                        }
+                                    });
+                             });
+
                         }
-                );
-
-        $(setTimeout(prepareSearch, 2000));
-
-        $('#byUser').click(function() {
-            flagOfStateOfSearch = "byUser";
-            prepareSearch();
-        });
-
-        $('#byTitle').click(function() {
-            flagOfStateOfSearch = "byTitle";
-
-        });
-
-        $('#byContent').click(function() {
-            flagOfStateOfSearch = "byContent";
-        });
-
-    function returnUnique(arr) {
-      var obj = {};
-
-      for(var i = 0; i < arr.length; i++) {
-        var str = arr[i];
-        obj[str] = true;
-      }
-
-      return Object.keys(obj);
-    }
-
-
-    $( "#tags" ).autocomplete({
-      search: function( event, ui ) {
-
-            if(flagOfStateOfSearch == "byTitle"){
-                $( "#tags" ).autocomplete({
-                                source: []
-                            });
-
-                for(var idx in data){
-                    if(data[idx].title.indexOf($( "#tags" ).val()) + 1){
-                        searchPartOfData.push(data[idx]);
                     }
+     );
+
+        //$(setTimeout(prepareSearch, 2000));
+
+
+        $(function() {
+            $( "#fromDate" ).datepicker({
+              showOtherMonths: true,
+              numberOfMonths: 1,
+              onClose: function( selectedDate ) {
+                $( "#toDate" ).datepicker( "option", "minDate", selectedDate );
+              }
+            });
+            $( "#toDate" ).datepicker({
+              showOtherMonths: true,
+              numberOfMonths: 1,
+              onClose: function( selectedDate ) {
+                $( "#fromDate" ).datepicker( "option", "maxDate", selectedDate );
+              }
+            });
+          });
+
+        $( "#fromDate" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+        $( "#fromDate" ).datepicker( "setDate", getCurrentFormattedDate() );
+        $( "#toDate" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+        $( "#toDate" ).datepicker( "setDate", getCurrentFormattedDate() );
+
+        $('#find_an_entry').click(function(){
+
+            $('#anchor').empty();
+
+            var fromDate = formatDate($( "#fromDate" ).datepicker( "getDate" ));
+            var toDate = formatDate($('#toDate').datepicker("getDate"));
+            var filteredArray = [];
+            var i = 0;
+            var entryDate;
+
+            for(var idx in data){
+
+                entryDate = formatDate(new Date(data[idx].entryDate));
+
+                if((entryDate >= fromDate && entryDate <= toDate) && ((data[idx].title.indexOf($( "#tags" ).val()) + 1) || (data[idx].entryText.indexOf($( "#tags" ).val()) + 1))){
+                    document.getElementById('anchor').innerHTML += addEntry(data[idx].entryId, data[idx].userId, data[idx].groupId,
+                                            data[idx].companyId, data[idx].userName, data[idx].title, data[idx].entryText, data[idx].entryDate);
                 }
-
-               $('#anchor').empty();
-
-               for(var idx in searchPartOfData){
-                    document.getElementById('anchor').innerHTML += addEntry(searchPartOfData[idx].entryId, searchPartOfData[idx].userId, searchPartOfData[idx].groupId,
-                                                                searchPartOfData[idx].companyId, searchPartOfData[idx].userName, searchPartOfData[idx].title, searchPartOfData[idx].entryText, searchPartOfData[idx].entryDate);
-               }
-
-                searchPartOfData = [];
-
-            } else if(flagOfStateOfSearch == "byContent"){
-                $( "#tags" ).autocomplete({
-                                source: []
-                            });
-
-                for(var idx in data){
-                    if(data[idx].entryText.indexOf($( "#tags" ).val()) + 1){
-                        searchPartOfData.push(data[idx]);
-                    }
-                }
-
-               $('#anchor').empty();
-
-               for(var idx in searchPartOfData){
-                    document.getElementById('anchor').innerHTML += addEntry(searchPartOfData[idx].entryId, searchPartOfData[idx].userId, searchPartOfData[idx].groupId,
-                                                                searchPartOfData[idx].companyId, searchPartOfData[idx].userName, searchPartOfData[idx].title, searchPartOfData[idx].entryText, searchPartOfData[idx].entryDate);
-               }
-
-                searchPartOfData = [];
             }
-      }
-    });
+        });
 
     $( "#tags" ).autocomplete({
         select:
             function( event, ui ) {
-                if(flagOfStateOfSearch == "byUser"){
-                    for(var idx in data){
-                        if(data[idx].userName == ui.item.value){
-                            searchPartOfData.push(data[idx]);
-                        }
+
+                $('#anchor').empty();
+
+                var resURL = Liferay.PortletURL.createResourceURL();
+                resURL.setPortletId('<%=themeDisplay.getPortletDisplay().getId()%>');
+
+                for(var idx in arrayOfNamesAndIdOfUsers){
+                    if(ui.item.value == arrayOfNamesAndIdOfUsers[idx].userName){
+                        resURL.setParameter("userId", arrayOfNamesAndIdOfUsers[idx].userId);
+                        resURL.setParameter("flag", "userEntries");
                     }
                 }
 
-               $('#anchor').empty();
+                AUI().use('aui-base','aui-io-request', function(A){
+                    A.io.request(resURL.toString(),{
+                        dataType: 'json',
+                        method: 'GET',
+                        on: {
+                            success: function() {
+                                data = this.get('responseData');
 
-               for(var idx in searchPartOfData){
-                    document.getElementById('anchor').innerHTML += addEntry(searchPartOfData[idx].entryId, searchPartOfData[idx].userId, searchPartOfData[idx].groupId,
-                                                                searchPartOfData[idx].companyId, searchPartOfData[idx].userName, searchPartOfData[idx].title, searchPartOfData[idx].entryText, searchPartOfData[idx].entryDate);
-               }
+                                A.Array.each(data, function(obj, idx){
+                                    document.getElementById('anchor').innerHTML += addEntry(obj.entryId, obj.userId, obj.groupId,
+                                        obj.companyId, obj.userName, obj.title, obj.entryText, obj.entryDate, idx);
 
-                searchPartOfData = [];
-          }
-        });
+                                });
+                            }
+                        }
+                    });
+                });
 
+                flagOfStateOfSearch = "byContent";
 
+                $( "#tags" ).autocomplete({
+                    disabled: true
+                });
 
-     function prepareSearch(){
-        var availableTags = [];
-
-        if(flagOfStateOfSearch == "byUser"){
-            for (var idx in data) {
-                availableTags.push(data[idx].userName);
+                $('#datePicker').show();
             }
-
-            availableTags = returnUnique(availableTags);
-
-            $( "#tags" ).autocomplete({
-                source: availableTags
-            });
-        }
-     }
-
-
-     $('#byAll').click(function() {
-        if($('#byAll').is(':checked')){
-
-                                 AUI().use('aui-base','aui-io-request', function(A){
-                                        A.io.request('<%=getUsersEntriesURL%>',{
-                                            dataType: 'json',
-                                            method: 'GET',
-                                            on: {
-                                                success: function() {
-                                                    data = this.get('responseData');
-
-                                                    $('#anchor').empty();
-
-                                                    A.Array.each(data, function(obj, idx){
-                                                          document.getElementById('anchor').innerHTML += addEntry(obj.entryId, obj.userId, obj.groupId,
-                                                                obj.companyId, obj.userName, obj.title, obj.entryText, obj.entryDate, idx);
-
-                                                    });
-
-
-                                                }
-                                            }
-                                        });
-                                 });
-        } else{
-                                  AUI().use('aui-base','aui-io-request', function(A){
-                                        A.io.request('<%=getAllEntriesURL%>',{
-                                            dataType: 'json',
-                                            method: 'GET',
-                                            on: {
-                                                success: function() {
-                                                    data = this.get('responseData');
-
-                                                    $('#anchor').empty();
-
-                                                    A.Array.each(data, function(obj, idx){
-                                                          document.getElementById('anchor').innerHTML += addEntry(obj.entryId, obj.userId, obj.groupId,
-                                                                obj.companyId, obj.userName, obj.title, obj.entryText, obj.entryDate, idx);
-
-                                                    });
-
-
-                                                }
-                                            }
-                                        });
-                                 });
-        }
-     });
-
-
+    });
 
      function addEntry(entryId, userId, groupId, companyId, userName1, title1, entryText1, entryDate1){
             stringHtml = "";

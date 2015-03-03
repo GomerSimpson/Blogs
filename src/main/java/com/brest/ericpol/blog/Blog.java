@@ -2,9 +2,6 @@ package com.brest.ericpol.blog;
 
 import com.brest.ericpol.blog.service.model.BlogEntry;
 import com.brest.ericpol.blog.service.service.BlogEntryLocalServiceUtil;
-import com.ckeditor.CKEditorConfig;
-import com.liferay.portal.NoSuchModelException;
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -13,32 +10,27 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.User;
-import com.liferay.portal.service.GroupLocalServiceUtil;
-import com.liferay.portal.service.OrganizationLocalServiceUtil;
-import com.liferay.portal.service.UserGroupLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.util.bridges.mvc.MVCPortlet;
-import org.exolab.castor.mapping.xml.Param;
 
 import javax.portlet.*;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.sql.Date;
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.util.ArrayList;
+import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Blog extends MVCPortlet{
 
     @Override
     public void serveResource(ResourceRequest resourceRequest,
                         ResourceResponse resourceResponse) throws IOException, PortletException {
-        JSONObject entryJSON = null;
-        JSONArray entriesJSONArray = JSONFactoryUtil.createJSONArray();
+        JSONObject objectJSON = null;
+        Long userId = null;
+        JSONArray arrayJSON = JSONFactoryUtil.createJSONArray();
         ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
         User user = themeDisplay.getUser();
 
@@ -48,31 +40,77 @@ public class Blog extends MVCPortlet{
             //List<BlogEntry> list = BlogEntryLocalServiceUtil.findAllEntries();
             //List<BlogEntry> list = BlogEntryLocalServiceUtil.findByUserGroupCompanyId(user.getUserId(), user.getGroupId(), user.getCompanyId());
             List<BlogEntry> list = null;
-            boolean flag = ParamUtil.getBoolean(resourceRequest, "amount");
+            String flag = ParamUtil.getString(resourceRequest, "flag");
 
-            if(flag) {
+            if(flag.equals("allNames")) {
                 list = BlogEntryLocalServiceUtil.findByGroupId(themeDisplay.getScopeGroupId());
-            } else{
+
+                Map<Long, String> map = new HashMap<Long, String>();
+
+                String userName = null;
+
+                for (BlogEntry be : list){
+                    userId = be.getUserId();
+                    userName = UserLocalServiceUtil.getUserById(userId).getFullName();
+
+                    map.put(userId, userName);
+                }
+
+                for (Map.Entry<Long, String> entry : map.entrySet()){
+                    objectJSON = JSONFactoryUtil.createJSONObject();
+                    objectJSON.put("userId", entry.getKey());
+                    objectJSON.put("userName", entry.getValue());
+                    arrayJSON.put(objectJSON);
+                }
+
+                PrintWriter out = resourceResponse.getWriter();
+                out.print(arrayJSON.toString());
+
+            } else if(flag.equals("userEntries")){
+                userId = ParamUtil.getLong(resourceRequest, "userId");
+
+                list = BlogEntryLocalServiceUtil.findByUserGroupCompanyId(userId, themeDisplay.getScopeGroupId(), user.getCompanyId());
+
+                for (BlogEntry be : list) {
+                    objectJSON = JSONFactoryUtil.createJSONObject();
+                    String userName = UserLocalServiceUtil.getUserById(be.getUserId()).getFullName();
+                    objectJSON.put("entryId", be.getEntryId());
+//                    objectJSON.put("userId", be.getUserId());
+//                    objectJSON.put("groupId", be.getGroupId());
+//                    objectJSON.put("companyId", be.getCompanyId());
+                    objectJSON.put("userName", userName);
+                    objectJSON.put("title", be.getTitle());
+                    objectJSON.put("entryText", be.getEntryText());
+                    objectJSON.put("entryDate", be.getEntryDate());
+
+                    arrayJSON.put(objectJSON);
+                }
+
+                PrintWriter out = resourceResponse.getWriter();
+                out.print(arrayJSON.toString());
+            } else if(flag.equals("currentUsersEntries")){
+                userId = themeDisplay.getUserId();
+
                 list = BlogEntryLocalServiceUtil.findByUserGroupCompanyId(user.getUserId(), themeDisplay.getScopeGroupId(), user.getCompanyId());
+
+                for (BlogEntry be : list) {
+                    objectJSON = JSONFactoryUtil.createJSONObject();
+                    String userName = UserLocalServiceUtil.getUserById(be.getUserId()).getFullName();
+                    objectJSON.put("entryId", be.getEntryId());
+//                    objectJSON.put("userId", be.getUserId());
+//                    objectJSON.put("groupId", be.getGroupId());
+//                    objectJSON.put("companyId", be.getCompanyId());
+                    objectJSON.put("userName", userName);
+                    objectJSON.put("title", be.getTitle());
+                    objectJSON.put("entryText", be.getEntryText());
+                    objectJSON.put("entryDate", be.getEntryDate());
+
+                    arrayJSON.put(objectJSON);
+                }
+
+                PrintWriter out = resourceResponse.getWriter();
+                out.print(arrayJSON.toString());
             }
-
-            for(BlogEntry be : list){
-                entryJSON = JSONFactoryUtil.createJSONObject();
-                String userName = UserLocalServiceUtil.getUserById(be.getUserId()).getFullName();
-                entryJSON.put("entryId",  be.getEntryId());
-                entryJSON.put("userId", be.getUserId());
-                entryJSON.put("groupId",  be.getGroupId());
-                entryJSON.put("companyId",  be.getCompanyId());
-                entryJSON.put("userName", userName);
-                entryJSON.put("title", be.getTitle());
-                entryJSON.put("entryText",  be.getEntryText());
-                entryJSON.put("entryDate", be.getEntryDate());
-
-                entriesJSONArray.put(entryJSON);
-            }
-
-            PrintWriter out = resourceResponse.getWriter();
-            out.print(entriesJSONArray.toString());
         } catch (SystemException e) {
             e.printStackTrace();
         } catch (PortalException e) {
@@ -131,6 +169,7 @@ public class Blog extends MVCPortlet{
         System.out.println("Date: " + date);
 
         BlogEntryLocalServiceUtil.addBlogEntry(userId, groupId, companyId, title, entryText, date);
+
     }
 
 }

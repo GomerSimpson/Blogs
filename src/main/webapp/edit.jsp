@@ -54,19 +54,11 @@
             function setDateAndTitle(){
 				var date;
 
+				var formattedDate = formatDate(new Date('<%=request.getParameter("entryDate")%>'));
+				var element = document.getElementById('<portlet:namespace/>date');
 
-					date = new Date('<%=request.getParameter("entryDate")%>');
-					var values = [ date.getDate(), date.getMonth() + 1 ];
-
-					for( var id in values ) {
-						values[ id ] = values[ id ].toString().replace( /^([0-9])$/, '0$1' );
-					}
-
-					var element = document.getElementById('<portlet:namespace/>date');
-					alert(date.getFullYear()+'-'+values[ 1 ]+'-'+values[ 0 ]);
-					element.setAttribute("value", date.getFullYear()+'-'+values[ 1 ]+'-'+values[ 0 ]);
-
-					document.getElementById('<portlet:namespace/>title').setAttribute("value", '<%=request.getParameter("title")%>');
+				element.setAttribute("value", formattedDate);
+				document.getElementById('<portlet:namespace/>title').setAttribute("value", '<%=request.getParameter("title")%>');
             }
 
 
