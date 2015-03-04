@@ -48,16 +48,6 @@
         <label for="toDate">From</label>
         <input type="text" id="toDate">
     </div>
-<!--<a href="#dwarfers" aria-owns="dwarfers" aria-haspopup="true" class="aui-button aui-dropdown2-trigger aui-style-default"><liferay-ui:message key="how_to_search" /></a></p>
-
-<div id="dwarfers" class="aui-dropdown2 aui-style-default">
-    <ul class="aui-list-truncate">
-        <li><a href="#" id="byUser"><liferay-ui:message key="by_user" /></a></li>
-        <li><a href="#" id="byTitle"><liferay-ui:message key="by_title" /></a></li>
-        <li><a href="#" id="byContent"><liferay-ui:message key="by_content" /></a></li>
-    </ul>
-</div>
-    <input type="checkbox" id="byAll" class="checkbox" name="byAll">-->
 
 	<div class="form-search">
 	    <input class="text" type="text" id="tags" name="d-fname" title="Choose a user">

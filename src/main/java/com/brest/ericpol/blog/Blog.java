@@ -75,9 +75,9 @@ public class Blog extends MVCPortlet{
                     objectJSON = JSONFactoryUtil.createJSONObject();
                     String userName = UserLocalServiceUtil.getUserById(be.getUserId()).getFullName();
                     objectJSON.put("entryId", be.getEntryId());
-//                    objectJSON.put("userId", be.getUserId());
-//                    objectJSON.put("groupId", be.getGroupId());
-//                    objectJSON.put("companyId", be.getCompanyId());
+                    objectJSON.put("userId", be.getUserId());
+                    objectJSON.put("groupId", be.getGroupId());
+                    objectJSON.put("companyId", be.getCompanyId());
                     objectJSON.put("userName", userName);
                     objectJSON.put("title", be.getTitle());
                     objectJSON.put("entryText", be.getEntryText());
@@ -97,9 +97,9 @@ public class Blog extends MVCPortlet{
                     objectJSON = JSONFactoryUtil.createJSONObject();
                     String userName = UserLocalServiceUtil.getUserById(be.getUserId()).getFullName();
                     objectJSON.put("entryId", be.getEntryId());
-//                    objectJSON.put("userId", be.getUserId());
-//                    objectJSON.put("groupId", be.getGroupId());
-//                    objectJSON.put("companyId", be.getCompanyId());
+                    objectJSON.put("userId", be.getUserId());
+                    objectJSON.put("groupId", be.getGroupId());
+                    objectJSON.put("companyId", be.getCompanyId());
                     objectJSON.put("userName", userName);
                     objectJSON.put("title", be.getTitle());
                     objectJSON.put("entryText", be.getEntryText());
@@ -162,13 +162,13 @@ public class Blog extends MVCPortlet{
         System.out.println("Company Id: " + companyId);
         String entryText = ParamUtil.getString(actionRequest, "entryText");
         System.out.println("Text: " + entryText);
-        String title = ParamUtil.getString(actionRequest, "updateTitle");
+        String title = ParamUtil.getString(actionRequest, "title");
         System.out.println("title:  " + title);
         String strDate  = ParamUtil.getString(actionRequest, "date");
         Date date = Date.valueOf(strDate);
         System.out.println("Date: " + date);
 
-        BlogEntryLocalServiceUtil.addBlogEntry(userId, groupId, companyId, title, entryText, date);
+        BlogEntryLocalServiceUtil.updateBlogEntry(entryId, userId, groupId, companyId, title, entryText, date);
 
     }
 

@@ -22,7 +22,6 @@
 
 <portlet:defineObjects />
 
-
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
         <script src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.15/require.min.js"></script>
         <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui.js"></script>
@@ -41,10 +40,10 @@
 		<label name="editorLabel" for="entryText">Text</label>
 		<textarea id="<portlet:namespace/>entryText" name="<portlet:namespace/>entryText"><%=request.getParameter("entryText")%></textarea>
 			<aui:input type="hidden" id="entryId" name="entryId" value='<%=request.getParameter("entryId")%>'/>
+			<aui:input type="hidden" id="userId" name="userId" value='<%=request.getParameter("userId")%>'/>
 			<aui:input type="hidden" id="groupId" name="groupId" value='<%=request.getParameter("groupId")%>'/>
 			<aui:input type="hidden" id="companyId" name="companyId" value='<%=request.getParameter("companyId")%>'/>
 			<aui:button name="updateButton" type="submit" value="Update" />
-
 	</aui:form>
 <aui:script>
 
@@ -79,11 +78,5 @@
 	};
 
 
-	AUI().ready(
-          function() {
-          	var editor_data = CKEDITOR.instances.editor1.getData();
-			alert(editor_data);
-          }
-    );
 
 </aui:script>
