@@ -22,8 +22,9 @@
     <portlet:param name="flag" value="currentUsersEntries" />
 </portlet:resourceURL>
 
-<portlet:actionURL var="updateEntry" name="updateEntry">
+<portlet:actionURL var="testURL" name="test">
 </portlet:actionURL>
+
 <liferay-theme:defineObjects />
 
     <!---------------------------start of Pop up------------------------------------>
@@ -35,7 +36,8 @@
     </div>
    <!---------------------------end of Pop up-------------------------------------->
 <div id="main" name="main" style="text-align: center;">
-<a href="<%=redirectThisPageURL%>">Back</a>
+<!--<a href="<%=redirectThisPageURL%>">Back</a>-->
+<a href="<%=testURL%>">Back</a>
 <portlet:renderURL var="testURL">
     <portlet:param name="mvcPath" value="/test.jsp"/>
     <liferay-portlet:param name="add_flag" value="true"/>
@@ -45,7 +47,7 @@
     <div id="datePicker">
         <label for="fromDate">From</label>
         <input type="text" id="fromDate">
-        <label for="toDate">From</label>
+        <label for="toDate">To</label>
         <input type="text" id="toDate">
     </div>
 
@@ -63,8 +65,26 @@
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
+
+  <%
+    Long str = request.getAttribute("flagOfUserId");
+    out.println(str instance of Long);
+
+    Boolean flag = null;
+
+    if(str != null){
+    out.println("str " + str);
+        Long flagOfUserId = Long.parseLong(str);
+
+        if(flagOfUserId != null){
+            flag = true;
+        }
+    }
+  %>
+
 <aui:script use="liferay-portlet-url, liferay-search-container, aui-node, liferay-service, aui-pagination">
 
+    var flagOfUserId = 0;
 	var stringHtml = "";
 	var entryAmount = 0;
 	var pageAmount = 0;
@@ -80,62 +100,70 @@
      AUI().ready(
                     function() {
 
-                        if(0){
+                        if(1){
                            //if an user is an administrator
                            //to get names of users from server
 
                             $('#datePicker').hide();
                             $('#find_an_entry').hide();
+                                alert(<%=flag%>);
+                                alert('quotted ' + '<%=flag%>');
 
-                            AUI().use('aui-base','aui-io-request', function(A){
-                                    A.io.request('<%=getNamesOfUsersURL%>',{
-                                        dataType: 'json',
-                                        method: 'GET',
-                                        on: {
-                                            success: function() {
-                                                arrayOfNamesAndIdOfUsers = this.get('responseData');
+                            if(<%=flag%>){
+                                alert("work");
+                            } else{
+                                alert('doesnt work');
+                            }
 
-                                                A.Array.each(arrayOfNamesAndIdOfUsers, function(obj, idx){
-                                                    arrayOfNamesOfUsers.push(obj.userName);
-                                                });
+                            if(flagOfUserId == 0)
+                                AUI().use('aui-base','aui-io-request', function(A){
+                                        A.io.request('<%=getNamesOfUsersURL%>',{
+                                            dataType: 'json',
+                                            method: 'POST',
+                                            on: {
+                                                success: function() {
+                                                    arrayOfNamesAndIdOfUsers = this.get('responseData');
 
-                                                $( "#tags" ).autocomplete({
-                                                    source: arrayOfNamesOfUsers
-                                                });
+                                                    A.Array.each(arrayOfNamesAndIdOfUsers, function(obj, idx){
+                                                        arrayOfNamesOfUsers.push(obj.userName);
+                                                    });
 
+                                                    $( "#tags" ).autocomplete({
+                                                        source: arrayOfNamesOfUsers
+                                                    });
+
+                                                }
                                             }
-                                        }
-                                    });
-                             });
-
+                                        });
+                                 });
 
                         } else{
-                             AUI().use('aui-base','aui-io-request', function(A){
-                                    A.io.request('<%=currentUsersEntriesURL%>',{
-                                        dataType: 'json',
-                                        method: 'GET',
-                                        on: {
-                                            success: function() {
-                                                data = this.get('responseData');
-
-                                                A.Array.each(data, function(obj, idx){
-                                                      document.getElementById('anchor').innerHTML += addEntry(obj.entryId, obj.userId, obj.groupId,
-                                                            obj.companyId, obj.userName, obj.title, obj.entryText, obj.entryDate);
-
-                                                });
-
-
-                                            }
-                                        }
-                                    });
-                             });
-
+                            //если зашёл не админ  то показываем записи юзера, который авторизовался
+                            getEntriesByAjax('<%=currentUsersEntriesURL%>');
                         }
                     }
-     );
+        );
 
         //$(setTimeout(prepareSearch, 2000));
 
+        function getEntriesByAjax(url){
+            AUI().use('aui-base','aui-io-request', function(A){
+                A.io.request(url.toString(),{
+                    dataType: 'json',
+                    method: 'POST',
+                    on: {
+                        success: function() {
+                            data = this.get('responseData');
+
+                            A.Array.each(data, function(obj, idx){
+                                document.getElementById('anchor').innerHTML += addEntry(obj.entryId, obj.userId, obj.groupId,
+                                    obj.companyId, obj.userName, obj.title, obj.entryText, obj.entryDate);
+                            });
+                        }
+                    }
+                });
+            });
+        }
 
         $(function() {
             $( "#fromDate" ).datepicker({
@@ -196,23 +224,7 @@
                     }
                 }
 
-                AUI().use('aui-base','aui-io-request', function(A){
-                    A.io.request(resURL.toString(),{
-                        dataType: 'json',
-                        method: 'GET',
-                        on: {
-                            success: function() {
-                                data = this.get('responseData');
-
-                                A.Array.each(data, function(obj, idx){
-                                    document.getElementById('anchor').innerHTML += addEntry(obj.entryId, obj.userId, obj.groupId,
-                                        obj.companyId, obj.userName, obj.title, obj.entryText, obj.entryDate, idx);
-
-                                });
-                            }
-                        }
-                    });
-                });
+                getEntriesByAjax(resURL);
 
                 flagOfStateOfSearch = "byContent";
 
@@ -221,6 +233,8 @@
                 });
 
                 $('#datePicker').show();
+                $('#find_an_entry').show();
+
             }
     });
 
@@ -298,9 +312,6 @@
 </aui:script>
 
     <script type="text/javascript">
-
-     function resetData(){
-        }
 
         p = $('.popup__overlay');
         $('#popup__toggle').click(function() {

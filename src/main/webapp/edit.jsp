@@ -60,10 +60,6 @@
 				document.getElementById('<portlet:namespace/>title').setAttribute("value", '<%=request.getParameter("title")%>');
             }
 
-
-
-
-
 	AJS.$(document).ready(function() {
 	   AJS.$('#<portlet:namespace/>date').datePicker({'overrideBrowserDefault': true});
 	});

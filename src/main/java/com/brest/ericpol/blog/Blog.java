@@ -125,7 +125,7 @@ public class Blog extends MVCPortlet{
 
         //List<User> gg= UserLocalServiceUtil.getGroupUsers(user.getGroupId());
 
-        long userId = user.getUserId();
+        Long userId = user.getUserId();
         long groupId = themeDisplay.getScopeGroupId();
         long companyId = user.getCompanyId();
         System.out.println("UserId: " + userId);
@@ -133,7 +133,7 @@ public class Blog extends MVCPortlet{
         System.out.println("GroupId: " + groupId);
 
         System.out.println("companyId: " + companyId);
-
+        actionResponse.setProperty("flagOfUserId", userId.toString());
         String entryText = ParamUtil.getString(actionRequest, "entryText");
         System.out.println("Text: " + entryText);
         String title = ParamUtil.getString(actionRequest, "title");
@@ -143,22 +143,25 @@ public class Blog extends MVCPortlet{
         System.out.println("Date: " + date);
 
         BlogEntryLocalServiceUtil.addBlogEntry(userId, groupId, companyId, title, entryText, date);
+        actionRequest.setAttribute("flagOfUserId", userId.toString());
     }
 
     public void deleteEntry(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, PortalException {
         long entryId = ParamUtil.getLong(actionRequest, "entryId");
-        BlogEntryLocalServiceUtil.deleteBlogEntry(entryId);
 
+        BlogEntry deletedEntry = BlogEntryLocalServiceUtil.deleteBlogEntry(entryId);
+        Long userId = deletedEntry.getUserId();
+        actionRequest.setAttribute("flagOfUserId", userId.toString());
     }
 
     public void updateEntry(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, PortalException, ParseException {
-        long entryId = ParamUtil.getLong(actionRequest, "entryId");
+        Long entryId = ParamUtil.getLong(actionRequest, "entryId");
         System.out.println("Entry Id: " + entryId);
-        long userId = ParamUtil.getLong(actionRequest, "userId");
+        Long userId = ParamUtil.getLong(actionRequest, "userId");
         System.out.println("User Id: " + userId);
-        long groupId = ParamUtil.getLong(actionRequest, "groupId");
+        Long groupId = ParamUtil.getLong(actionRequest, "groupId");
         System.out.println("Group Id: " + groupId);
-        long companyId = ParamUtil.getLong(actionRequest, "companyId");
+        Long companyId = ParamUtil.getLong(actionRequest, "companyId");
         System.out.println("Company Id: " + companyId);
         String entryText = ParamUtil.getString(actionRequest, "entryText");
         System.out.println("Text: " + entryText);
@@ -167,9 +170,13 @@ public class Blog extends MVCPortlet{
         String strDate  = ParamUtil.getString(actionRequest, "date");
         Date date = Date.valueOf(strDate);
         System.out.println("Date: " + date);
-
+        actionRequest.setAttribute("flagOfUserId", userId);
         BlogEntryLocalServiceUtil.updateBlogEntry(entryId, userId, groupId, companyId, title, entryText, date);
 
     }
 
+    public void test(ActionRequest actionRequest, ActionResponse actionResponse){
+        actionRequest.setAttribute("flagOfUserId", 1059);
+        actionResponse.setRenderParameter("jspPage", "/test.jsp");
+    }
 }
