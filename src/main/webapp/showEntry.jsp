@@ -20,8 +20,12 @@
     <portlet:param name="mvcPath" value="/edit.jsp"/>
 </portlet:renderURL>
 
-<liferay-theme:defineObjects />
+<portlet:actionURL var="allEntriesURL" name="showAll">
+    <portlet:param name="userId" value='<%=request.getParameter("userId")%>'/>
+</portlet:actionURL>
 
+<liferay-theme:defineObjects />
+<a href="<%=allEntriesURL%>">Go back</a>
 			<div class="entry">
 			    <div class="entry-content">
 			        <div class="entry-date">
@@ -51,29 +55,6 @@
         <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.7/css/aui.css"/>
 <link href="http://cdn.alloyui.com/2.5.0/aui-css/css/bootstrap.min.css" rel="stylesheet"></link>
 <aui:script use="liferay-portlet-url, liferay-search-container">
-    var idx = '<%=request.getParameter("idx")%>';
-    var data;
-
-         AUI().ready(
-                        function() {
-                             AUI().use('aui-base','aui-io-request', function(A){
-                                    A.io.request('<%=resourceURL%>',{
-                                        dataType: 'json',
-                                        method: 'GET',
-                                        on: {
-                                            success: function() {
-                                                data=this.get('responseData');
-
-                                            }
-                                        }
-                                    });
-                             });
-                            }
-                    );
-/*
-
-*/
-
     var date = new Date('<%=request.getParameter("entryDate")%>');
     var strDate = " " + date.getDate() + "-" + (date.getMonth() + 1) + "-" + (date.getYear() + 1900);
 

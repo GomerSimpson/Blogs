@@ -23,98 +23,95 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Blog extends MVCPortlet{
+public class Blog extends MVCPortlet {
 
     @Override
     public void serveResource(ResourceRequest resourceRequest,
-                        ResourceResponse resourceResponse) throws IOException, PortletException {
+                              ResourceResponse resourceResponse) throws IOException, PortletException {
         JSONObject objectJSON = null;
         Long userId = null;
         JSONArray arrayJSON = JSONFactoryUtil.createJSONArray();
         ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
         User user = themeDisplay.getUser();
 
-        System.out.println(user.getUserId() + " " + themeDisplay.getScopeGroupId() + " " + user.getCompanyId());
+      //  System.out.println(user.getUserId() + " " + themeDisplay.getScopeGroupId() + " " + user.getCompanyId());
 
-        try {
-            //List<BlogEntry> list = BlogEntryLocalServiceUtil.findAllEntries();
-            //List<BlogEntry> list = BlogEntryLocalServiceUtil.findByUserGroupCompanyId(user.getUserId(), user.getGroupId(), user.getCompanyId());
-            List<BlogEntry> list = null;
-            String flag = ParamUtil.getString(resourceRequest, "flag");
+        //List<BlogEntry> list = BlogEntryLocalServiceUtil.findAllEntries();
+        //List<BlogEntry> list = BlogEntryLocalServiceUtil.findByUserGroupCompanyId(user.getUserId(), user.getGroupId(), user.getCompanyId());
+        List<BlogEntry> list = null;
+        String flag = ParamUtil.getString(resourceRequest, "flag");
 
-            if(flag.equals("allNames")) {
+        if (flag.equals("allNames")) {
+            try {
                 list = BlogEntryLocalServiceUtil.findByGroupId(themeDisplay.getScopeGroupId());
-
-                Map<Long, String> map = new HashMap<Long, String>();
-
-                String userName = null;
-
-                for (BlogEntry be : list){
-                    userId = be.getUserId();
-                    userName = UserLocalServiceUtil.getUserById(userId).getFullName();
-
-                    map.put(userId, userName);
-                }
-
-                for (Map.Entry<Long, String> entry : map.entrySet()){
-                    objectJSON = JSONFactoryUtil.createJSONObject();
-                    objectJSON.put("userId", entry.getKey());
-                    objectJSON.put("userName", entry.getValue());
-                    arrayJSON.put(objectJSON);
-                }
-
-                PrintWriter out = resourceResponse.getWriter();
-                out.print(arrayJSON.toString());
-
-            } else if(flag.equals("userEntries")){
-                userId = ParamUtil.getLong(resourceRequest, "userId");
-
-                list = BlogEntryLocalServiceUtil.findByUserGroupCompanyId(userId, themeDisplay.getScopeGroupId(), user.getCompanyId());
-
-                for (BlogEntry be : list) {
-                    objectJSON = JSONFactoryUtil.createJSONObject();
-                    String userName = UserLocalServiceUtil.getUserById(be.getUserId()).getFullName();
-                    objectJSON.put("entryId", be.getEntryId());
-                    objectJSON.put("userId", be.getUserId());
-                    objectJSON.put("groupId", be.getGroupId());
-                    objectJSON.put("companyId", be.getCompanyId());
-                    objectJSON.put("userName", userName);
-                    objectJSON.put("title", be.getTitle());
-                    objectJSON.put("entryText", be.getEntryText());
-                    objectJSON.put("entryDate", be.getEntryDate());
-
-                    arrayJSON.put(objectJSON);
-                }
-
-                PrintWriter out = resourceResponse.getWriter();
-                out.print(arrayJSON.toString());
-            } else if(flag.equals("currentUsersEntries")){
-                userId = themeDisplay.getUserId();
-
-                list = BlogEntryLocalServiceUtil.findByUserGroupCompanyId(user.getUserId(), themeDisplay.getScopeGroupId(), user.getCompanyId());
-
-                for (BlogEntry be : list) {
-                    objectJSON = JSONFactoryUtil.createJSONObject();
-                    String userName = UserLocalServiceUtil.getUserById(be.getUserId()).getFullName();
-                    objectJSON.put("entryId", be.getEntryId());
-                    objectJSON.put("userId", be.getUserId());
-                    objectJSON.put("groupId", be.getGroupId());
-                    objectJSON.put("companyId", be.getCompanyId());
-                    objectJSON.put("userName", userName);
-                    objectJSON.put("title", be.getTitle());
-                    objectJSON.put("entryText", be.getEntryText());
-                    objectJSON.put("entryDate", be.getEntryDate());
-
-                    arrayJSON.put(objectJSON);
-                }
-
-                PrintWriter out = resourceResponse.getWriter();
-                out.print(arrayJSON.toString());
+            } catch (SystemException e) {
+                e.printStackTrace();
             }
-        } catch (SystemException e) {
-            e.printStackTrace();
-        } catch (PortalException e) {
-            e.printStackTrace();
+
+            Map<Long, String> map = new HashMap<Long, String>();
+
+            String userName = null;
+
+            for (BlogEntry be : list) {
+                userId = be.getUserId();
+                try {
+                    userName = UserLocalServiceUtil.getUserById(userId).getFullName();
+                } catch (PortalException e) {
+                    e.printStackTrace();
+                } catch (SystemException e) {
+                    e.printStackTrace();
+                }
+
+                map.put(userId, userName);
+            }
+
+            for (Map.Entry<Long, String> entry : map.entrySet()) {
+                objectJSON = JSONFactoryUtil.createJSONObject();
+                objectJSON.put("userId", entry.getKey());
+                objectJSON.put("userName", entry.getValue());
+                arrayJSON.put(objectJSON);
+            }
+
+            PrintWriter out = resourceResponse.getWriter();
+            out.print(arrayJSON.toString());
+
+        } else {
+            if (flag.equals("userEntries")) {
+                userId = ParamUtil.getLong(resourceRequest, "userId");
+            }
+
+            try {
+                System.out.println("User id" + userId);
+                list = BlogEntryLocalServiceUtil.findByUserGroupCompanyId(userId, themeDisplay.getScopeGroupId(), user.getCompanyId());
+            } catch (SystemException e) {
+                e.printStackTrace();
+            }
+
+            for (BlogEntry be : list) {
+                objectJSON = JSONFactoryUtil.createJSONObject();
+                String userName = null;
+                try {
+                    userName = UserLocalServiceUtil.getUserById(be.getUserId()).getFullName();
+                } catch (PortalException e) {
+                    e.printStackTrace();
+                } catch (SystemException e) {
+                    e.printStackTrace();
+                }
+
+                objectJSON.put("entryId", be.getEntryId());
+                objectJSON.put("userId", be.getUserId());
+                objectJSON.put("groupId", be.getGroupId());
+                objectJSON.put("companyId", be.getCompanyId());
+                objectJSON.put("userName", userName);
+                objectJSON.put("title", be.getTitle());
+                objectJSON.put("entryText", be.getEntryText());
+                objectJSON.put("entryDate", be.getEntryDate());
+
+                arrayJSON.put(objectJSON);
+            }
+
+            PrintWriter out = resourceResponse.getWriter();
+            out.print(arrayJSON.toString());
         }
     }
 
@@ -128,22 +125,22 @@ public class Blog extends MVCPortlet{
         Long userId = user.getUserId();
         long groupId = themeDisplay.getScopeGroupId();
         long companyId = user.getCompanyId();
-        System.out.println("UserId: " + userId);
+      //  System.out.println("UserId: " + userId);
 
-        System.out.println("GroupId: " + groupId);
+      //  System.out.println("GroupId: " + groupId);
 
-        System.out.println("companyId: " + companyId);
+       // System.out.println("companyId: " + companyId);
         actionResponse.setProperty("flagOfUserId", userId.toString());
         String entryText = ParamUtil.getString(actionRequest, "entryText");
-        System.out.println("Text: " + entryText);
+      //  System.out.println("Text: " + entryText);
         String title = ParamUtil.getString(actionRequest, "title");
-        System.out.println("title:  " + title);
-        String strDate  = ParamUtil.getString(actionRequest, "date");
+      //  System.out.println("title:  " + title);
+        String strDate = ParamUtil.getString(actionRequest, "date");
         Date date = Date.valueOf(strDate);
-        System.out.println("Date: " + date);
+     //   System.out.println("Date: " + date);
 
         BlogEntryLocalServiceUtil.addBlogEntry(userId, groupId, companyId, title, entryText, date);
-        actionRequest.setAttribute("flagOfUserId", userId.toString());
+        actionRequest.setAttribute("flagOfUserId", userId);
     }
 
     public void deleteEntry(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, PortalException {
@@ -151,31 +148,37 @@ public class Blog extends MVCPortlet{
 
         BlogEntry deletedEntry = BlogEntryLocalServiceUtil.deleteBlogEntry(entryId);
         Long userId = deletedEntry.getUserId();
-        actionRequest.setAttribute("flagOfUserId", userId.toString());
+        actionRequest.setAttribute("flagOfUserId", userId);
     }
 
     public void updateEntry(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, PortalException, ParseException {
         Long entryId = ParamUtil.getLong(actionRequest, "entryId");
-        System.out.println("Entry Id: " + entryId);
+       // System.out.println("Entry Id: " + entryId);
         Long userId = ParamUtil.getLong(actionRequest, "userId");
-        System.out.println("User Id: " + userId);
+     //   System.out.println("User Id: " + userId);
         Long groupId = ParamUtil.getLong(actionRequest, "groupId");
-        System.out.println("Group Id: " + groupId);
+     //   System.out.println("Group Id: " + groupId);
         Long companyId = ParamUtil.getLong(actionRequest, "companyId");
-        System.out.println("Company Id: " + companyId);
+      //  System.out.println("Company Id: " + companyId);
         String entryText = ParamUtil.getString(actionRequest, "entryText");
-        System.out.println("Text: " + entryText);
+     //   System.out.println("Text: " + entryText);
         String title = ParamUtil.getString(actionRequest, "title");
-        System.out.println("title:  " + title);
-        String strDate  = ParamUtil.getString(actionRequest, "date");
+       // System.out.println("title:  " + title);
+        String strDate = ParamUtil.getString(actionRequest, "date");
         Date date = Date.valueOf(strDate);
-        System.out.println("Date: " + date);
+      //  System.out.println("Date: " + date);
         actionRequest.setAttribute("flagOfUserId", userId);
         BlogEntryLocalServiceUtil.updateBlogEntry(entryId, userId, groupId, companyId, title, entryText, date);
 
     }
 
-    public void test(ActionRequest actionRequest, ActionResponse actionResponse){
+    public void showAll(ActionRequest actionRequest, ActionResponse actionResponse){
+        Long entryId = ParamUtil.getLong(actionRequest, "userId");
+        actionResponse.setRenderParameter("jspPage", "/view.jsp");
+        actionRequest.setAttribute("flagOfUserId", entryId);
+    }
+
+    public void test(ActionRequest actionRequest, ActionResponse actionResponse) {
         actionRequest.setAttribute("flagOfUserId", 1059);
         actionResponse.setRenderParameter("jspPage", "/test.jsp");
     }

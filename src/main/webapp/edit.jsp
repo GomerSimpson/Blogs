@@ -20,6 +20,10 @@
 <portlet:actionURL var="updateEntry" name="updateEntry">
 </portlet:actionURL>
 
+<portlet:actionURL var="allEntriesURL" name="showAll">
+    <portlet:param name="userId" value='<%=request.getParameter("userId")%>'/>
+</portlet:actionURL>
+
 <portlet:defineObjects />
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
@@ -32,6 +36,8 @@
 <script type="text/javascript" src="/html/ckeditor/ckeditor.js"></script>
 
 
+
+		<a href="<%=allEntriesURL%>">back</a>
 
 		<aui:form action="<%=updateEntry%>" name="updateEntry" method="POST">
 		<label name="label" for="demo-range-always">Date</label>

@@ -10,7 +10,7 @@
 <%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
 <portlet:defineObjects />
 
-<portlet:renderURL var="redirectThisPageURL">
+<portlet:renderURL var="chooseAnUserURL">
     <portlet:param name="mvcPath" value="/view.jsp"/>
 </portlet:renderURL>
 
@@ -35,13 +35,32 @@
         </div>
     </div>
    <!---------------------------end of Pop up-------------------------------------->
+
+  <%
+    Long flagOfUserId = null;
+    Boolean flag = false;
+    flagOfUserId = (Long)request.getAttribute("flagOfUserId");
+    String strUserId = null;
+
+        if(flagOfUserId != null && flagOfUserId != 0){
+
+            if(flagOfUserId != null){
+                flag = true;
+                strUserId = flagOfUserId.toString();
+            }
+        }
+
+  %>
+
+  <portlet:actionURL var="allEntriesURL" name="showAll">
+      <portlet:param name="userId" value='<%=strUserId%>'/>
+  </portlet:actionURL>
+
+
 <div id="main" name="main" style="text-align: center;">
-<!--<a href="<%=redirectThisPageURL%>">Back</a>-->
-<a href="<%=testURL%>">Back</a>
-<portlet:renderURL var="testURL">
-    <portlet:param name="mvcPath" value="/test.jsp"/>
-    <liferay-portlet:param name="add_flag" value="true"/>
-</portlet:renderURL>
+<a href="<%=chooseAnUserURL%>" id="chooseAnUserHref">Choose an user</a>
+<a href="<%=allEntriesURL%>" id="showAllHref">Show all</a>
+
 <div class="topContainer">
     <button class="btn btn-primary" id="popup__toggle"  ><liferay-ui:message key="add_entry" /></button>
     <div id="datePicker">
@@ -55,7 +74,6 @@
 	    <input class="text" type="text" id="tags" name="d-fname" title="Choose a user">
 	</div>
 	    <button class="btn btn-primary" id="find_an_entry"  >Find an entry</button>
-
 </div>
 
 <div id="anchor" style="text-align: center;">
@@ -65,22 +83,6 @@
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
-
-  <%
-    Long str = request.getAttribute("flagOfUserId");
-    out.println(str instance of Long);
-
-    Boolean flag = null;
-
-    if(str != null){
-    out.println("str " + str);
-        Long flagOfUserId = Long.parseLong(str);
-
-        if(flagOfUserId != null){
-            flag = true;
-        }
-    }
-  %>
 
 <aui:script use="liferay-portlet-url, liferay-search-container, aui-node, liferay-service, aui-pagination">
 
@@ -100,49 +102,67 @@
      AUI().ready(
                     function() {
 
-                        if(1){
+                        if(0){
                            //if an user is an administrator
                            //to get names of users from server
 
                             $('#datePicker').hide();
                             $('#find_an_entry').hide();
-                                alert(<%=flag%>);
-                                alert('quotted ' + '<%=flag%>');
+                            $('#popup__toggle').hide();
+                            $('#showAllHref').hide();
 
-                            if(<%=flag%>){
-                                alert("work");
-                            } else{
-                                alert('doesnt work');
-                            }
-
-                            if(flagOfUserId == 0)
+                            if(<%=flag == false%>){
                                 AUI().use('aui-base','aui-io-request', function(A){
-                                        A.io.request('<%=getNamesOfUsersURL%>',{
-                                            dataType: 'json',
-                                            method: 'POST',
-                                            on: {
-                                                success: function() {
-                                                    arrayOfNamesAndIdOfUsers = this.get('responseData');
+                                    A.io.request('<%=getNamesOfUsersURL%>',{
+                                        dataType: 'json',
+                                        method: 'POST',
+                                        on: {
+                                            success: function() {
+                                                arrayOfNamesAndIdOfUsers = this.get('responseData');
 
-                                                    A.Array.each(arrayOfNamesAndIdOfUsers, function(obj, idx){
-                                                        arrayOfNamesOfUsers.push(obj.userName);
-                                                    });
+                                                A.Array.each(arrayOfNamesAndIdOfUsers, function(obj, idx){
+                                                    arrayOfNamesOfUsers.push(obj.userName);
+                                                });
 
-                                                    $( "#tags" ).autocomplete({
-                                                        source: arrayOfNamesOfUsers
-                                                    });
-
-                                                }
+                                                $( "#tags" ).autocomplete({
+                                                    source: arrayOfNamesOfUsers
+                                                });
                                             }
-                                        });
-                                 });
+                                        }
+                                    });
+                                });
+                            } else {
+
+                                $('#datePicker').show();
+                                $('#find_an_entry').show();
+                                $('#popup__toggle').hide();
+                                $('#showAllHref').hide();
+                                var resURL = Liferay.PortletURL.createResourceURL();
+                                resURL.setPortletId('<%=themeDisplay.getPortletDisplay().getId()%>');
+
+                                resURL.setParameter("userId", <%=flagOfUserId%>);
+                                resURL.setParameter("flag", "userEntries");
+
+                                getEntriesByAjax(resURL);
+                            }
 
                         } else{
                             //если зашёл не админ  то показываем записи юзера, который авторизовался
-                            getEntriesByAjax('<%=currentUsersEntriesURL%>');
+                            $('#showAllHref').hide();
+                            $('#chooseAnUserHref').hide();
+
+                            var resURL = Liferay.PortletURL.createResourceURL();
+                            resURL.setPortletId('<%=themeDisplay.getPortletDisplay().getId()%>');
+
+                            resURL.setParameter("userId", '<%= com.liferay.portal.util.PortalUtil.getUserId(request)%>');
+                            resURL.setParameter("flag", "userEntries");
+
+
+
+                            getEntriesByAjax(resURL);
                         }
                     }
-        );
+     );
 
         //$(setTimeout(prepareSearch, 2000));
 
@@ -188,7 +208,7 @@
         $( "#toDate" ).datepicker( "setDate", getCurrentFormattedDate() );
 
         $('#find_an_entry').click(function(){
-
+            $('#showAllHref').show();
             $('#anchor').empty();
 
             var fromDate = formatDate($( "#fromDate" ).datepicker( "getDate" ));
@@ -214,12 +234,20 @@
 
                 $('#anchor').empty();
 
+                var showAllURL = Liferay.PortletURL.createActionURL();
+                showAllURL.setParameter('p_auth', Liferay.authToken);
+
+                showAllURL.setPortletId('${themeDisplay.portletDisplay.rootPortletId}');
+                showAllURL.setWindowState('normal');
+                showAllURL.setName('showAll');
+
                 var resURL = Liferay.PortletURL.createResourceURL();
                 resURL.setPortletId('<%=themeDisplay.getPortletDisplay().getId()%>');
 
                 for(var idx in arrayOfNamesAndIdOfUsers){
                     if(ui.item.value == arrayOfNamesAndIdOfUsers[idx].userName){
                         resURL.setParameter("userId", arrayOfNamesAndIdOfUsers[idx].userId);
+                        showAllURL.setParameter('userId', arrayOfNamesAndIdOfUsers[idx].userId);
                         resURL.setParameter("flag", "userEntries");
                     }
                 }
@@ -227,14 +255,14 @@
                 getEntriesByAjax(resURL);
 
                 flagOfStateOfSearch = "byContent";
-
+                $('#showAllHref').attr('href', showAllURL.toString());
                 $( "#tags" ).autocomplete({
                     disabled: true
                 });
 
+                $('#showAllHref').hide();
                 $('#datePicker').show();
                 $('#find_an_entry').show();
-
             }
     });
 
@@ -312,10 +340,10 @@
 </aui:script>
 
     <script type="text/javascript">
-
         p = $('.popup__overlay');
+
         $('#popup__toggle').click(function() {
-                $('#main').hide();
+            $('#main').hide();
             p.css('display', 'block');
         });
 
