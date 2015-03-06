@@ -56,25 +56,24 @@
       <portlet:param name="userId" value='<%=strUserId%>'/>
   </portlet:actionURL>
 
-
-<div id="main" name="main" style="text-align: center;">
+<div id="main" name="main">
 <a href="<%=chooseAnUserURL%>" id="chooseAnUserHref">Choose an user</a>
 <a href="<%=allEntriesURL%>" id="showAllHref">Show all</a>
-
-<div class="topContainer">
+<div class="topContainer" class="aui">
     <button class="btn btn-primary" id="popup__toggle"  ><liferay-ui:message key="add_entry" /></button>
+
     <div id="datePicker">
-        <label for="fromDate">From</label>
-        <input type="text" id="fromDate">
+        <label for="fromDate" class="inputLabel">From</label>
+        <input class="text short-field" type="text" id="fromDate" name="d-fromDate" title="fromDate">
         <label for="toDate">To</label>
-        <input type="text" id="toDate">
+        <input class="text short-field" type="text" id="toDate" name="toDate" title="toDate">
     </div>
 
 	<div class="form-search">
 	    <input class="text" type="text" id="tags" name="d-fname" title="Choose a user">
 	</div>
 	    <button class="btn btn-primary" id="find_an_entry"  >Find an entry</button>
-</div>
+    </div>
 
 <div id="anchor" style="text-align: center;">
 </div>
@@ -102,7 +101,7 @@
      AUI().ready(
                     function() {
 
-                        if(0){
+                        if(1){
                            //if an user is an administrator
                            //to get names of users from server
 
