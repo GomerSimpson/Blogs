@@ -8,6 +8,7 @@
 		<icon>/icon.png</icon>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
+
 	</portlet>
     <portlet>
         <portlet-name>Shower</portlet-name>
@@ -31,4 +32,5 @@
 		<role-name>user</role-name>
 		<role-link>User</role-link>
 	</role-mapper>
+
 </liferay-portlet-app>

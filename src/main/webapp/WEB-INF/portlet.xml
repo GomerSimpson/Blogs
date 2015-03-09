@@ -7,6 +7,7 @@
 		<portlet-name>Blog</portlet-name>
 		<display-name>Blog</display-name>
 		<portlet-class>com.brest.ericpol.blog.Blog</portlet-class>
+
 		<init-param>
 			<name>view-jsp</name>
 			<value>/view.jsp</value>
@@ -19,6 +20,7 @@
             <name>showEntry-jsp</name>
             <value>/showEntry.jsp</value>
         </init-param>
+
         <init-param>
             <name>add-jsp</name>
             <value>/add.jsp</value>
@@ -54,6 +56,7 @@
         <supported-publishing-event>
             <qname xmlns:x="http://liferay.com/events">x:ipc.mine</qname>
         </supported-publishing-event>
+
 	</portlet>
     <portlet>
         <portlet-name>Shower</portlet-name>

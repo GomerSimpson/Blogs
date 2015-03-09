@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -115,7 +116,7 @@ public class Blog extends MVCPortlet {
         }
     }
 
-    public void addEntry(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, PortalException {
+    public void addEntry(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, PortalException, WindowStateException {
 
         ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
         User user = themeDisplay.getUser();
@@ -141,6 +142,7 @@ public class Blog extends MVCPortlet {
 
         BlogEntryLocalServiceUtil.addBlogEntry(userId, groupId, companyId, title, entryText, date);
         actionRequest.setAttribute("flagOfUserId", userId);
+        actionResponse.setWindowState(WindowState.MAXIMIZED);
     }
 
     public void deleteEntry(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, PortalException {
@@ -151,7 +153,7 @@ public class Blog extends MVCPortlet {
         actionRequest.setAttribute("flagOfUserId", userId);
     }
 
-    public void updateEntry(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, PortalException, ParseException {
+    public void updateEntry(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, PortalException, ParseException, WindowStateException {
         Long entryId = ParamUtil.getLong(actionRequest, "entryId");
        // System.out.println("Entry Id: " + entryId);
         Long userId = ParamUtil.getLong(actionRequest, "userId");
@@ -169,17 +171,56 @@ public class Blog extends MVCPortlet {
       //  System.out.println("Date: " + date);
         actionRequest.setAttribute("flagOfUserId", userId);
         BlogEntryLocalServiceUtil.updateBlogEntry(entryId, userId, groupId, companyId, title, entryText, date);
+        actionResponse.setWindowState(WindowState.MAXIMIZED);
 
     }
 
-    public void showAll(ActionRequest actionRequest, ActionResponse actionResponse){
+    public void showAll(ActionRequest actionRequest, ActionResponse actionResponse) throws WindowStateException {
         Long entryId = ParamUtil.getLong(actionRequest, "userId");
         actionResponse.setRenderParameter("jspPage", "/view.jsp");
         actionRequest.setAttribute("flagOfUserId", entryId);
+        actionResponse.setWindowState(WindowState.MAXIMIZED);
     }
 
     public void test(ActionRequest actionRequest, ActionResponse actionResponse) {
         actionRequest.setAttribute("flagOfUserId", 1059);
         actionResponse.setRenderParameter("jspPage", "/test.jsp");
+    }
+
+    public void createReport(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, PortalException {
+        String radio = ParamUtil.getString(actionRequest, "radio");
+        String reportFileName = ParamUtil.getString(actionRequest, "reportFileName");
+        String entriesIds = ParamUtil.getString(actionRequest, "entriesIds");
+        String[] strIds = entriesIds.split(",");
+        String fileNamePrefix = null;
+        Long[] ids = new Long[strIds.length];
+        int i = 0;
+        List<BlogEntry> list = new ArrayList<BlogEntry>();
+
+        for(String str : strIds){
+            ids[i] = Long.parseLong(str);
+            list.add(BlogEntryLocalServiceUtil.getBlogEntry(ids[i]));
+            System.out.println(BlogEntryLocalServiceUtil.getBlogEntry(ids[i]).toString());
+            i++;
+        }
+
+        new ReportCreator(radio, createFileName(Long.toString(list.get(0).getUserId()),
+                reportFileName), list, UserLocalServiceUtil.getUserById(list.get(0).getUserId()).getFullName());
+
+//        System.out.println("FileName -> " + reportFileName);
+//        System.out.println("ids -> " + entriesIds);
+        System.out.println("radio -> " + radio);
+    }
+
+    private String createFileName(String userId, String fileName){
+        String name = userId + "_";
+
+        if(true){          //если юзер админ
+            name += "admin_";
+        }
+
+        name += fileName;
+
+        return name;
     }
 }

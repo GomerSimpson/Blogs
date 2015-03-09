@@ -27,14 +27,23 @@
 
 <liferay-theme:defineObjects />
 
-    <!---------------------------start of Pop up------------------------------------>
-    <div class="popup__overlay">
-        <div class="popup">
-            <a href="#" class="popup__close">X</a>
+    <!---------------------------start of add Pop up------------------------------------>
+    <div id="addPopupOverlay" class="popup__overlay">
+        <div id="addPopup" class="popup">
+            <a href="#" id="addPopupClose" class="popup__close">X</a>
                <%@ include file="/add.jsp" %>
         </div>
     </div>
-   <!---------------------------end of Pop up-------------------------------------->
+   <!---------------------------end of add Pop up-------------------------------------->
+
+    <!---------------------------start of report Pop up------------------------------------>
+    <div id="reportPopupOverlay" class="popup__overlay">
+        <div id="reportPopup" class="popup">
+            <a href="#" id="reportPopupClose" class="popup__close">X</a>
+               <%@ include file="/report.jsp" %>
+        </div>
+    </div>
+   <!---------------------------end of report Pop up-------------------------------------->
 
   <%
     Long flagOfUserId = null;
@@ -49,36 +58,34 @@
                 strUserId = flagOfUserId.toString();
             }
         }
-
   %>
 
   <portlet:actionURL var="allEntriesURL" name="showAll">
       <portlet:param name="userId" value='<%=strUserId%>'/>
   </portlet:actionURL>
 
-<div id="main" name="main">
+<div id="main" class="main" name="main" >
 <a href="<%=chooseAnUserURL%>" id="chooseAnUserHref">Choose an user</a>
 <a href="<%=allEntriesURL%>" id="showAllHref">Show all</a>
 <div class="topContainer" class="aui">
     <button class="btn btn-primary" id="popup__toggle"  ><liferay-ui:message key="add_entry" /></button>
+    <button class="btn btn-primary" id="reportPopupToggle"  >Create Report</button>
 
     <div id="datePicker">
-        <label for="fromDate" class="inputLabel">From</label>
+        <label for="fromDate" class="inputLabel">From<span class="aui-icon icon-required"></span></label>
         <input class="text short-field" type="text" id="fromDate" name="d-fromDate" title="fromDate">
         <label for="toDate">To</label>
         <input class="text short-field" type="text" id="toDate" name="toDate" title="toDate">
     </div>
-
 	<div class="form-search">
 	    <input class="text" type="text" id="tags" name="d-fname" title="Choose a user">
 	</div>
 	    <button class="btn btn-primary" id="find_an_entry"  >Find an entry</button>
     </div>
 
-<div id="anchor" style="text-align: center;">
+<div id="anchor">
 </div>
-<div id="pager"></div>
-</div>
+</div><div id="filesField" class="filesField"> Field with files</div>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
@@ -97,11 +104,12 @@
 	var arrayOfNamesOfUsers = [];
 	var tempArray;
 	var flagOfStateOfSearch = "byUser";
+	var arrayOfIdForReport = [];
 
      AUI().ready(
                     function() {
 
-                        if(1){
+                        if(0){
                            //if an user is an administrator
                            //to get names of users from server
 
@@ -174,9 +182,13 @@
                         success: function() {
                             data = this.get('responseData');
 
+                            arrayOfIdForReport = [];
+
                             A.Array.each(data, function(obj, idx){
                                 document.getElementById('anchor').innerHTML += addEntry(obj.entryId, obj.userId, obj.groupId,
                                     obj.companyId, obj.userName, obj.title, obj.entryText, obj.entryDate);
+
+                                arrayOfIdForReport[idx] = obj.entryId;
                             });
                         }
                     }
@@ -216,6 +228,8 @@
             var i = 0;
             var entryDate;
 
+            arrayOfIdForReport = [];
+
             for(var idx in data){
 
                 entryDate = formatDate(new Date(data[idx].entryDate));
@@ -223,6 +237,9 @@
                 if((entryDate >= fromDate && entryDate <= toDate) && ((data[idx].title.indexOf($( "#tags" ).val()) + 1) || (data[idx].entryText.indexOf($( "#tags" ).val()) + 1))){
                     document.getElementById('anchor').innerHTML += addEntry(data[idx].entryId, data[idx].userId, data[idx].groupId,
                                             data[idx].companyId, data[idx].userName, data[idx].title, data[idx].entryText, data[idx].entryDate);
+
+                    arrayOfIdForReport[i] = data[idx].entryId;
+                    i++;
                 }
             }
         });
@@ -265,6 +282,10 @@
             }
     });
 
+    $('#reportPopupToggle').click(function(){
+        $('#<portlet:namespace/>entriesIds').val(arrayOfIdForReport.toString());
+    });
+
      function addEntry(entryId, userId, groupId, companyId, userName1, title1, entryText1, entryDate1){
             stringHtml = "";
 			var entryDate = new Date(entryDate1);
@@ -275,9 +296,9 @@
             var editUrl = createEditEntryURL(entryId, userId, groupId, companyId, userName, title, entryText, entryDate);
             var deleteUrl = createDeleteURL(entryId);
 
-			stringHtml += '<div class="entry" style="text-align: center;">';
+			stringHtml += '<div class="entry">';
 			stringHtml += '<div class="separator"><!-- --></div>';
-			stringHtml += '<div class="entry-content" style="text-align: center;">';
+			stringHtml += '<div class="entry-content">';
 			stringHtml += '<div class="entry-date">';
 			stringHtml += '<ul class="edit-actions entry icons-container lfr-meta-actions"><li class="date-entry"><span class="aui-icon aui-icon-small aui-iconfont-time"></span>';
             stringHtml += ' ' + entryDate.getDate() + '-' + (entryDate.getMonth() + 1) + '-' + (entryDate.getYear() + 1900) + '</li>';
@@ -286,8 +307,8 @@
             stringHtml += '<li class="delete-entry">';
             stringHtml += '<a href="' + deleteUrl + '"><span class="aui-icon aui-icon-small aui-iconfont-remove"></span><liferay-ui:message key="delete" /></a></li>';
             stringHtml += '<li><div class="entry-author"><span class="aui-icon aui-icon-small aui-iconfont-group"></span> by' + userName + '</div></li></ul>';
-            stringHtml += '<div class="entry-title"><a href="' + showEntryUrl + '"><h3>' + title + '</h3></a></div>';
-            stringHtml += '<div class="entry-body">' + entryText + '</div></div></div>';
+            stringHtml += '<br><div class="entry-title"><a href="' + showEntryUrl + '"><h3>' + title + '</h3></a></div>';
+            stringHtml += '<div class="entry-body" style="text-align: center;">' + entryText + '</div></div></div>';
             stringHtml += '</div>';
             return stringHtml;
      }
@@ -339,11 +360,18 @@
 </aui:script>
 
     <script type="text/javascript">
-        p = $('.popup__overlay');
+
+        p = $('#addPopupOverlay');
+        r = $('#reportPopupOverlay');
 
         $('#popup__toggle').click(function() {
             $('#main').hide();
             p.css('display', 'block');
+        });
+
+        $('#reportPopupToggle').click(function() {
+            $('#main').hide();
+            r.css('display', 'block');
         });
 
         p.click(function(event) {
@@ -354,9 +382,22 @@
             }
         });
 
-        $('.popup__close').click(function() {
+        r.click(function(event) {
+            e = event || window.event;
+            if (e.target == this) {
+                $('#main').show();
+                $(r).css('display', 'none');
+            }
+        });
+
+        $('#addPopupClose').click(function() {
             $('#main').show();
             p.css('display', 'none');
+        });
+
+        $('#reportPopupClose').click(function() {
+            $('#main').show();
+            r.css('display', 'none');
         });
 
     </script>
