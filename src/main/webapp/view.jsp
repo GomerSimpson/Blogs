@@ -18,6 +18,10 @@
     <portlet:param name="flag" value="allNames" />
 </portlet:resourceURL>
 
+<portlet:resourceURL var="getFilesURL">
+    <portlet:param name="flag" value="fileNames" />
+</portlet:resourceURL>
+
 <portlet:resourceURL var="currentUsersEntriesURL">
     <portlet:param name="flag" value="currentUsersEntries" />
 </portlet:resourceURL>
@@ -105,10 +109,11 @@
 	var tempArray;
 	var flagOfStateOfSearch = "byUser";
 	var arrayOfIdForReport = [];
+	var arrayOfFileNames = [];
 
      AUI().ready(
                     function() {
-
+                        setFiles();
                         if(0){
                            //if an user is an administrator
                            //to get names of users from server
@@ -171,7 +176,31 @@
                     }
      );
 
-        //$(setTimeout(prepareSearch, 2000));
+     function setFiles(){
+        AUI().use('aui-base','aui-io-request', function(A){
+            A.io.request('<%=getFilesURL%>',{
+                dataType: 'json',
+                    method: 'POST',
+                        on: {
+                            success: function() {
+                                arrayOfFileNames = this.get('responseData');
+
+                                stringHtml = "";
+
+                                A.Array.each(arrayOfFileNames, function(obj, idx){
+                                    stringHtml += "<a href='#'>" + obj + "</a><br>";
+                                });
+
+                                document.getElementById('filesField').innerHTML += stringHtml;
+                                stringHtml = "";
+                                alert(arrayOfFileNames);
+                            }
+                        }
+            });
+        });
+     }
+
+     //$(setTimeout(prepareSearch, 2000));
 
         function getEntriesByAjax(url){
             AUI().use('aui-base','aui-io-request', function(A){

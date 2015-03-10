@@ -2,6 +2,7 @@ package com.brest.ericpol.blog;
 
 import com.brest.ericpol.blog.service.model.BlogEntry;
 import com.brest.ericpol.blog.service.service.BlogEntryLocalServiceUtil;
+import com.itextpdf.text.DocumentException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -13,10 +14,11 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.util.bridges.mvc.MVCPortlet;
+import org.apache.lucene.search.FieldCache;
+import org.apache.lucene.util.IOUtils;
 
 import javax.portlet.*;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.sql.Date;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -35,14 +37,31 @@ public class Blog extends MVCPortlet {
         ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
         User user = themeDisplay.getUser();
 
-      //  System.out.println(user.getUserId() + " " + themeDisplay.getScopeGroupId() + " " + user.getCompanyId());
-
-        //List<BlogEntry> list = BlogEntryLocalServiceUtil.findAllEntries();
-        //List<BlogEntry> list = BlogEntryLocalServiceUtil.findByUserGroupCompanyId(user.getUserId(), user.getGroupId(), user.getCompanyId());
         List<BlogEntry> list = null;
         String flag = ParamUtil.getString(resourceRequest, "flag");
+ /*       String fileNameToDownload = ParamUtil.getString(resourceRequest, "fileName");
 
-        if (flag.equals("allNames")) {
+        if(fileNameToDownload != null){
+            File outputFile = new File("C:\\reports\\10198_admin_test2.pdf");
+            resourceResponse.setContentType("application/pdf");
+            OutputStream out = resourceResponse.getPortletOutputStream();
+            InputStream in = new FileInputStream(outputFile);
+
+            out.flush();
+        }
+*/
+
+
+        if (flag.equals("fileNames")) {
+            List<String> files = getFiles(user.getUserId());
+
+            for(String str : files){
+                arrayJSON.put(str);
+            }
+
+            PrintWriter out = resourceResponse.getWriter();
+            out.print(arrayJSON.toString());
+        } else if (flag.equals("allNames")) {
             try {
                 list = BlogEntryLocalServiceUtil.findByGroupId(themeDisplay.getScopeGroupId());
             } catch (SystemException e) {
@@ -126,19 +145,19 @@ public class Blog extends MVCPortlet {
         Long userId = user.getUserId();
         long groupId = themeDisplay.getScopeGroupId();
         long companyId = user.getCompanyId();
-      //  System.out.println("UserId: " + userId);
+        //  System.out.println("UserId: " + userId);
 
-      //  System.out.println("GroupId: " + groupId);
+        //  System.out.println("GroupId: " + groupId);
 
-       // System.out.println("companyId: " + companyId);
+        // System.out.println("companyId: " + companyId);
         actionResponse.setProperty("flagOfUserId", userId.toString());
         String entryText = ParamUtil.getString(actionRequest, "entryText");
-      //  System.out.println("Text: " + entryText);
+        //  System.out.println("Text: " + entryText);
         String title = ParamUtil.getString(actionRequest, "title");
-      //  System.out.println("title:  " + title);
+        //  System.out.println("title:  " + title);
         String strDate = ParamUtil.getString(actionRequest, "date");
         Date date = Date.valueOf(strDate);
-     //   System.out.println("Date: " + date);
+        //   System.out.println("Date: " + date);
 
         BlogEntryLocalServiceUtil.addBlogEntry(userId, groupId, companyId, title, entryText, date);
         actionRequest.setAttribute("flagOfUserId", userId);
@@ -155,20 +174,20 @@ public class Blog extends MVCPortlet {
 
     public void updateEntry(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, PortalException, ParseException, WindowStateException {
         Long entryId = ParamUtil.getLong(actionRequest, "entryId");
-       // System.out.println("Entry Id: " + entryId);
+        // System.out.println("Entry Id: " + entryId);
         Long userId = ParamUtil.getLong(actionRequest, "userId");
-     //   System.out.println("User Id: " + userId);
+        //   System.out.println("User Id: " + userId);
         Long groupId = ParamUtil.getLong(actionRequest, "groupId");
-     //   System.out.println("Group Id: " + groupId);
+        //   System.out.println("Group Id: " + groupId);
         Long companyId = ParamUtil.getLong(actionRequest, "companyId");
-      //  System.out.println("Company Id: " + companyId);
+        //  System.out.println("Company Id: " + companyId);
         String entryText = ParamUtil.getString(actionRequest, "entryText");
-     //   System.out.println("Text: " + entryText);
+        //   System.out.println("Text: " + entryText);
         String title = ParamUtil.getString(actionRequest, "title");
-       // System.out.println("title:  " + title);
+        // System.out.println("title:  " + title);
         String strDate = ParamUtil.getString(actionRequest, "date");
         Date date = Date.valueOf(strDate);
-      //  System.out.println("Date: " + date);
+        //  System.out.println("Date: " + date);
         actionRequest.setAttribute("flagOfUserId", userId);
         BlogEntryLocalServiceUtil.updateBlogEntry(entryId, userId, groupId, companyId, title, entryText, date);
         actionResponse.setWindowState(WindowState.MAXIMIZED);
@@ -187,7 +206,7 @@ public class Blog extends MVCPortlet {
         actionResponse.setRenderParameter("jspPage", "/test.jsp");
     }
 
-    public void createReport(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, PortalException {
+    public void createReport(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, PortalException, IOException, DocumentException {
         String radio = ParamUtil.getString(actionRequest, "radio");
         String reportFileName = ParamUtil.getString(actionRequest, "reportFileName");
         String entriesIds = ParamUtil.getString(actionRequest, "entriesIds");
@@ -197,7 +216,7 @@ public class Blog extends MVCPortlet {
         int i = 0;
         List<BlogEntry> list = new ArrayList<BlogEntry>();
 
-        for(String str : strIds){
+        for (String str : strIds) {
             ids[i] = Long.parseLong(str);
             list.add(BlogEntryLocalServiceUtil.getBlogEntry(ids[i]));
             System.out.println(BlogEntryLocalServiceUtil.getBlogEntry(ids[i]).toString());
@@ -212,15 +231,42 @@ public class Blog extends MVCPortlet {
         System.out.println("radio -> " + radio);
     }
 
-    private String createFileName(String userId, String fileName){
+    private String createFileName(String userId, String fileName) {
         String name = userId + "_";
 
-        if(true){          //если юзер админ
+        if (true) {          //если юзер админ
             name += "admin_";
         }
 
         name += fileName;
 
         return name;
+    }
+
+    private List<String> getFiles(Long currentUserId) {
+        File folder = new File("C:\\reports\\");
+
+        File[] listOfFiles = folder.listFiles();
+        List<String> listOfUsersFiles = new ArrayList<String>();
+
+
+        for (File file : listOfFiles) {
+            if (file.isFile()) {
+                String fileUserIdStr = file.getName().substring(0, 5);
+                if (true) {                      //если админ
+                    if (Long.parseLong(fileUserIdStr) == currentUserId && file.getName().contains("admin")) {
+                        listOfUsersFiles.add(file.getName());
+                    }
+                } else {
+                    if (Long.parseLong(fileUserIdStr) == currentUserId) {
+                        listOfUsersFiles.add(file.getName());
+                    }
+                }
+                System.out.println(file.getName() + " : " + Long.parseLong(fileUserIdStr));
+            }
+        }
+
+
+        return listOfUsersFiles;
     }
 }
