@@ -2,8 +2,6 @@ package com.brest.ericpol.blog;
 
 import com.brest.ericpol.blog.service.model.BlogEntry;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.pdf.BaseFont;
 import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalAlignment;
 import net.sf.dynamicreports.report.constant.Markup;
@@ -53,22 +51,22 @@ public class ReportCreator {
                         .title(Templates.createTitleComponent(userName))
                         .sortBy(asc(entryIdColumn))
                         .setDataSource((createDataSource()))
-                        .toPdf(new FileOutputStream("C:\\reports\\" + fileName + ".pdf"));
+                        .toPdf(new FileOutputStream("/home/simpson/reports/" + fileName + ".pdf"));
             } else if (fileType.equals("XLS")) {
                 report().setTemplate(Templates.reportTemplate)
                         .columns(entryIdColumn, titleColumn, contentColumn, dateColumn)
                         .title(Templates.createTitleComponent(userName))
                         .sortBy(asc(entryIdColumn))
                         .setDataSource((createDataSource()))
-                        .toXlsx(new FileOutputStream("C:\\reports\\" + fileName + ".xlsx"));
+                        .toXlsx(new FileOutputStream("/home/simpson/reports/" + fileName + ".xlsx"));
             } else if (fileType.equals("PDF and XLS")) {
                 report().setTemplate(Templates.reportTemplate)
                         .columns(entryIdColumn, titleColumn, contentColumn, dateColumn)
                         .title(Templates.createTitleComponent(userName))
                         .sortBy(asc(entryIdColumn))
                         .setDataSource((createDataSource()))
-                        .toXlsx(new FileOutputStream("C:\\reports\\" + fileName + ".xlsx"))
-                        .toPdf(new FileOutputStream("C:\\reports\\" + fileName + ".pdf"));
+                        .toXlsx(new FileOutputStream("/home/simpson/reports/" + fileName + ".xlsx"))
+                        .toPdf(new FileOutputStream("/home/simpson/reports/" + fileName + ".pdf"));
             }
         } catch (DRException e) {
             e.printStackTrace();

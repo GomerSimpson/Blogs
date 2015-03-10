@@ -42,9 +42,9 @@
                             <li>
                                 <div class="entry-author"><span class="aui-icon aui-icon-small aui-iconfont-group"></span> by<%=request.getParameter("userName")%></div>
                             </li>
-                        </ul>
+                        </ul><br clear="all">
                         <div class="entry-title"><h3><%=request.getParameter("title")%></h3></div>
-                        <div class="entry-body"><%=request.getParameter("entryText")%></div></div></div>
+                        <div class="entry-body"><h4><%=request.getParameter("entryText")%></h4></div></div></div>
                     </div>
                 </div>
             </div>

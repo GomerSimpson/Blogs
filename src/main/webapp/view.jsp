@@ -69,27 +69,39 @@
   </portlet:actionURL>
 
 <div id="main" class="main" name="main" >
-<a href="<%=chooseAnUserURL%>" id="chooseAnUserHref">Choose an user</a>
-<a href="<%=allEntriesURL%>" id="showAllHref">Show all</a>
 <div class="topContainer" class="aui">
-    <button class="btn btn-primary" id="popup__toggle"  ><liferay-ui:message key="add_entry" /></button>
-    <button class="btn btn-primary" id="reportPopupToggle"  >Create Report</button>
 
-    <div id="datePicker">
-        <label for="fromDate" class="inputLabel">From<span class="aui-icon icon-required"></span></label>
-        <input class="text short-field" type="text" id="fromDate" name="d-fromDate" title="fromDate">
-        <label for="toDate">To</label>
-        <input class="text short-field" type="text" id="toDate" name="toDate" title="toDate">
-    </div>
-	<div class="form-search">
-	    <input class="text" type="text" id="tags" name="d-fname" title="Choose a user">
-	</div>
-	    <button class="btn btn-primary" id="find_an_entry"  >Find an entry</button>
+        <a href="<%=chooseAnUserURL%>" id="chooseAnUserHref">
+            <button class="btn btn-primary" id="chooseAnUser">Choose an user</button>
+        </a>
+        <button class="btn btn-primary" id="popup__toggle"  ><liferay-ui:message key="add_entry" /></button>
+        <button class="btn btn-primary" id="reportPopupToggle"  >Create Report</button>
+
+        <div id="datePicker">
+            <label for="fromDate">From<span class="aui-icon icon-required"></span></label><input class="text short-field" type="text" id="fromDate" name="d-fromDate" title="fromDate">
+            <label for="toDate">To<span class="aui-icon icon-required"></span></label><input class="text short-field" type="text" id="toDate" name="toDate" title="toDate">
+        </div>
+        <div class="form-search">
+            <div id="note_content" class="alert alert-info">
+                Type here to search by content
+            </div>
+            <input class="text" type="text" id="tags" name="d-fname" title="Choose a user">
+        </div>
+            <button class="btn btn-primary" id="find_an_entry"  >Find an entry</button>
+            <a href="<%=allEntriesURL%>" id="showAllHref">
+                <button class="btn btn-primary" id="find_an_entry"  >ShowAll</button>
+            </a>
+        </div>
+
+    <div id="anchor">
     </div>
 
-<div id="anchor">
 </div>
-</div><div id="filesField" class="filesField"> Field with files</div>
+<div id="filesField" class="filesField">
+    <div class="alert alert-info">
+        List of reports
+    </div>
+</div>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
@@ -118,13 +130,17 @@
                            //if an user is an administrator
                            //to get names of users from server
 
-                            $('#datePicker').hide();
-                            $('#find_an_entry').hide();
                             $('#popup__toggle').hide();
                             $('#showAllHref').hide();
 
                             if(<%=flag == false%>){
                                 AUI().use('aui-base','aui-io-request', function(A){
+
+                                    $('#note_content').hide();
+                                    $('#datePicker').hide();
+                                    $('#find_an_entry').hide();
+                                    $('#reportPopupToggle').hide();
+
                                     A.io.request('<%=getNamesOfUsersURL%>',{
                                         dataType: 'json',
                                         method: 'POST',
@@ -149,6 +165,8 @@
                                 $('#find_an_entry').show();
                                 $('#popup__toggle').hide();
                                 $('#showAllHref').hide();
+                                $('#reportPopupToggle').show();
+                                $('#note_content').show();
                                 var resURL = Liferay.PortletURL.createResourceURL();
                                 resURL.setPortletId('<%=themeDisplay.getPortletDisplay().getId()%>');
 
@@ -176,6 +194,11 @@
                     }
      );
 
+    $( "#fromDate" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+    $( "#fromDate" ).datepicker( "setDate", getCurrentFormattedDate());
+    $( "#toDate" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+    $( "#toDate" ).datepicker( "setDate", getCurrentFormattedDate());
+
      function setFiles(){
         AUI().use('aui-base','aui-io-request', function(A){
             A.io.request('<%=getFilesURL%>',{
@@ -188,19 +211,22 @@
                                 stringHtml = "";
 
                                 A.Array.each(arrayOfFileNames, function(obj, idx){
-                                    stringHtml += "<a href='#'>" + obj + "</a><br>";
+
+                                    var resFileURL = Liferay.PortletURL.createResourceURL();
+                                    resFileURL.setPortletId('<%=themeDisplay.getPortletDisplay().getId()%>');
+                                    resFileURL.setParameter("fileNameToDownload", obj);
+
+                                    stringHtml += "<span><a href='" + resFileURL + "'><button class='btn btn-lg btn-block btn-primary' type='button'><b>" + trimFileName(obj) + "</b></button>" + "</a><br></span>";
                                 });
 
                                 document.getElementById('filesField').innerHTML += stringHtml;
                                 stringHtml = "";
-                                alert(arrayOfFileNames);
                             }
                         }
             });
         });
      }
 
-     //$(setTimeout(prepareSearch, 2000));
 
         function getEntriesByAjax(url){
             AUI().use('aui-base','aui-io-request', function(A){
@@ -224,28 +250,6 @@
                 });
             });
         }
-
-        $(function() {
-            $( "#fromDate" ).datepicker({
-              showOtherMonths: true,
-              numberOfMonths: 1,
-              onClose: function( selectedDate ) {
-                $( "#toDate" ).datepicker( "option", "minDate", selectedDate );
-              }
-            });
-            $( "#toDate" ).datepicker({
-              showOtherMonths: true,
-              numberOfMonths: 1,
-              onClose: function( selectedDate ) {
-                $( "#fromDate" ).datepicker( "option", "maxDate", selectedDate );
-              }
-            });
-          });
-
-        $( "#fromDate" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
-        $( "#fromDate" ).datepicker( "setDate", getCurrentFormattedDate() );
-        $( "#toDate" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
-        $( "#toDate" ).datepicker( "setDate", getCurrentFormattedDate() );
 
         $('#find_an_entry').click(function(){
             $('#showAllHref').show();
@@ -305,9 +309,11 @@
                     disabled: true
                 });
 
+                $('#note_content').show();
                 $('#showAllHref').hide();
                 $('#datePicker').show();
                 $('#find_an_entry').show();
+
             }
     });
 
@@ -327,17 +333,17 @@
 
 			stringHtml += '<div class="entry">';
 			stringHtml += '<div class="separator"><!-- --></div>';
-			stringHtml += '<div class="entry-content">';
+			stringHtml += '<div  class="entry-content">';
 			stringHtml += '<div class="entry-date">';
-			stringHtml += '<ul class="edit-actions entry icons-container lfr-meta-actions"><li class="date-entry"><span class="aui-icon aui-icon-small aui-iconfont-time"></span>';
+			stringHtml += '<ul class="edit-actions entry icons-container lfr-meta-actions"><li class="date-entry"><span class="aui-icon aui-icon-small aui-iconfont-teamcals"></span>';
             stringHtml += ' ' + entryDate.getDate() + '-' + (entryDate.getMonth() + 1) + '-' + (entryDate.getYear() + 1900) + '</li>';
             stringHtml += '<li class="edit-entry">';
             stringHtml += '<a href="' + editUrl + '"><span class="aui-icon aui-icon-small aui-iconfont-edit"></span><liferay-ui:message key="edit" /></a></li>';
             stringHtml += '<li class="delete-entry">';
             stringHtml += '<a href="' + deleteUrl + '"><span class="aui-icon aui-icon-small aui-iconfont-remove"></span><liferay-ui:message key="delete" /></a></li>';
             stringHtml += '<li><div class="entry-author"><span class="aui-icon aui-icon-small aui-iconfont-group"></span> by' + userName + '</div></li></ul>';
-            stringHtml += '<br><div class="entry-title"><a href="' + showEntryUrl + '"><h3>' + title + '</h3></a></div>';
-            stringHtml += '<div class="entry-body" style="text-align: center;">' + entryText + '</div></div></div>';
+            stringHtml += '<br clear="all"><div class="entry-title"><a href="' + showEntryUrl + '"><h3>' + title + '</h3></a></div>';
+            stringHtml += '<div class="entry-body"><h4>' + entryText + '</h4></div></div></div>';
             stringHtml += '</div>';
             return stringHtml;
      }
@@ -384,49 +390,5 @@
 
             return deleteEntryURL.toString();
     }
-        var string = "";
 
 </aui:script>
-
-    <script type="text/javascript">
-
-        p = $('#addPopupOverlay');
-        r = $('#reportPopupOverlay');
-
-        $('#popup__toggle').click(function() {
-            $('#main').hide();
-            p.css('display', 'block');
-        });
-
-        $('#reportPopupToggle').click(function() {
-            $('#main').hide();
-            r.css('display', 'block');
-        });
-
-        p.click(function(event) {
-            e = event || window.event;
-            if (e.target == this) {
-                $('#main').show();
-                $(p).css('display', 'none');
-            }
-        });
-
-        r.click(function(event) {
-            e = event || window.event;
-            if (e.target == this) {
-                $('#main').show();
-                $(r).css('display', 'none');
-            }
-        });
-
-        $('#addPopupClose').click(function() {
-            $('#main').show();
-            p.css('display', 'none');
-        });
-
-        $('#reportPopupClose').click(function() {
-            $('#main').show();
-            r.css('display', 'none');
-        });
-
-    </script>

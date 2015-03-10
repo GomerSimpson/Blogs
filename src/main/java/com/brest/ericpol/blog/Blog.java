@@ -8,14 +8,15 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.util.bridges.mvc.MVCPortlet;
-import org.apache.lucene.search.FieldCache;
-import org.apache.lucene.util.IOUtils;
+import org.apache.commons.io.IOUtils;
+
 
 import javax.portlet.*;
 import java.io.*;
@@ -39,23 +40,37 @@ public class Blog extends MVCPortlet {
 
         List<BlogEntry> list = null;
         String flag = ParamUtil.getString(resourceRequest, "flag");
- /*       String fileNameToDownload = ParamUtil.getString(resourceRequest, "fileName");
+        String fileNameToDownload = ParamUtil.getString(resourceRequest, "fileNameToDownload");
+        System.out.println("File: " + fileNameToDownload);
+        if (!fileNameToDownload.equals("")) {
+            if (fileNameToDownload.contains(".pdf")) {
 
-        if(fileNameToDownload != null){
-            File outputFile = new File("C:\\reports\\10198_admin_test2.pdf");
-            resourceResponse.setContentType("application/pdf");
-            OutputStream out = resourceResponse.getPortletOutputStream();
-            InputStream in = new FileInputStream(outputFile);
-
-            out.flush();
+                File outputFile = new File("/home/simpson/reports/" + fileNameToDownload);
+                resourceResponse.setContentType("application/pdf");
+                resourceResponse.addProperty(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileNameToDownload + "\"");
+                OutputStream out = resourceResponse.getPortletOutputStream();
+                InputStream in = new FileInputStream(outputFile);
+                IOUtils.copy(in, out);
+                out.flush();
+            } else if (fileNameToDownload.contains(".xls")) {
+                System.out.println(fileNameToDownload);
+                File outputFile = new File("/home/simpson/reports/" + fileNameToDownload);
+                resourceResponse.setContentType("application/vnd.ms-excel");
+                resourceResponse.addProperty(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileNameToDownload + "\"");
+                OutputStream out = resourceResponse.getPortletOutputStream();
+                InputStream in = new FileInputStream(outputFile);
+                IOUtils.copy(in, out);
+                out.flush();
+            }
+            return;
         }
-*/
+
 
 
         if (flag.equals("fileNames")) {
             List<String> files = getFiles(user.getUserId());
 
-            for(String str : files){
+            for (String str : files) {
                 arrayJSON.put(str);
             }
 
@@ -211,7 +226,10 @@ public class Blog extends MVCPortlet {
         String reportFileName = ParamUtil.getString(actionRequest, "reportFileName");
         String entriesIds = ParamUtil.getString(actionRequest, "entriesIds");
         String[] strIds = entriesIds.split(",");
-        String fileNamePrefix = null;
+
+        ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+        User user = themeDisplay.getUser();
+
         Long[] ids = new Long[strIds.length];
         int i = 0;
         List<BlogEntry> list = new ArrayList<BlogEntry>();
@@ -223,28 +241,27 @@ public class Blog extends MVCPortlet {
             i++;
         }
 
-        new ReportCreator(radio, createFileName(Long.toString(list.get(0).getUserId()),
+        new ReportCreator(radio, createFileName(Long.toString(user.getUserId()),
                 reportFileName), list, UserLocalServiceUtil.getUserById(list.get(0).getUserId()).getFullName());
 
-//        System.out.println("FileName -> " + reportFileName);
-//        System.out.println("ids -> " + entriesIds);
         System.out.println("radio -> " + radio);
+        actionRequest.setAttribute("flagOfUserId", list.get(0).getUserId());
     }
 
     private String createFileName(String userId, String fileName) {
         String name = userId + "_";
-
+/*
         if (true) {          //если юзер админ
             name += "admin_";
         }
-
+*/
         name += fileName;
 
         return name;
     }
 
     private List<String> getFiles(Long currentUserId) {
-        File folder = new File("C:\\reports\\");
+        File folder = new File("/home/simpson/reports/");
 
         File[] listOfFiles = folder.listFiles();
         List<String> listOfUsersFiles = new ArrayList<String>();
@@ -253,14 +270,10 @@ public class Blog extends MVCPortlet {
         for (File file : listOfFiles) {
             if (file.isFile()) {
                 String fileUserIdStr = file.getName().substring(0, 5);
-                if (true) {                      //если админ
-                    if (Long.parseLong(fileUserIdStr) == currentUserId && file.getName().contains("admin")) {
-                        listOfUsersFiles.add(file.getName());
-                    }
-                } else {
-                    if (Long.parseLong(fileUserIdStr) == currentUserId) {
-                        listOfUsersFiles.add(file.getName());
-                    }
+
+                if (Long.parseLong(fileUserIdStr) == currentUserId) {
+                    listOfUsersFiles.add(file.getName());
+
                 }
                 System.out.println(file.getName() + " : " + Long.parseLong(fileUserIdStr));
             }
@@ -268,5 +281,9 @@ public class Blog extends MVCPortlet {
 
 
         return listOfUsersFiles;
+    }
+
+    private String trimFileName(String str){
+        return str.substring(6);
     }
 }
