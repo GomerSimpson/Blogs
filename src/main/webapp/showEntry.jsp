@@ -25,19 +25,22 @@
 </portlet:actionURL>
 
 <liferay-theme:defineObjects />
-<a href="<%=allEntriesURL%>">Go back</a>
-			<div class="entry">
+
+			<div class="entry_block">
 			    <div class="entry-content">
 			        <div class="entry-date">
 			            <ul class="edit-actions entry icons-container lfr-meta-actions">
 			                <li class="date-entry">
+                                <div id="arrow"><a href="<%=allEntriesURL%>"><img src="/mine/img/arrow_right_blue.png"></a></div>
+                            </li>
+			                <li class="date-entry">
 			                    <div id="foo"><span class="aui-icon aui-icon-small aui-iconfont-time"></span></div>
 			                </li>
                             <li class="edit-entry">
-                                <a href="<%=editEntryURL%>"><span class="aui-icon aui-icon-small aui-iconfont-edit"></span>Edit</a>
+                                <a href="<%=editEntryURL%>"><span class="aui-icon aui-icon-small aui-iconfont-edit"></span><liferay-ui:message key="edit" /></a>
                             </li>
                             <li class="delete-entry">
-                                <a href="<%=deleteEntryURL%>"><span class="aui-icon aui-icon-small aui-iconfont-remove"></span>Delete</a>
+                                <a href="<%=deleteEntryURL%>"><span class="aui-icon aui-icon-small aui-iconfont-remove"></span><liferay-ui:message key="delete" /></a>
                             </li>
                             <li>
                                 <div class="entry-author"><span class="aui-icon aui-icon-small aui-iconfont-group"></span> by<%=request.getParameter("userName")%></div>
@@ -47,13 +50,17 @@
                         <div class="entry-body"><h4><%=request.getParameter("entryText")%></h4></div></div></div>
                     </div>
                 </div>
+                <div class="separator"><!-- --></div>
             </div>
-            <div class="separator"><!-- --></div>
 
 <script src="/mine/js/jquery.min.js"></script>
         <script src="/mine/js/aui.js"></script>
-        <link rel="stylesheet" type="text/css" href="/mine/css/aui.css"/>
-<link href="http://cdn.alloyui.com/2.5.0/aui-css/css/bootstrap.min.css" rel="stylesheet"></link>
+        <script src="/mine/js/aui-experimental.js"></script>
+        <script src="/mine/js/aui-datepicker.js"></script>
+        <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.7/css/aui.css"/>
+        <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.7/css/aui-experimental.css"/>
+<script type="text/javascript" src="/mine/ckeditor/ckeditor.js"></script>
+
 <aui:script use="liferay-portlet-url, liferay-search-container">
     var date = new Date('<%=request.getParameter("entryDate")%>');
     var strDate = " " + date.getDate() + "-" + (date.getMonth() + 1) + "-" + (date.getYear() + 1900);

@@ -3,6 +3,8 @@ package com.brest.ericpol.blog;
 import com.brest.ericpol.blog.service.model.BlogEntry;
 import com.itextpdf.text.DocumentException;
 import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
+import net.sf.dynamicreports.report.builder.style.FontBuilder;
+import net.sf.dynamicreports.report.builder.style.StyleBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalAlignment;
 import net.sf.dynamicreports.report.constant.Markup;
 import net.sf.dynamicreports.report.datasource.DRDataSource;
@@ -37,36 +39,40 @@ public class ReportCreator {
     }
 
     private void build() throws IOException, DocumentException {
+
+        StyleBuilder plainStyle = stl.style()
+                .setFontName("DejaVu Sans");
+
         TextColumnBuilder<Long> entryIdColumn = col.column("EntryId", "entryId", type.longType());
-        TextColumnBuilder<String> titleColumn = col.column("Title", "title", type.stringType());
+        TextColumnBuilder<String> titleColumn = col.column("Title", "title", type.stringType()).setStyle(plainStyle);
         TextColumnBuilder<String> contentColumn = col.column("Message", "entryText", type.stringType()).setStyle(stl.style().setHorizontalAlignment(HorizontalAlignment.LEFT)
-                .setMarkup(Markup.HTML));
+                .setMarkup(Markup.HTML).setFontName("DejaVu Sans"));
         TextColumnBuilder<Date> dateColumn = col.column("Date", "entryDate", type.dateType());
 
         try {
                    // report().toPdf(new FileOutputStream("/home/simpson/report3.pdf"));
             if (fileType.equals("PDF")) {
                 report().setTemplate(Templates.reportTemplate)
-                        .columns(entryIdColumn, titleColumn, contentColumn, dateColumn)
+                        .columns(entryIdColumn, titleColumn, contentColumn, dateColumn).setColumnStyle(plainStyle)
                         .title(Templates.createTitleComponent(userName))
                         .sortBy(asc(entryIdColumn))
                         .setDataSource((createDataSource()))
-                        .toPdf(new FileOutputStream("C:\\reports\\" + fileName + ".pdf"));
+                        .toPdf(new FileOutputStream("/home/simpson/reports/" + fileName + ".pdf"));
             } else if (fileType.equals("XLS")) {
                 report().setTemplate(Templates.reportTemplate)
                         .columns(entryIdColumn, titleColumn, contentColumn, dateColumn)
                         .title(Templates.createTitleComponent(userName))
                         .sortBy(asc(entryIdColumn))
                         .setDataSource((createDataSource()))
-                        .toXlsx(new FileOutputStream("C:\\reports\\" + fileName + ".xlsx"));
+                        .toXlsx(new FileOutputStream("/home/simpson/reports/" + fileName + ".xlsx"));
             } else if (fileType.equals("PDF and XLS")) {
                 report().setTemplate(Templates.reportTemplate)
                         .columns(entryIdColumn, titleColumn, contentColumn, dateColumn)
                         .title(Templates.createTitleComponent(userName))
                         .sortBy(asc(entryIdColumn))
                         .setDataSource((createDataSource()))
-                        .toXlsx(new FileOutputStream("C:\\reports\\" + fileName + ".xlsx"))
-                        .toPdf(new FileOutputStream("C:\\reports\\" + fileName + ".pdf"));
+                        .toXlsx(new FileOutputStream("/home/simpson/reports/" + fileName + ".xlsx"))
+                        .toPdf(new FileOutputStream("/home/simpson/reports/" + fileName + ".pdf"));
             }
         } catch (DRException e) {
             e.printStackTrace();

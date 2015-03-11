@@ -32,24 +32,24 @@
 <script type="text/javascript" src="/mine/ckeditor/ckeditor.js"></script>
 
         <div id="myAlert" class="alert alert-info">
-            Please, fill in this form to add an entry.
+            <liferay-ui:message key="add_entry_note"/>
         </div>
 		<aui:form action="<%=addEntry%>" name="addEntry" method="POST">
 
-		<label name="label" for="demo-range-always">Date</label>
+		<label name="label" for="demo-range-always"><h4><liferay-ui:message key="date"/></h4></label>
 		<input class="aui-date-picker" name="<portlet:namespace/>date" id="<portlet:namespace/>date" type="date" max="2019-01-05" min="2011-12-25" />
-		<aui:input type="text" id="title" name="title" value="" label="Title"/>
-		<label name="editorLabel" for="entryText">Text</label>
+		<label name="titleLabel" for="title"><h4><liferay-ui:message key="title"/></h4></label>
+		<input type="text" id="<portlet:namespace/>title" name="<portlet:namespace/>title" value=""/>
+		<label name="editorLabel" for="entryText"><h4><liferay-ui:message key="content"/></h4></label>
 		<textarea id="<portlet:namespace/>entryText" name="<portlet:namespace/>entryText"></textarea>
-		<aui:button name="addButton" type="submit" value="Add" />
-
+		<c:set var="add_entry_button"><liferay-ui:message key="add_entry_button" /></c:set>
+		<aui:button name="addButton" type="submit" value="${add_entry_button}" />
 
 	</aui:form>
 
 <aui:script>
 
 		$(setDate);
-
 
             function setDate(){
 
@@ -73,13 +73,5 @@ AJS.$(document).ready(function() {
         uiColor : '#009ae5'
     });
 	};
-
-
-	AUI().ready(
-          function() {
-          	var editor_data = CKEDITOR.instances.editor1.getData();
-			alert(editor_data);
-          }
-    );
 
 </aui:script>

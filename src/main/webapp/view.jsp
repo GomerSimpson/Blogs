@@ -75,36 +75,50 @@
             <button class="btn btn-primary" id="chooseAnUser"><liferay-ui:message key="choose_an_user" /></button>
         </a>
         <button class="btn btn-primary" id="popup__toggle"  ><liferay-ui:message key="add_entry" /></button>
-        <button class="btn btn-primary" id="reportPopupToggle"  ><liferay-ui:message key="create_report" /></button>
-
+        <button class="btn btn-primary" id="reportPopupToggle"><liferay-ui:message key="create_report" /></button>
+        <a href="<%=allEntriesURL%>" id="showAllHref">
+            <button class="btn btn-primary" id="showAll"><liferay-ui:message key="show_all"/></button>
+        </a>
         <div id="datePicker">
-            <label for="fromDate">From<span class="aui-icon icon-required"></span></label><input class="text short-field" type="text" id="fromDate" name="d-fromDate" title='<liferay-ui:message key="from_date" />'>
-            <label for="toDate">To<span class="aui-icon icon-required"></span></label><input class="text short-field" type="text" id="toDate" name="toDate" title='<liferay-ui:message key="to_date" />'>
+            <ul class="edit-actions entry icons-container lfr-meta-actions">
+                <li>
+                    <label for="fromDate" id="fromDateLabel"><liferay-ui:message key="from_date" /><span class="aui-icon icon-required"></span></label>
+                </li>
+                <li>
+                    <input class="text short-field" type="text" id="fromDate" name="d-fromDate" title='<liferay-ui:message key="from_date" />'>
+                </li>
+            </ul>
+            <ul  class="edit-actions entry icons-container lfr-meta-actions">
+                <li>
+                    <label for="toDate" id="toDateLabel"><liferay-ui:message key="to_date" /><span class="aui-icon icon-required"></span></label>
+                </li>
+                <li>
+                    <input class="text short-field" type="text" id="toDate" name="toDate" title='<liferay-ui:message key="to_date" />'>
+                </li>
+                <li>
+                     <label for="tags" id="labelForTags1"><liferay-ui:message key="by_content"/></label>
+                     <label for="tags" id="labelForTags2"><liferay-ui:message key="by_name"/></label>
+                </li>
+                <li>
+                    <input class="text" type="text" id="tags" name="d-fname"/>
+                </li>
+            </ul>
         </div>
 
-        <div class="form-search">
-            <div id="note_content" class="alert alert-info">
-                <liferay-ui:message key="hint_for_search"/>
-            </div>
-            <input class="text" type="text" id="tags" name="d-fname">
-        </div>
             <button class="btn btn-primary" id="find_an_entry"  ><liferay-ui:message key="find_an_entry"/></button>
-            <a href="<%=allEntriesURL%>" id="showAllHref">
-                <button class="btn btn-primary" id="find_an_entry"  ><liferay-ui:message key="show_all"/></button>
-            </a>
         </div>
 
     <div id="anchor">
     </div>
-
 </div>
+
 <div id="filesField" class="filesField">
     <div class="alert alert-info">
         <liferay-ui:message key="list_of_reports"/>
     </div>
 </div>
   <link rel="stylesheet" href="/mine/css/jquery-ui.css">
-  <!--<script src="/mine/js/jquery-1.10.2.js"></script>-->
+  <script src="/mine/js/jquery-1.10.2.js"></script>
   <script src="/mine/js/jquery-ui.js"></script>
 
 <aui:script use="liferay-portlet-url, liferay-search-container, aui-node, liferay-service, aui-pagination">
@@ -133,14 +147,19 @@
                             $('#popup__toggle').hide();
                             $('#showAllHref').hide();
 
+
                             if(<%=flag == false%>){
                                 AUI().use('aui-base','aui-io-request', function(A){
 
                                     $('#note_content').hide();
-                                    $('#datePicker').hide();
+
+                                    $('#fromDate').hide();
+                                    $('#toDate').hide();
+                                    $('#fromDateLabel').hide();
+                                    $('#toDateLabel').hide();
+                                    $('#labelForTags1').hide();
                                     $('#find_an_entry').hide();
                                     $('#reportPopupToggle').hide();
-
                                     A.io.request('<%=getNamesOfUsersURL%>',{
                                         dataType: 'json',
                                         method: 'POST',
@@ -161,7 +180,13 @@
                                 });
                             } else {
 
-                                $('#datePicker').show();
+                                $('#fromDate').show();
+                                $('#toDate').show();
+                                $('#fromDateLabel').show();
+                                $('#toDateLabel').show();
+                                $('#labelForTags1').show();
+                                $('#labelForTags2').hide();
+
                                 $('#find_an_entry').show();
                                 $('#popup__toggle').hide();
                                 $('#showAllHref').hide();
@@ -180,6 +205,7 @@
                             //если зашёл не админ  то показываем записи юзера, который авторизовался
                             $('#showAllHref').hide();
                             $('#chooseAnUserHref').hide();
+                            $('#labelForTags2').hide();
 
                             var resURL = Liferay.PortletURL.createResourceURL();
                             resURL.setPortletId('<%=themeDisplay.getPortletDisplay().getId()%>');
@@ -311,8 +337,17 @@
 
                 $('#note_content').show();
                 $('#showAllHref').hide();
-                $('#datePicker').show();
+
+                $('#fromDate').show();
+                $('#toDate').show();
+                $('#fromDateLabel').show();
+                $('#toDateLabel').show();
+
+                $('#reportPopupToggle').show();
+
                 $('#find_an_entry').show();
+                $('#labelForTags1').show();
+                $('#labelForTags2').hide();
 
             }
     });

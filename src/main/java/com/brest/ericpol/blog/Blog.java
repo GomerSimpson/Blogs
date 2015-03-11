@@ -44,7 +44,7 @@ public class Blog extends MVCPortlet {
         if (!fileNameToDownload.equals("")) {
             if (fileNameToDownload.contains(".pdf")) {
 
-                File outputFile = new File("C:\\reports\\" + fileNameToDownload);
+                File outputFile = new File("/home/simpson/reports/" + fileNameToDownload);
                 resourceResponse.setContentType("application/pdf");
                 resourceResponse.addProperty(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileNameToDownload + "\"");
                 OutputStream out = resourceResponse.getPortletOutputStream();
@@ -53,7 +53,7 @@ public class Blog extends MVCPortlet {
                 out.flush();
             } else if (fileNameToDownload.contains(".xls")) {
                 System.out.println(fileNameToDownload);
-                File outputFile = new File("C:\\reports\\" + fileNameToDownload);
+                File outputFile = new File("/home/simpson/reports/" + fileNameToDownload);
                 resourceResponse.setContentType("application/vnd.ms-excel");
                 resourceResponse.addProperty(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileNameToDownload + "\"");
                 OutputStream out = resourceResponse.getPortletOutputStream();
@@ -257,7 +257,7 @@ public class Blog extends MVCPortlet {
     }
 
     private List<String> getFiles(Long currentUserId) {
-        File folder = new File("C:\\reports\\");
+        File folder = new File("/home/simpson/reports/");
 
         File[] listOfFiles = folder.listFiles();
         List<String> listOfUsersFiles = new ArrayList<String>();

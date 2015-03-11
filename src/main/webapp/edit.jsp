@@ -35,22 +35,25 @@
         <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.7/css/aui-experimental.css"/>
 <script type="text/javascript" src="/mine/ckeditor/ckeditor.js"></script>
 
+<div id="topDiv" style="width:30%;">
 
-
-		<a href="<%=allEntriesURL%>">back</a>
+		<div id="arrow"><a href="<%=allEntriesURL%>"><img src="/mine/img/arrow_right_blue.png"></a></div>
 
 		<aui:form action="<%=updateEntry%>" name="updateEntry" method="POST">
-		<label name="label" for="demo-range-always">Date</label>
+		<label name="label" for="demo-range-always"><h4><liferay-ui:message key="date"/></h4></label>
 		<input class="aui-date-picker" name="<portlet:namespace/>date" id="<portlet:namespace/>date" type="date" max="2019-01-05" min="2011-12-25" />
-		<aui:input type="text" id="title" name="title" value="" label="Title"/>
-		<label name="editorLabel" for="entryText">Text</label>
+		<label name="titleLabel" for="title"><h4><liferay-ui:message key="title"/></h4></label>
+		<input type="text" id="<portlet:namespace/>title" name="<portlet:namespace/>title" value=""/>
+		<label name="editorLabel" for="entryText"><h4><liferay-ui:message key="content" /></h4></label>
 		<textarea id="<portlet:namespace/>entryText" name="<portlet:namespace/>entryText"><%=request.getParameter("entryText")%></textarea>
 			<aui:input type="hidden" id="entryId" name="entryId" value='<%=request.getParameter("entryId")%>'/>
 			<aui:input type="hidden" id="userId" name="userId" value='<%=request.getParameter("userId")%>'/>
 			<aui:input type="hidden" id="groupId" name="groupId" value='<%=request.getParameter("groupId")%>'/>
 			<aui:input type="hidden" id="companyId" name="companyId" value='<%=request.getParameter("companyId")%>'/>
-			<aui:button name="updateButton" type="submit" value="Update" />
+			<c:set var="update"><liferay-ui:message key="update" /></c:set>
+			<aui:button name="updateButton" type="submit" value="${update}" />
 	</aui:form>
+</div>
 <aui:script>
 
 		$(setDateAndTitle);

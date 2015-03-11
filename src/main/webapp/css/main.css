@@ -79,6 +79,30 @@
                 float: left;
             }
             .filesField{
-                width: 30%;
+                padding: 2%;
+                width: 24%;
                 float: right;
+                border: 1px #009ae5 solid;
+
+                -webkit-border-radius: 10px;
+                -moz-border-radius: 10px;
+                border-radius: 10px;
+
+                -moz-box-shadow: inset 0px 0px 4px 0px #009ae5;
+                -webkit-box-shadow: inset 0px 0px 4px 0px #009ae5;
+                box-shadow: inset 0px 0px 4px 0px #009ae5;
+            }
+
+            .entry_block{
+                padding: 2%;
+                width: 30%;
+                border: 1px #009ae5 solid;
+
+                -webkit-border-radius: 10px;
+                -moz-border-radius: 10px;
+                border-radius: 10px;
+
+                -moz-box-shadow: inset 0px 0px 4px 0px #009ae5;
+                -webkit-box-shadow: inset 0px 0px 4px 0px #009ae5;
+                box-shadow: inset 0px 0px 4px 0px #009ae5;
             }
