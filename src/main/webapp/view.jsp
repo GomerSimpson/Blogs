@@ -72,24 +72,25 @@
 <div class="topContainer" class="aui">
 
         <a href="<%=chooseAnUserURL%>" id="chooseAnUserHref">
-            <button class="btn btn-primary" id="chooseAnUser">Choose an user</button>
+            <button class="btn btn-primary" id="chooseAnUser"><liferay-ui:message key="choose_an_user" /></button>
         </a>
         <button class="btn btn-primary" id="popup__toggle"  ><liferay-ui:message key="add_entry" /></button>
-        <button class="btn btn-primary" id="reportPopupToggle"  >Create Report</button>
+        <button class="btn btn-primary" id="reportPopupToggle"  ><liferay-ui:message key="create_report" /></button>
 
         <div id="datePicker">
-            <label for="fromDate">From<span class="aui-icon icon-required"></span></label><input class="text short-field" type="text" id="fromDate" name="d-fromDate" title="fromDate">
-            <label for="toDate">To<span class="aui-icon icon-required"></span></label><input class="text short-field" type="text" id="toDate" name="toDate" title="toDate">
+            <label for="fromDate">From<span class="aui-icon icon-required"></span></label><input class="text short-field" type="text" id="fromDate" name="d-fromDate" title='<liferay-ui:message key="from_date" />'>
+            <label for="toDate">To<span class="aui-icon icon-required"></span></label><input class="text short-field" type="text" id="toDate" name="toDate" title='<liferay-ui:message key="to_date" />'>
         </div>
+
         <div class="form-search">
             <div id="note_content" class="alert alert-info">
-                Type here to search by content
+                <liferay-ui:message key="hint_for_search"/>
             </div>
-            <input class="text" type="text" id="tags" name="d-fname" title="Choose a user">
+            <input class="text" type="text" id="tags" name="d-fname">
         </div>
-            <button class="btn btn-primary" id="find_an_entry"  >Find an entry</button>
+            <button class="btn btn-primary" id="find_an_entry"  ><liferay-ui:message key="find_an_entry"/></button>
             <a href="<%=allEntriesURL%>" id="showAllHref">
-                <button class="btn btn-primary" id="find_an_entry"  >ShowAll</button>
+                <button class="btn btn-primary" id="find_an_entry"  ><liferay-ui:message key="show_all"/></button>
             </a>
         </div>
 
@@ -99,15 +100,14 @@
 </div>
 <div id="filesField" class="filesField">
     <div class="alert alert-info">
-        List of reports
+        <liferay-ui:message key="list_of_reports"/>
     </div>
 </div>
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
-  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-  <script src="//code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
+  <link rel="stylesheet" href="/mine/css/jquery-ui.css">
+  <!--<script src="/mine/js/jquery-1.10.2.js"></script>-->
+  <script src="/mine/js/jquery-ui.js"></script>
 
 <aui:script use="liferay-portlet-url, liferay-search-container, aui-node, liferay-service, aui-pagination">
-
     var flagOfUserId = 0;
 	var stringHtml = "";
 	var entryAmount = 0;

@@ -17,7 +17,6 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import org.apache.commons.io.IOUtils;
 
-
 import javax.portlet.*;
 import java.io.*;
 import java.sql.Date;
@@ -45,7 +44,7 @@ public class Blog extends MVCPortlet {
         if (!fileNameToDownload.equals("")) {
             if (fileNameToDownload.contains(".pdf")) {
 
-                File outputFile = new File("/home/simpson/reports/" + fileNameToDownload);
+                File outputFile = new File("C:\\reports\\" + fileNameToDownload);
                 resourceResponse.setContentType("application/pdf");
                 resourceResponse.addProperty(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileNameToDownload + "\"");
                 OutputStream out = resourceResponse.getPortletOutputStream();
@@ -54,7 +53,7 @@ public class Blog extends MVCPortlet {
                 out.flush();
             } else if (fileNameToDownload.contains(".xls")) {
                 System.out.println(fileNameToDownload);
-                File outputFile = new File("/home/simpson/reports/" + fileNameToDownload);
+                File outputFile = new File("C:\\reports\\" + fileNameToDownload);
                 resourceResponse.setContentType("application/vnd.ms-excel");
                 resourceResponse.addProperty(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileNameToDownload + "\"");
                 OutputStream out = resourceResponse.getPortletOutputStream();
@@ -64,8 +63,6 @@ public class Blog extends MVCPortlet {
             }
             return;
         }
-
-
 
         if (flag.equals("fileNames")) {
             List<String> files = getFiles(user.getUserId());
@@ -206,7 +203,6 @@ public class Blog extends MVCPortlet {
         actionRequest.setAttribute("flagOfUserId", userId);
         BlogEntryLocalServiceUtil.updateBlogEntry(entryId, userId, groupId, companyId, title, entryText, date);
         actionResponse.setWindowState(WindowState.MAXIMIZED);
-
     }
 
     public void showAll(ActionRequest actionRequest, ActionResponse actionResponse) throws WindowStateException {
@@ -261,7 +257,7 @@ public class Blog extends MVCPortlet {
     }
 
     private List<String> getFiles(Long currentUserId) {
-        File folder = new File("/home/simpson/reports/");
+        File folder = new File("C:\\reports\\");
 
         File[] listOfFiles = folder.listFiles();
         List<String> listOfUsersFiles = new ArrayList<String>();

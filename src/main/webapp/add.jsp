@@ -23,13 +23,13 @@
 
 <portlet:defineObjects />
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-        <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui.js"></script>
-        <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui-experimental.js"></script>
-        <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui-datepicker.js"></script>
+<script src="/mine/js/jquery.min.js"></script>
+        <script src="/mine/js/aui.js"></script>
+        <script src="/mine/js/aui-experimental.js"></script>
+        <script src="/mine/js/aui-datepicker.js"></script>
         <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.7/css/aui.css"/>
         <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.7/css/aui-experimental.css"/>
-<script type="text/javascript" src="/html/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="/mine/ckeditor/ckeditor.js"></script>
 
         <div id="myAlert" class="alert alert-info">
             Please, fill in this form to add an entry.

@@ -50,9 +50,9 @@
             </div>
             <div class="separator"><!-- --></div>
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-        <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui.js"></script>
-        <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.7/css/aui.css"/>
+<script src="/mine/js/jquery.min.js"></script>
+        <script src="/mine/js/aui.js"></script>
+        <link rel="stylesheet" type="text/css" href="/mine/css/aui.css"/>
 <link href="http://cdn.alloyui.com/2.5.0/aui-css/css/bootstrap.min.css" rel="stylesheet"></link>
 <aui:script use="liferay-portlet-url, liferay-search-container">
     var date = new Date('<%=request.getParameter("entryDate")%>');
