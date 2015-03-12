@@ -19,16 +19,14 @@
 
 <portlet:actionURL var="addEntry" name="addEntry">
 </portlet:actionURL>
-
-
 <portlet:defineObjects />
 
 <script src="/mine/js/jquery.min.js"></script>
         <script src="/mine/js/aui.js"></script>
         <script src="/mine/js/aui-experimental.js"></script>
         <script src="/mine/js/aui-datepicker.js"></script>
-        <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.7/css/aui.css"/>
-        <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.7/css/aui-experimental.css"/>
+        <link rel="stylesheet" type="text/css" href="http://aui-cdn.atlassian.com/aui-adg/5.8.7/css/aui.css"/>
+        <link rel="stylesheet" type="text/css" href="http://aui-cdn.atlassian.com/aui-adg/5.8.7/css/aui-experimental.css"/>
 <script type="text/javascript" src="/mine/ckeditor/ckeditor.js"></script>
 
         <div id="myAlert" class="alert alert-info">

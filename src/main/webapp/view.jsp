@@ -72,6 +72,8 @@
       <portlet:param name="userId" value='<%=strUserId%>'/>
   </portlet:actionURL>
 
+  <link rel="stylesheet" href="/mine/css/portlet.css">
+
 <div id="main" class="main" name="main" >
 <div class="topContainer" class="aui">
 
@@ -113,11 +115,10 @@
                 </li>
             </ul>
         </div>
-
             <button class="btn btn-primary" id="find_an_entry"  ><liferay-ui:message key="find_an_entry"/></button>
         </div>
 
-    <div id="anchor">
+    <div id="anchor" class="anchor">
     </div>
 </div>
 
@@ -155,7 +156,6 @@
                             $('#popup__toggle').hide();
                             $('#showAllHref').hide();
 
-
                             if(<%=flag == false%>){
                                 AUI().use('aui-base','aui-io-request', function(A){
 
@@ -170,20 +170,23 @@
                                     $('#reportPopupToggle').hide();
                                     $('#chooseUserHint').show();
                                     $('#chooseAnUserHref').hide();
+                                    $('#labelForTags2').hide();
+                                    $('#tags').hide();
                                     A.io.request('<%=getNamesOfUsersURL%>',{
                                         dataType: 'json',
                                         method: 'POST',
                                         on: {
                                             success: function() {
                                                 arrayOfNamesAndIdOfUsers = this.get('responseData');
+                                                stringHtml = "";
 
                                                 A.Array.each(arrayOfNamesAndIdOfUsers, function(obj, idx){
                                                     arrayOfNamesOfUsers.push(obj.userName);
+                                                    stringHtml += "<button id='"+ obj.userId + "' class='btn btn-block btn-success'>" + obj.userName + "</button><br>"
                                                 });
 
-                                                $( "#tags" ).autocomplete({
-                                                    source: arrayOfNamesOfUsers
-                                                });
+                                                document.getElementById('anchor').innerHTML += stringHtml;
+
                                             }
                                         }
                                     });
@@ -252,7 +255,7 @@
                                     resFileURL.setPortletId('<%=themeDisplay.getPortletDisplay().getId()%>');
                                     resFileURL.setParameter("fileNameToDownload", obj);
 
-                                    stringHtml += "<span><a href='" + resFileURL + "'><button class='btn btn-lg btn-block btn-primary' type='button'><b>" + trimFileName(obj) + "</b></button>" + "</a><br></span>";
+                                    stringHtml += "<span><a class='test' href='" + resFileURL + "'><button class='btn btn-lg btn-block btn-primary' type='button'><b>" + trimFileName(obj) + "</b></button>" + "</a><br></span>";
                                 });
 
                                 document.getElementById('filesField').innerHTML += stringHtml;
@@ -313,10 +316,11 @@
             }
         });
 
-    $( "#tags" ).autocomplete({
-        select:
-            function( event, ui ) {
+    function showEntriesOfUser(userId){
 
+    }
+
+        $('.anchor').on('click', 'button', function(event){
                 $('#anchor').empty();
 
                 var showAllURL = Liferay.PortletURL.createActionURL();
@@ -329,13 +333,11 @@
                 var resURL = Liferay.PortletURL.createResourceURL();
                 resURL.setPortletId('<%=themeDisplay.getPortletDisplay().getId()%>');
 
-                for(var idx in arrayOfNamesAndIdOfUsers){
-                    if(ui.item.value == arrayOfNamesAndIdOfUsers[idx].userName){
-                        resURL.setParameter("userId", arrayOfNamesAndIdOfUsers[idx].userId);
-                        showAllURL.setParameter('userId', arrayOfNamesAndIdOfUsers[idx].userId);
-                        resURL.setParameter("flag", "userEntries");
-                    }
-                }
+                resURL.setParameter("userId", event.target.id);
+                showAllURL.setParameter('userId', event.target.id);
+                resURL.setParameter("flag", "userEntries");
+
+
 
                 getEntriesByAjax(resURL);
 
@@ -344,6 +346,8 @@
                 $( "#tags" ).autocomplete({
                     disabled: true
                 });
+
+                $('#tags').show();
 
                 $('#note_content').show();
                 $('#showAllHref').hide();
@@ -359,8 +363,7 @@
                 $('#labelForTags1').show();
                 $('#labelForTags2').hide();
                 $('#chooseUserHint').hide();
-            }
-    });
+        });
 
     $('#reportPopupToggle').click(function(){
         $('#<portlet:namespace/>entriesIds').val(arrayOfIdForReport.toString());
@@ -383,12 +386,12 @@
 			stringHtml += '<ul class="edit-actions entry icons-container lfr-meta-actions"><li class="date-entry"><span class="aui-icon aui-icon-small aui-iconfont-teamcals"></span>';
             stringHtml += ' ' + entryDate.getDate() + '-' + (entryDate.getMonth() + 1) + '-' + (entryDate.getYear() + 1900) + '</li>';
 
-            if(<%=permissionChecker.hasPermission(themeDisplay.getScopeGroupId(), resource_name, themeDisplay.getScopeGroupId(), ActionKeys.UPDATE)%>){
+           // if(<%=permissionChecker.hasPermission(themeDisplay.getScopeGroupId(), resource_name, themeDisplay.getScopeGroupId(), ActionKeys.UPDATE)%>){
                 stringHtml += '<li class="edit-entry">';
                 stringHtml += '<a href="' + editUrl + '"><span class="aui-icon aui-icon-small aui-iconfont-edit"></span><liferay-ui:message key="edit" /></a></li>';
                 stringHtml += '<li class="delete-entry">';
                 stringHtml += '<a href="' + deleteUrl + '"><span class="aui-icon aui-icon-small aui-iconfont-remove"></span><liferay-ui:message key="delete" /></a></li>';
-            }
+         //   }
 
             stringHtml += '<li><div class="entry-author"><span class="aui-icon aui-icon-small aui-iconfont-group"></span> by' + userName + '</div></li></ul>';
             stringHtml += '<br clear="all"><div class="entry-title"><a href="' + showEntryUrl + '"><h3>' + title + '</h3></a></div>';

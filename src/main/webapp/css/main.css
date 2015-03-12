@@ -106,3 +106,6 @@
                 -webkit-box-shadow: inset 0px 0px 4px 0px #009ae5;
                 box-shadow: inset 0px 0px 4px 0px #009ae5;
             }
+            li {
+                list-style-type: none; /* Убираем маркеры */
+               }
