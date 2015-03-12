@@ -7,6 +7,10 @@
 <%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 <%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
+<%@ page import="com.liferay.portal.service.permission.PortalPermissionUtil" %>
+<%@ page import="com.liferay.portal.service.permission.PortletPermissionUtil" %>
+<%@ page import="com.liferay.portal.security.permission.ActionKeys" %>
+
 <portlet:defineObjects />
 
 <portlet:resourceURL var="resourceURL">
@@ -36,12 +40,17 @@
 			                <li class="date-entry">
 			                    <div id="foo"><span class="aui-icon aui-icon-small aui-iconfont-time"></span></div>
 			                </li>
-                            <li class="edit-entry">
-                                <a href="<%=editEntryURL%>"><span class="aui-icon aui-icon-small aui-iconfont-edit"></span><liferay-ui:message key="edit" /></a>
-                            </li>
-                            <li class="delete-entry">
-                                <a href="<%=deleteEntryURL%>"><span class="aui-icon aui-icon-small aui-iconfont-remove"></span><liferay-ui:message key="delete" /></a>
-                            </li>
+			                <%    String resource_name = "com.brest.ericpol.blog";
+			                    if(permissionChecker.hasPermission(themeDisplay.getScopeGroupId(), resource_name, themeDisplay.getScopeGroupId(), ActionKeys.UPDATE)){
+			                %>
+                                <li class="edit-entry">
+                                    <a href="<%=editEntryURL%>"><span class="aui-icon aui-icon-small aui-iconfont-edit"></span><liferay-ui:message key="edit" /></a>
+                                </li>
+                                <li class="delete-entry">
+                                    <a href="<%=deleteEntryURL%>"><span class="aui-icon aui-icon-small aui-iconfont-remove"></span><liferay-ui:message key="delete" /></a>
+                                </li>
+                            <%}
+                            %>
                             <li>
                                 <div class="entry-author"><span class="aui-icon aui-icon-small aui-iconfont-group"></span> by<%=request.getParameter("userName")%></div>
                             </li>

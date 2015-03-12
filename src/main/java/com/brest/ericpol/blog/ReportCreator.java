@@ -50,29 +50,28 @@ public class ReportCreator {
         TextColumnBuilder<Date> dateColumn = col.column("Date", "entryDate", type.dateType());
 
         try {
-                   // report().toPdf(new FileOutputStream("/home/simpson/report3.pdf"));
             if (fileType.equals("PDF")) {
                 report().setTemplate(Templates.reportTemplate)
                         .columns(entryIdColumn, titleColumn, contentColumn, dateColumn).setColumnStyle(plainStyle)
                         .title(Templates.createTitleComponent(userName))
                         .sortBy(asc(entryIdColumn))
                         .setDataSource((createDataSource()))
-                        .toPdf(new FileOutputStream("/home/simpson/reports/" + fileName + ".pdf"));
+                        .toPdf(new FileOutputStream("C:\\reports\\" + fileName + ".pdf"));
             } else if (fileType.equals("XLS")) {
                 report().setTemplate(Templates.reportTemplate)
                         .columns(entryIdColumn, titleColumn, contentColumn, dateColumn)
                         .title(Templates.createTitleComponent(userName))
                         .sortBy(asc(entryIdColumn))
                         .setDataSource((createDataSource()))
-                        .toXlsx(new FileOutputStream("/home/simpson/reports/" + fileName + ".xlsx"));
+                        .toXlsx(new FileOutputStream("C:\\reports\\" + fileName + ".xlsx"));
             } else if (fileType.equals("PDF and XLS")) {
                 report().setTemplate(Templates.reportTemplate)
                         .columns(entryIdColumn, titleColumn, contentColumn, dateColumn)
                         .title(Templates.createTitleComponent(userName))
                         .sortBy(asc(entryIdColumn))
                         .setDataSource((createDataSource()))
-                        .toXlsx(new FileOutputStream("/home/simpson/reports/" + fileName + ".xlsx"))
-                        .toPdf(new FileOutputStream("/home/simpson/reports/" + fileName + ".pdf"));
+                        .toXlsx(new FileOutputStream("C:\\reports\\" + fileName + ".xlsx"))
+                        .toPdf(new FileOutputStream("C:\\reports\\" + fileName + ".pdf"));
             }
         } catch (DRException e) {
             e.printStackTrace();

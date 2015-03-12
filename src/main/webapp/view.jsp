@@ -8,6 +8,9 @@
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 <%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
 <%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
+<%@ page import="com.liferay.portal.service.permission.PortalPermissionUtil" %>
+<%@ page import="com.liferay.portal.service.permission.PortletPermissionUtil" %>
+<%@ page import="com.liferay.portal.security.permission.ActionKeys" %>
 <portlet:defineObjects />
 
 <portlet:renderURL var="chooseAnUserURL">
@@ -54,6 +57,7 @@
     Boolean flag = false;
     flagOfUserId = (Long)request.getAttribute("flagOfUserId");
     String strUserId = null;
+    String resource_name = "com.brest.ericpol.blog";
 
         if(flagOfUserId != null && flagOfUserId != 0){
 
@@ -95,6 +99,11 @@
                 <li>
                     <input class="text short-field" type="text" id="toDate" name="toDate" title='<liferay-ui:message key="to_date" />'>
                 </li>
+            </ul>
+            <div id="chooseUserHint" class="alert alert-info">
+                <liferay-ui:message key="choose_user_hint"/>
+            </div>
+            <ul class="edit-actions entry icons-container lfr-meta-actions">
                 <li>
                      <label for="tags" id="labelForTags1"><liferay-ui:message key="by_content"/></label>
                      <label for="tags" id="labelForTags2"><liferay-ui:message key="by_name"/></label>
@@ -140,10 +149,9 @@
      AUI().ready(
                     function() {
                         setFiles();
-                        if(0){
+                        if(<%=permissionChecker.hasPermission(themeDisplay.getScopeGroupId(), resource_name, themeDisplay.getScopeGroupId(), ActionKeys.PERMISSIONS)%>){
                            //if an user is an administrator
                            //to get names of users from server
-
                             $('#popup__toggle').hide();
                             $('#showAllHref').hide();
 
@@ -160,6 +168,8 @@
                                     $('#labelForTags1').hide();
                                     $('#find_an_entry').hide();
                                     $('#reportPopupToggle').hide();
+                                    $('#chooseUserHint').show();
+                                    $('#chooseAnUserHref').hide();
                                     A.io.request('<%=getNamesOfUsersURL%>',{
                                         dataType: 'json',
                                         method: 'POST',
@@ -180,6 +190,8 @@
                                 });
                             } else {
 
+                                $('#chooseUserHint').hide();
+                                $('#chooseAnUserHref').show();
                                 $('#fromDate').show();
                                 $('#toDate').show();
                                 $('#fromDateLabel').show();
@@ -212,8 +224,6 @@
 
                             resURL.setParameter("userId", '<%= com.liferay.portal.util.PortalUtil.getUserId(request)%>');
                             resURL.setParameter("flag", "userEntries");
-
-
 
                             getEntriesByAjax(resURL);
                         }
@@ -337,7 +347,7 @@
 
                 $('#note_content').show();
                 $('#showAllHref').hide();
-
+                $('#chooseAnUserHref').show();
                 $('#fromDate').show();
                 $('#toDate').show();
                 $('#fromDateLabel').show();
@@ -348,7 +358,7 @@
                 $('#find_an_entry').show();
                 $('#labelForTags1').show();
                 $('#labelForTags2').hide();
-
+                $('#chooseUserHint').hide();
             }
     });
 
@@ -372,10 +382,14 @@
 			stringHtml += '<div class="entry-date">';
 			stringHtml += '<ul class="edit-actions entry icons-container lfr-meta-actions"><li class="date-entry"><span class="aui-icon aui-icon-small aui-iconfont-teamcals"></span>';
             stringHtml += ' ' + entryDate.getDate() + '-' + (entryDate.getMonth() + 1) + '-' + (entryDate.getYear() + 1900) + '</li>';
-            stringHtml += '<li class="edit-entry">';
-            stringHtml += '<a href="' + editUrl + '"><span class="aui-icon aui-icon-small aui-iconfont-edit"></span><liferay-ui:message key="edit" /></a></li>';
-            stringHtml += '<li class="delete-entry">';
-            stringHtml += '<a href="' + deleteUrl + '"><span class="aui-icon aui-icon-small aui-iconfont-remove"></span><liferay-ui:message key="delete" /></a></li>';
+
+            if(<%=permissionChecker.hasPermission(themeDisplay.getScopeGroupId(), resource_name, themeDisplay.getScopeGroupId(), ActionKeys.UPDATE)%>){
+                stringHtml += '<li class="edit-entry">';
+                stringHtml += '<a href="' + editUrl + '"><span class="aui-icon aui-icon-small aui-iconfont-edit"></span><liferay-ui:message key="edit" /></a></li>';
+                stringHtml += '<li class="delete-entry">';
+                stringHtml += '<a href="' + deleteUrl + '"><span class="aui-icon aui-icon-small aui-iconfont-remove"></span><liferay-ui:message key="delete" /></a></li>';
+            }
+
             stringHtml += '<li><div class="entry-author"><span class="aui-icon aui-icon-small aui-iconfont-group"></span> by' + userName + '</div></li></ul>';
             stringHtml += '<br clear="all"><div class="entry-title"><a href="' + showEntryUrl + '"><h3>' + title + '</h3></a></div>';
             stringHtml += '<div class="entry-body"><h4>' + entryText + '</h4></div></div></div>';
