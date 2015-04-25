@@ -56,22 +56,22 @@ public class ReportCreator {
                         .title(Templates.createTitleComponent(userName))
                         .sortBy(asc(entryIdColumn))
                         .setDataSource((createDataSource()))
-                        .toPdf(new FileOutputStream("C:\\reports\\" + fileName + ".pdf"));
+                        .toPdf(new FileOutputStream("/home/simpson/reports/" + fileName + ".pdf"));
             } else if (fileType.equals("XLS")) {
                 report().setTemplate(Templates.reportTemplate)
                         .columns(entryIdColumn, titleColumn, contentColumn, dateColumn)
                         .title(Templates.createTitleComponent(userName))
                         .sortBy(asc(entryIdColumn))
                         .setDataSource((createDataSource()))
-                        .toXlsx(new FileOutputStream("C:\\reports\\" + fileName + ".xlsx"));
+                        .toXlsx(new FileOutputStream("/home/simpson/reports/" + fileName + ".xlsx"));
             } else if (fileType.equals("PDF and XLS")) {
                 report().setTemplate(Templates.reportTemplate)
                         .columns(entryIdColumn, titleColumn, contentColumn, dateColumn)
                         .title(Templates.createTitleComponent(userName))
                         .sortBy(asc(entryIdColumn))
                         .setDataSource((createDataSource()))
-                        .toXlsx(new FileOutputStream("C:\\reports\\" + fileName + ".xlsx"))
-                        .toPdf(new FileOutputStream("C:\\reports\\" + fileName + ".pdf"));
+                        .toXlsx(new FileOutputStream("/home/simpson/reports/" + fileName + ".xlsx"))
+                        .toPdf(new FileOutputStream("/home/simpson/reports/" + fileName + ".pdf"));
             }
         } catch (DRException e) {
             e.printStackTrace();

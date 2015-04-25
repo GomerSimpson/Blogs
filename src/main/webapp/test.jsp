@@ -17,7 +17,6 @@
 </portlet:actionURL>
 <liferay-theme:defineObjects />
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.15/require.min.js"></script>
         <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui.js"></script>
         <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui-experimental.js"></script>
         <script src="//aui-cdn.atlassian.com/aui-adg/5.8.7/js/aui-datepicker.js"></script>
@@ -35,7 +34,6 @@
   <script src="//code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
   <link rel="stylesheet" href="/resources/demos/style.css">
   <script>
-                              alert('<%=request.getAttribute("flagOfUserId")%>');
   $(function() {
     var availableTags = [
       "ActionScript",
@@ -73,7 +71,6 @@
   <label for="tags">Tags: </label>
   <input id="tags">
 </div>
-
 
 </body>
 </html>

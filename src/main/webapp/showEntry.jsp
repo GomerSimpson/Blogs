@@ -29,29 +29,29 @@
 </portlet:actionURL>
 
 <liferay-theme:defineObjects />
-
+  <link rel="stylesheet" href="/mine/css/portlet.css">
 			<div class="entry_block">
 			    <div class="entry-content">
 			        <div class="entry-date">
 			            <ul class="edit-actions entry icons-container lfr-meta-actions">
-			                <li class="date-entry">
+			                <li class="mineLi">
                                 <div id="arrow"><a href="<%=allEntriesURL%>"><img src="/mine/img/arrow_right_blue.png"></a></div>
                             </li>
-			                <li class="date-entry">
+			                <li class="mineLi">
 			                    <div id="foo"><span class="aui-icon aui-icon-small aui-iconfont-time"></span></div>
 			                </li>
 			                <%    String resource_name = "com.brest.ericpol.blog";
 			                    if(permissionChecker.hasPermission(themeDisplay.getScopeGroupId(), resource_name, themeDisplay.getScopeGroupId(), ActionKeys.UPDATE)){
 			                %>
-                                <li class="edit-entry">
+                                <li class="mineLi">
                                     <a href="<%=editEntryURL%>"><span class="aui-icon aui-icon-small aui-iconfont-edit"></span><liferay-ui:message key="edit" /></a>
                                 </li>
-                                <li class="delete-entry">
+                                <li class="mineLi">
                                     <a href="<%=deleteEntryURL%>"><span class="aui-icon aui-icon-small aui-iconfont-remove"></span><liferay-ui:message key="delete" /></a>
                                 </li>
                             <%}
                             %>
-                            <li>
+                            <li class="mineLi">
                                 <div class="entry-author"><span class="aui-icon aui-icon-small aui-iconfont-group"></span> by<%=request.getParameter("userName")%></div>
                             </li>
                         </ul><br clear="all">

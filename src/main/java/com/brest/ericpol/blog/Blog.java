@@ -44,7 +44,7 @@ public class Blog extends MVCPortlet {
         if (!fileNameToDownload.equals("")) {
             if (fileNameToDownload.contains(".pdf")) {
 
-                File outputFile = new File("C:\\reports\\" + fileNameToDownload);
+                File outputFile = new File("/home/simpson/reports/" + fileNameToDownload);
                 resourceResponse.setContentType("application/pdf");
                 resourceResponse.addProperty(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileNameToDownload + "\"");
                 OutputStream out = resourceResponse.getPortletOutputStream();
@@ -53,7 +53,7 @@ public class Blog extends MVCPortlet {
                 out.flush();
             } else if (fileNameToDownload.contains(".xls")) {
                 System.out.println(fileNameToDownload);
-                File outputFile = new File("C:\\reports\\" + fileNameToDownload);
+                File outputFile = new File("/home/simpson/reports/" + fileNameToDownload);
                 resourceResponse.setContentType("application/vnd.ms-excel");
                 resourceResponse.addProperty(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileNameToDownload + "\"");
                 OutputStream out = resourceResponse.getPortletOutputStream();
@@ -97,12 +97,23 @@ public class Blog extends MVCPortlet {
                 map.put(userId, userName);
             }
 
-            for (Map.Entry<Long, String> entry : map.entrySet()) {
-                objectJSON = JSONFactoryUtil.createJSONObject();
-                objectJSON.put("userId", entry.getKey());
-                objectJSON.put("userName", entry.getValue());
-                arrayJSON.put(objectJSON);
+            List<Long> duplicates = new ArrayList<Long>();;
+
+            for (BlogEntry be : list) {
+
+                if(!duplicates.contains(be.getUserId())) {
+                    objectJSON = JSONFactoryUtil.createJSONObject();
+                    objectJSON.put("userId", be.getUserId());
+                    objectJSON.put("userName", map.get(be.getUserId()));
+                    objectJSON.put("amountOfEntities", countEntries(be.getUserId(), be.getGroupId(), be.getCompanyId()));
+                    objectJSON.put("lastDate", getOlderDate(be.getUserId(), be.getGroupId(), be.getCompanyId()));
+                    arrayJSON.put(objectJSON);
+
+                    duplicates.add(be.getUserId());
+                }
             }
+
+            System.out.println(arrayJSON);
 
             PrintWriter out = resourceResponse.getWriter();
             out.print(arrayJSON.toString());
@@ -231,7 +242,7 @@ public class Blog extends MVCPortlet {
     }
 
     private List<String> getFiles(Long currentUserId) {
-        File folder = new File("C:\\reports\\");
+        File folder = new File("/home/simpson/reports/");
 
         File[] listOfFiles = folder.listFiles();
         List<String> listOfUsersFiles = new ArrayList<String>();
@@ -254,5 +265,44 @@ public class Blog extends MVCPortlet {
 
     private String trimFileName(String str){
         return str.substring(6);
+    }
+
+    private int countEntries(Long userId, Long groupId, Long companyId){
+        List<BlogEntry> list = null;
+
+        try {
+            list = BlogEntryLocalServiceUtil.findByUserGroupCompanyId(userId, groupId, companyId);
+        } catch (SystemException e) {
+            e.printStackTrace();
+        }
+
+        return list.size();
+    }
+
+    private Date getOlderDate(Long userId, Long groupId, Long companyId) {
+        List<BlogEntry> list = null;
+        Integer dateIndex = null;
+
+
+        try {
+            list = BlogEntryLocalServiceUtil.findByUserGroupCompanyId(userId, groupId, companyId);
+        } catch (SystemException e) {
+            e.printStackTrace();
+        }
+
+        if(list.size() > 0){
+            dateIndex = 0;
+        } else {
+            System.out.println("NoSuchFieldException");
+        }
+
+        for(int counter = 0; counter < list.size() - 1; counter++){
+
+            if(list.get(dateIndex).getEntryDate().before(list.get(counter + 1).getEntryDate())){
+                dateIndex = counter;
+            }
+        }
+
+        return new Date(list.get(dateIndex).getEntryDate().getTime());
     }
 }

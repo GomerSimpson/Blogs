@@ -37,10 +37,11 @@
 
 <div id="topDiv" style="width:30%;">
 
-		<div id="arrow"><a href="<%=allEntriesURL%>"><img src="/mine/img/arrow_right_blue.png"></a></div>
+		<div id="arrow"><a href="<%=allEntriesURL%>"><button class="btn btn-primary" id="backButton"><liferay-ui:message key="back" /></button></a></div>
+
 
 		<aui:form action="<%=updateEntry%>" name="updateEntry" method="POST">
-		<label name="label" for="demo-range-always"><h4><liferay-ui:message key="date"/></h4></label>
+		<label name="label" for="demo-range-always" style="margin-top:10px;"><h4><liferay-ui:message key="date"/></h4></label>
 		<input class="aui-date-picker" name="<portlet:namespace/>date" id="<portlet:namespace/>date" type="date" max="2019-01-05" min="2011-12-25" />
 		<label name="titleLabel" for="title"><h4><liferay-ui:message key="title"/></h4></label>
 		<input type="text" id="<portlet:namespace/>title" name="<portlet:namespace/>title" value=""/>
@@ -57,7 +58,6 @@
 <aui:script>
 
 		$(setDateAndTitle);
-
 
             function setDateAndTitle(){
 				var date;
